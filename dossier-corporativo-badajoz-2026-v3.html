@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dossier Corporativo · Convención Badajoz 2026 | Viajes Planea</title>
+  <meta name="theme-color" content="#0F172A" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0F172A;
+      --slate: #1E293B;
+      --gold: #C5A059;
+      --crimson: #C8102E;
+      --bg: #F8FAFC;
+    }
+    body, * {
+      font-family: 'Calibri', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: var(--bg);
+      color: #1E293B;
+    }
+    .leaflet-div-icon {
+      background: transparent !important;
+      border: none !important;
+    }
+    #corporate-map {
+      width: 100%;
+      height: 480px;
+      min-height: 440px;
+      z-index: 10;
+    }
+    .tab-btn.active {
+      background-color: var(--navy);
+      color: #FFFFFF;
+      border-bottom: 3px solid var(--gold);
+    }
+    .pax-pill.active {
+      background-color: var(--gold);
+      color: #0F172A;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(197, 160, 89, 0.35);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-slate-900">
+
+  <!-- TOP EXECUTIVE HEADER -->
+  <header class="bg-[#0F172A] text-white border-b-4 border-[#C5A059] shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div>
+        <div class="flex flex-wrap items-center gap-3 mb-1">
+          <span class="px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider bg-[#C5A059] text-[#0F172A] rounded">Viajes Planea · Corporate</span>
+          <span class="text-xs text-slate-300"><i class="fa-regular fa-calendar mr-1"></i>01 – 03 Diciembre 2026</span>
+          <span class="text-xs text-slate-300"><i class="fa-solid fa-location-dot mr-1 text-[#C5A059]"></i>Badajoz, España</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+          Dossier Logístico &amp; Movilidad Ejecutiva · Badajoz 2026
+        </h1>
+        <p class="text-sm text-slate-300 mt-0.5">
+          7 Ejecutivos · 5 Ciudades de Origen (BCN, MAD, BIO, SCQ, AGP) · Alojamiento AC Hotel Badajoz (DUI + Desayuno)
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="openPwaModal()" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs font-semibold flex items-center gap-2 transition">
+          <i class="fa-solid fa-mobile-screen-button text-[#C5A059]"></i> Instalar App (PWA)
+        </button>
+        <a href="tel:+34924952613" class="px-3.5 py-2 rounded-lg bg-[#C8102E] hover:bg-red-700 text-white text-xs font-bold flex items-center gap-2 shadow transition">
+          <i class="fa-solid fa-phone-volume"></i> Asistencia 24h Planea: 924 952 613
+        </a>
+      </div>
+    </div>
+
+    <!-- EXECUTIVE PAX FILTER BAR -->
+    <div class="bg-[#1E293B] border-t border-slate-700/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar">
+        <span class="text-xs uppercase tracking-wider text-slate-400 font-bold shrink-0 mr-1">
+          <i class="fa-solid fa-user-tie mr-1 text-[#C5A059]"></i>Vista Viajero:
+        </span>
+        <button onclick="setPaxFilter('ALL')" data-pax="ALL" class="pax-pill active px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+          Todos (7 PAX)
+        </button>
+        <button onclick="setPaxFilter('MIQUEL')" data-pax="MIQUEL" class="pax-pill px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+          Miquel Castells
+        </button>
+        <button onclick="setPaxFilter('EUGENIA')" data-pax="EUGENIA" class="pax-pill px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+          Mª Eugenia Luna
+        </button>
+        <button onclick="setPaxFilter('DIAZ')" data-pax="DIAZ" class="pax-pill px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+          Juan Luis Díaz Calvet
+        </button>
+        <button onclick="setPaxFilter('RIVAS')" data-pax="RIVAS" class="pax-pill px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+          Ángel Jesús Rivas
+        </button>
+        <button onclick="setPaxFilter('ANA')" data-pax="ANA" class="pax-pill px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+          Ana Los Huertos
+        </button>
+        <button onclick="setPaxFilter('EVA')" data-pax="EVA" class="pax-pill px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+          Eva Mª Del Pozo
+        </button>
+        <button onclick="setPaxFilter('TATIANA')" data-pax="TATIANA" class="pax-pill px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+          Tadiana Rico
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- STICKY NAVIGATION TABS (10 CORPORATE VIEWS) -->
+  <nav class="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 flex overflow-x-auto no-scrollbar">
+      <button onclick="switchTab('resumen')" id="tab-resumen" class="tab-btn active px-3.5 py-3.5 text-xs sm:text-sm font-bold whitespace-nowrap flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-clipboard-check text-[#C5A059]"></i> 1. Resumen &amp; Auditoría
+      </button>
+      <button onclick="switchTab('itinerario')" id="tab-itinerario" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-timeline text-[#C5A059]"></i> 2. Cronograma Diario
+      </button>
+      <button onclick="switchTab('mapa')" id="tab-mapa" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-map-location-dot text-[#C5A059]"></i> 3. Mapa Operativo
+      </button>
+      <button onclick="switchTab('sede')" id="tab-sede" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-building-user text-[#C5A059]"></i> 4. Guía Ejecutiva
+      </button>
+      <button onclick="switchTab('importante')" id="tab-importante" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-bold text-[#C8102E] hover:text-red-800 whitespace-nowrap flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-circle-exclamation text-[#C8102E]"></i> 5. Información Importante
+      </button>
+      <button onclick="switchTab('plania')" id="tab-plania" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-headset text-[#C5A059]"></i> 6. Asistente PlanIA
+      </button>
+      <button onclick="switchTab('gastos')" id="tab-gastos" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-calculator text-[#C5A059]"></i> 7. Dietas &amp; Logística
+      </button>
+      <button onclick="switchTab('seguro')" id="tab-seguro" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-shield-halved text-[#C5A059]"></i> 8. Asistencia &amp; Coberturas
+      </button>
+      <button onclick="switchTab('condiciones')" id="tab-condiciones" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-file-contract text-[#C5A059]"></i> 9. Tarifas &amp; Equipaje
+      </button>
+      <button onclick="switchTab('pwa')" id="tab-pwa" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-download text-[#C5A059]"></i> 10. App Offline
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- ==================== TAB 1: RESUMEN & AUDITORÍA ==================== -->
+    <section id="view-resumen" class="tab-view space-y-6">
+
+      <!-- OPERATIONAL NOTES & AUDIT BANNER -->
+      <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-xl p-5 shadow-sm">
+        <div class="flex items-start gap-3">
+          <div class="p-2 bg-amber-100 text-amber-800 rounded-lg shrink-0 mt-0.5">
+            <i class="fa-solid fa-clipboard-check text-lg"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+              <h2 class="text-base font-extrabold text-amber-950 uppercase tracking-wide">
+                Auditoría Operativa &amp; Avisos de Movilidad · Viajes Planea
+              </h2>
+              <button onclick="switchTab('importante')" class="text-xs font-bold text-[#C8102E] underline hover:text-red-800">
+                Ver Condiciones y Normativa Completa &rarr;
+              </button>
+            </div>
+            <p class="text-xs text-amber-900 mb-3">
+              Enlaces terrestres validados con los vehículos de alquiler, acceso hotelero y recomendaciones para conexiones locales:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div class="bg-white/95 border border-emerald-200 rounded-lg p-3">
+                <span class="font-bold text-emerald-800 block mb-1"><i class="fa-solid fa-car-side mr-1"></i>ENLACES EN COCHE COMPARTIDO (OK)</span>
+                <p class="text-slate-700">
+                  <strong>&bull; Ruta Málaga – Sevilla – Badajoz:</strong> Tadiana Rico (SIXT <code class="font-mono bg-slate-100 px-1">9741993622</code>) recoge a <strong>Ana Los Huertos</strong> en Sevilla SVQ el 01/12 y realiza también el regreso <strong>Badajoz &rarr; Sevilla SVQ</strong> el 03/12 con Ana y Eva.<br/>
+                  <strong>&bull; Ruta Sevilla – Badajoz (01/12):</strong> Miquel Castells, Mª Eugenia Luna y <strong>Eva Mª Del Pozo</strong> comparten el coche AVIS (<code class="font-mono bg-slate-100 px-1">31981548ES4</code>), que se entrega en Badajoz el 02/12.
+                </p>
+              </div>
+              <div class="bg-white/95 border border-amber-300 rounded-lg p-3">
+                <span class="font-bold text-amber-800 block mb-1"><i class="fa-solid fa-taxi mr-1"></i>CONEXIONES LOCALES SIN CONTRATAR</span>
+                <p class="text-slate-700">
+                  No hay servicio de traslado privado contratado en Badajoz. En caso de necesitar taxi o transporte público adicional para conexionar estación/aeropuerto con el hotel o lugar de reunión, debe contratarlo el propio viajero y pasar el gasto al departamento correspondiente de su empresa (Radio Taxi Badajoz: <a href="tel:+34924243101" class="underline font-bold">924 24 31 01</a>).
+                </p>
+              </div>
+              <div class="bg-white/95 border border-emerald-200 rounded-lg p-3">
+                <span class="font-bold text-emerald-800 block mb-1"><i class="fa-solid fa-id-card mr-1 text-[#C5A059]"></i>CHECK-IN HOTELERO SIN BONO (RESERVA DIRECTA)</span>
+                <p class="text-slate-700">
+                  <strong>&bull; Alojamiento confirmado:</strong> 7 habitaciones DUI en régimen de Desayuno en AC Hotel Badajoz (Entrada: <strong>01/12/2026</strong> · Salida: <strong>03/12/2026</strong>).<br/>
+                  <strong>&bull; Acceso en recepción:</strong> Para la reserva de este servicio <strong>NO se requiere bono</strong>; a la llegada al hotel solo tiene que presentar su <strong>DNI</strong> en recepción.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOTEL CARD: AC HOTEL BADAJOZ -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-[#0F172A] px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5 text-white">
+            <i class="fa-solid fa-hotel text-[#C5A059] text-lg"></i>
+            <div>
+              <h3 class="font-bold text-base leading-tight">AC Hotel Badajoz by Marriott (4&#9733;)</h3>
+              <p class="text-xs text-slate-300">Sede de Alojamiento Oficial · 7 Habitaciones Doble Uso Individual (DUI) + Desayuno</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+              <i class="fa-regular fa-calendar-check mr-1"></i>Entrada: 01/12/2026 · Salida: 03/12/2026
+            </span>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-sky-500/20 text-sky-300 border border-sky-400/40">
+              <i class="fa-solid fa-id-card mr-1"></i>Reserva Directa · Check-in con DNI (Sin Bono)
+            </span>
+          </div>
+        </div>
+
+        <!-- PROMINENT CHECK-IN / CHECK-OUT DATES BAR -->
+        <div class="bg-slate-50 border-b border-slate-200 px-5 py-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <span class="text-[11px] uppercase font-bold text-slate-400 block">Fecha de Entrada (Check-in)</span>
+            <span class="font-extrabold text-sm text-[#0F172A]">Martes, 01 Dic 2026</span>
+            <span class="block text-[11px] text-slate-500">Si llega después de las 20:00 h, avisar al hotel</span>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <span class="text-[11px] uppercase font-bold text-slate-400 block">Fecha de Salida (Check-out)</span>
+            <span class="font-extrabold text-sm text-[#0F172A]">Jueves, 03 Dic 2026</span>
+            <span class="block text-[11px] text-slate-500">Antes de las 12:00 h (7 PAX)</span>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <span class="text-[11px] uppercase font-bold text-slate-400 block">Duración y Habitaciones</span>
+            <span class="font-extrabold text-sm text-[#0F172A]">2 Noches · 7 Hab. DUI</span>
+            <span class="block text-[11px] text-slate-500">Doble de Uso Individual</span>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <span class="text-[11px] uppercase font-bold text-slate-400 block">Régimen Contratado</span>
+            <span class="font-extrabold text-sm text-emerald-700">Alojamiento y Desayuno (AD)</span>
+            <span class="block text-[11px] text-slate-500">Comidas/cenas a contratar y pasar dieta</span>
+          </div>
+        </div>
+
+        <div class="p-5 grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div class="space-y-2 text-sm">
+            <p class="text-xs font-bold uppercase text-slate-400">Ubicación y Protocolo de Entrada</p>
+            <p class="font-semibold text-slate-900"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1.5"></i>Av. de Elvas, S/N, 06006 Badajoz</p>
+            <p class="text-slate-600"><i class="fa-solid fa-phone text-slate-400 mr-1.5"></i>924 28 62 47</p>
+            <div class="bg-sky-50 border border-sky-200 rounded-lg p-2.5 text-xs text-sky-950">
+              <i class="fa-solid fa-id-card text-sky-700 mr-1"></i><strong>Documentación en Recepción:</strong> Esta reserva no necesita bono al tratarse de gestión directa con el hotel; bastará con presentar el <strong>DNI</strong> a la llegada.
+            </div>
+            <p class="text-xs text-slate-500 pt-0.5">
+              <i class="fa-solid fa-taxi mr-1 text-[#C5A059]"></i>Sin transfer contratado: recomendamos <strong>Taxi</strong> o transporte público a Estación Renfe (~6 min) y Aeropuerto BJZ (~16 min).
+            </p>
+          </div>
+          <div class="lg:col-span-2 bg-slate-50 rounded-lg p-3.5 border border-slate-200/80 text-xs space-y-2">
+            <p class="font-bold text-slate-800 uppercase">Rooming List Detallado (Fechas de Entrada y Salida por Viajero)</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="hotel-rooming-list">
+              <!-- Rendered dynamically by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONVERGENCE MATRIX TABLE -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="font-bold text-base text-[#0F172A]">
+              <i class="fa-solid fa-table-list text-[#C5A059] mr-2"></i>Matriz Ejecutiva de Llegadas, Estancia y Salidas
+            </h3>
+            <p class="text-xs text-slate-500">Consolidación nominal de transporte aéreo, ferroviario, coches compartidos y fechas de hotel</p>
+          </div>
+          <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded">
+            Zona Horaria: CET (Madrid)
+          </span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 uppercase text-xs border-b border-slate-200">
+                <th class="py-3 px-4 font-bold">Ejecutivo</th>
+                <th class="py-3 px-4 font-bold">Llegada (01 Dic)</th>
+                <th class="py-3 px-4 font-bold">Enlace Terrestre / Movilidad</th>
+                <th class="py-3 px-4 font-bold">Hotel AC Badajoz (In / Out)</th>
+                <th class="py-3 px-4 font-bold">Regreso (03–04 Dic)</th>
+              </tr>
+            </thead>
+            <tbody id="matrix-tbody" class="divide-y divide-slate-200">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TRANSPORT & CAR RENTAL CARDS -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="transport-cards-grid">
+        <!-- Populated by JS -->
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB 2: CRONOGRAMA DIARIO ==================== -->
+    <section id="view-itinerario" class="tab-view hidden space-y-5">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-extrabold text-[#0F172A]">Cronograma Operativo Día a Día</h2>
+          <p class="text-xs text-slate-500">Todos los horarios en hora local peninsular (CET). Incluye enlaces de coche compartido y avisos de taxi local.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="scrollToDay('day-1')" class="px-3 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-bold hover:bg-slate-800">D1 · 01 Dic</button>
+          <button onclick="scrollToDay('day-2')" class="px-3 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-bold hover:bg-slate-800">D2 · 02 Dic</button>
+          <button onclick="scrollToDay('day-3')" class="px-3 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-bold hover:bg-slate-800">D3 · 03 Dic</button>
+          <button onclick="scrollToDay('day-4')" class="px-3 py-1.5 rounded-lg bg-slate-200 text-slate-800 text-xs font-bold hover:bg-slate-300">D4 · 04 Dic</button>
+        </div>
+      </div>
+      <div id="itinerary-container" class="space-y-5">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: MAPA OPERATIVO (ESRI ARCGIS VERIFICADO) ==================== -->
+    <section id="view-mapa" class="tab-view hidden space-y-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-extrabold text-[#0F172A]">Mapa Logístico &amp; Puntos de Control (Coordenadas Verificadas)</h2>
+          <p class="text-xs text-slate-500">Direcciones exactas contrastadas: AC Hotel Badajoz, Oficina AVIS, Estación Renfe, Aeropuerto BJZ y Restauración (Esri ArcGIS local-safe).</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="filterMapMarkers('ALL')" class="px-3 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-bold">Todos</button>
+          <button onclick="filterMapMarkers('HOTEL')" class="px-3 py-1.5 rounded-lg bg-amber-100 text-amber-900 text-xs font-bold">Hotel</button>
+          <button onclick="filterMapMarkers('TRANSPORTE')" class="px-3 py-1.5 rounded-lg bg-blue-100 text-blue-900 text-xs font-bold">Estaciones / Aeropuertos</button>
+          <button onclick="filterMapMarkers('COCHE')" class="px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-900 text-xs font-bold">Rent-a-Car</button>
+          <button onclick="filterMapMarkers('DINING')" class="px-3 py-1.5 rounded-lg bg-rose-100 text-rose-900 text-xs font-bold">Sugerencias Gastronómicas</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+          <div id="corporate-map"></div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm overflow-y-auto max-h-[480px] space-y-2.5" id="map-points-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: GUÍA EJECUTIVA BADAJOZ ==================== -->
+    <section id="view-sede" class="tab-view hidden space-y-5">
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <h2 class="text-lg font-extrabold text-[#0F172A] mb-1">Guía Ejecutiva de Badajoz · Diciembre 2026</h2>
+        <p class="text-xs text-slate-500 mb-4">Información práctica para desplazamientos de negocios, climatología invernal y sugerencias gastronómicas verificadas.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="text-xs font-bold uppercase text-slate-400 mb-1"><i class="fa-solid fa-cloud-sun text-[#C5A059] mr-1"></i>Climatología Diciembre</p>
+            <p class="text-sm font-bold text-slate-900">Máx. 14 °C / Mín. 4 °C</p>
+            <p class="text-xs text-slate-600 mt-1">Mañanas frías con posible niebla matinal junto al río Guadiana (precaución en carretera A-66 desde Sevilla y en accesos a BJZ). Tardes despejadas y templadas.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="text-xs font-bold uppercase text-slate-400 mb-1"><i class="fa-solid fa-shirt text-[#C5A059] mr-1"></i>Vestimenta Recomendada</p>
+            <p class="text-sm font-bold text-slate-900">Casual / Informal · Libre Elección</p>
+            <p class="text-xs text-slate-600 mt-1">Sin etiqueta formal requerida: vestimenta cómoda o casual de libre elección, acompañada de abrigo de entretiempo/invierno para exteriores.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="text-xs font-bold uppercase text-slate-400 mb-1"><i class="fa-solid fa-taxi text-[#C5A059] mr-1"></i>Taxis &amp; Movilidad Local</p>
+            <p class="text-sm font-bold text-slate-900">Radio Taxi Badajoz: 924 24 31 01</p>
+            <p class="text-xs text-slate-600 mt-1">Sin transfer contratado en Badajoz: recomendamos taxi o transporte público para ir del AC Hotel / reunión a Estación Renfe (~6 min) o Aeropuerto BJZ (~16 min).</p>
+          </div>
+        </div>
+
+        <h3 class="text-sm font-extrabold uppercase tracking-wider text-[#0F172A] mb-1">
+          Sugerencias Gastronómicas en Badajoz (2 opciones verificadas por día · Libre Elección)
+        </h3>
+        <p class="text-xs text-slate-500 mb-4">Selección orientativa con direcciones y teléfonos 100 % verificados (sin reserva ni horario asignado, a libre elección del viajero):</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="border border-slate-200 rounded-xl p-4 hover:border-[#C5A059] transition">
+            <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-800">Día 1 · Opción 1</span>
+            <h4 class="font-bold text-slate-900 mt-2">Restaurante Marchivirito</h4>
+            <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>Carr. de Cáceres, N 37, 06007 Badajoz</p>
+            <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone mr-1"></i>924 27 42 15</p>
+            <p class="text-xs text-slate-700">Cocina española vanguardista y producto extremeño con terraza y salones amplios.</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-4 hover:border-[#C5A059] transition">
+            <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-800">Día 1 · Opción 2</span>
+            <h4 class="font-bold text-slate-900 mt-2">Restaurante Lugaris</h4>
+            <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>Av. Adolfo Díaz Ambrona, 44, 06006 Badajoz</p>
+            <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone mr-1"></i>924 27 45 40</p>
+            <p class="text-xs text-slate-700">Cocina de autor muy próxima al AC Hotel Badajoz, ideal por cercanía y comodidad.</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-4 hover:border-[#C5A059] transition">
+            <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-800">Día 2 · Opción 1</span>
+            <h4 class="font-bold text-slate-900 mt-2">Restaurante El Alma del Genio</h4>
+            <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>C. Bartolomé José Gallardo, 6, 06001 Badajoz</p>
+            <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone mr-1"></i>824 63 33 17</p>
+            <p class="text-xs text-slate-700">Propuesta gastronómica cuidada en pleno centro de Badajoz.</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-4 hover:border-[#C5A059] transition">
+            <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-800">Día 2 · Opción 2</span>
+            <h4 class="font-bold text-slate-900 mt-2">Restaurante La Bistrológica</h4>
+            <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>C. Jacinta García Hernández, 4, 06011 Badajoz</p>
+            <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone mr-1"></i>600 05 61 75</p>
+            <p class="text-xs text-slate-700">Ambiente moderno y versátil con cocina de mercado actualizada.</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-4 hover:border-[#C5A059] transition">
+            <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-800">Día 3 · Opción 1</span>
+            <h4 class="font-bold text-slate-900 mt-2">Bidaia Restaurante</h4>
+            <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>C. Meléndez Valdés, 2, 06002 Badajoz</p>
+            <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone mr-1"></i>689 82 03 32</p>
+            <p class="text-xs text-slate-700">Cocina creativa de fusión junto al casco histórico de Badajoz.</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-4 hover:border-[#C5A059] transition">
+            <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-800">Día 3 · Opción 2</span>
+            <h4 class="font-bold text-slate-900 mt-2">Restaurante El Laurel</h4>
+            <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>C. Hermanos Segura Covarsí, 3, 06011 Badajoz</p>
+            <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone mr-1"></i>623 33 55 00</p>
+            <p class="text-xs text-slate-700">Producto tradicional extremeño y tapas elaboradas de referencia local.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: INFORMACIÓN IMPORTANTE (NORMATIVA VIAJES PLANEA) ==================== -->
+    <section id="view-importante" class="tab-view hidden space-y-5">
+
+      <!-- TOP HEADER BANNER -->
+      <div class="bg-[#0F172A] text-white rounded-xl p-5 border-l-4 border-[#C5A059] shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#C5A059] block mb-1">Condiciones Generales y Operativas · Viajes Planea</span>
+          <h2 class="text-lg sm:text-xl font-extrabold">Información Importante a Tener en Cuenta en Todos los Servicios Contratados</h2>
+          <p class="text-xs text-slate-300 mt-1">
+            <strong>Nota de Validez:</strong> Si usted ya ha recibido la documentación correspondiente de estos servicios en un correo anterior, por favor <strong>tenga en cuenta solamente la documentación e información actualizada</strong> facilitada en este envío.
+          </p>
+        </div>
+        <a href="tel:+34924952613" class="px-4 py-2.5 rounded-lg bg-[#C8102E] hover:bg-red-700 text-white text-xs font-bold flex items-center gap-2 shrink-0 self-start md:self-center">
+          <i class="fa-solid fa-headset"></i> Soporte 24h: 924 952 613
+        </a>
+      </div>
+
+      <!-- 1. VUELOS Y TRENES -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex items-center gap-2">
+          <i class="fa-solid fa-plane-departure text-[#0F172A]"></i>
+          <h3 class="font-extrabold text-sm uppercase tracking-wide text-[#0F172A]">1. Transportes: Vuelos y Trenes</h3>
+        </div>
+        <div class="p-5 space-y-4 text-xs text-slate-700 leading-relaxed">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
+              <p class="font-bold text-slate-900"><i class="fa-solid fa-ticket text-[#C5A059] mr-1.5"></i>Tarjetas de Embarque y Antelación</p>
+              <ul class="list-disc pl-4 space-y-1.5">
+                <li><strong>Envío de tarjetas de embarque:</strong> Cuando sea necesaria documentación adicional como tarjetas de embarque, se las haremos llegar entre <strong>23 y 24 horas antes</strong> de la salida del vuelo a su correo electrónico o vía WhatsApp al teléfono facilitado. Si viaja en fin de semana, le rogamos esté pendiente de su correo o teléfono.</li>
+                <li><strong>Antelación en aeropuerto:</strong> Recuerde estar en el aeropuerto con tiempo suficiente para gestiones previas al embarque. Desde <strong>Viajes Planea</strong> recomendamos llegar al menos <strong>2 horas antes</strong> de la salida del vuelo.</li>
+                <li><strong>Pasajeros Residentes:</strong> En caso de ser residente en Ceuta, Melilla, Islas Baleares o Islas Canarias, es aconsejable llevar junto con su documentación el certificado de residente.</li>
+                <li><strong>Derechos de los pasajeros:</strong> Puede consultar la normativa europea sobre derechos de embarque en <a href="https://transport.ec.europa.eu/transport-themes/passenger-rights/air_es" target="_blank" rel="noopener" class="text-blue-700 underline font-semibold">Comisión Europea · Derechos de los Pasajeros Aéreos</a>.</li>
+              </ul>
+            </div>
+
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
+              <p class="font-bold text-slate-900"><i class="fa-solid fa-suitcase-rolling text-[#C5A059] mr-1.5"></i>Dimensiones de Equipaje de Mano y Asientos</p>
+              <div class="grid grid-cols-2 gap-2 my-2">
+                <div class="bg-white p-2.5 rounded border border-slate-200">
+                  <span class="font-bold text-[#0F172A] block"><i class="fa-solid fa-briefcase text-[#C5A059] mr-1"></i>Accesorio Personal</span>
+                  <span class="text-[11px] text-slate-600 block">Bajo el asiento delantero</span>
+                  <span class="font-mono font-bold text-[11px] text-slate-900">Máx. 40 x 30 x 15 cm</span>
+                </div>
+                <div class="bg-white p-2.5 rounded border border-slate-200">
+                  <span class="font-bold text-[#0F172A] block"><i class="fa-solid fa-suitcase text-[#C5A059] mr-1"></i>Equipaje de Cabina</span>
+                  <span class="text-[11px] text-slate-600 block">Compartimento superior</span>
+                  <span class="font-mono font-bold text-[11px] text-slate-900">Máx. 55 x 40 x 20 cm (10 kg)</span>
+                </div>
+              </div>
+              <ul class="list-disc pl-4 space-y-1.5">
+                <li><strong>Trenes:</strong> Las características del equipaje permitido aparecen detalladas en cada billete adjunto.</li>
+                <li><strong>Asignación de asientos:</strong> Salvo indicación expresa, los transportes incluyen asiento aleatorio. La selección de asiento concreto queda sujeta a disponibilidad y suplemento de la compañía.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-950">
+              <p class="font-bold mb-1"><i class="fa-solid fa-mobile-screen mr-1"></i>Nota Importante Aerolínea Ryanair</p>
+              <p>Si tiene vuelo confirmado con Ryanair, le informamos que su política de tarjetas de embarque exige llevar las tarjetas en <strong>formato digital</strong> emitidas desde la aplicación de Ryanair. Para facilitarle la tarea, desde Viajes Planea le adjuntamos imagen de la misma con la que podrá viajar y almacenarla en su móvil.</p>
+            </div>
+            <div class="p-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800">
+              <p class="font-bold mb-1"><i class="fa-solid fa-people-arrows mr-1"></i>Coordinación y Conexiones Locales</p>
+              <p>Si necesitan coordinar su desplazamiento con algún compañero, rogamos contacten entre ustedes directamente o con el departamento de Personas de su empresa. En caso de necesitar taxi o transporte público adicional para conexionar estación/aeropuerto con su lugar de reunión, debe contratarlo usted mismo y pasar el gasto al departamento correspondiente (recomendamos transporte público para contribuir con el medio ambiente).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. COCHES DE ALQUILER -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex items-center gap-2">
+          <i class="fa-solid fa-car text-[#0F172A]"></i>
+          <h3 class="font-extrabold text-sm uppercase tracking-wide text-[#0F172A]">2. Coches de Alquiler: Condiciones de Recogida y Devolución</h3>
+        </div>
+        <div class="p-5 space-y-3 text-xs text-slate-700 leading-relaxed">
+          <div class="p-3 rounded-lg bg-red-50 border border-red-200 text-red-950 font-medium">
+            <i class="fa-solid fa-triangle-exclamation text-[#C8102E] mr-1"></i>
+            <strong>Imprescindible en mostrador:</strong> Entregue el bono adjunto y <strong>NO contrate ningún servicio extra adicional</strong> que le puedan ofrecer en el mostrador de recogida sin previa autorización de Viajes Planea. Cualquier cargo no incluido contratado en destino <strong>no está autorizado</strong> y correrá a cargo del pasajero principal que firme el contrato.
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <ul class="list-disc pl-4 space-y-1.5">
+              <li><strong>Documentación obligatoria:</strong> Documento de Identidad (DNI/Pasaporte) y Carné de conducir vigente con antigüedad mínima de 1 año. De no presentar esta documentación no podrá retirar el vehículo sin derecho a reembolso.</li>
+              <li><strong>Política de combustible (Lleno-Lleno):</strong> El coche se entrega con el depósito lleno y debe devolverse igualmente lleno. Recuerde guardar siempre el justificante del último repostaje.</li>
+              <li><strong>Edad mínima conductor:</strong> Sin cargo a partir de 25 años (entre 21 y 25 años puede aplicar suplemento; menores de 21 años no pueden retirar el vehículo).</li>
+            </ul>
+            <ul class="list-disc pl-4 space-y-1.5">
+              <li><strong>Horarios de oficina:</strong> Recoger o devolver el vehículo fuera de los horarios establecidos en el acuerdo o fuera del horario de apertura de la oficina puede suponer un cargo adicional no incluido.</li>
+              <li><strong>Paso de fronteras:</strong> Si tiene previsto cambiar de país con el vehículo, consulte previamente las condiciones generales de la compañía (algunas lo prohíben o aplican suplemento).</li>
+              <li><strong>Conexiones desde domicilio:</strong> Si necesita transporte adicional desde su domicilio a la estación/oficina, debe contratarlo usted mismo y pasar el gasto a su empresa.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. ALOJAMIENTOS, SEGUROS Y DOCUMENTACIÓN INTERNACIONAL -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex items-center gap-2">
+            <i class="fa-solid fa-hotel text-[#0F172A]"></i>
+            <h3 class="font-extrabold text-sm uppercase tracking-wide text-[#0F172A]">3. Alojamientos y Dietas</h3>
+          </div>
+          <div class="p-5 space-y-2 text-xs text-slate-700 leading-relaxed">
+            <ul class="list-disc pl-4 space-y-1.5">
+              <li><strong>Llegadas tardías (después de las 20:00 h):</strong> Si tiene previsto llegar al alojamiento después de las 20:00 h, es obligatorio contactar directamente con el establecimiento para informar de dicha circunstancia y mantener garantizada la habitación.</li>
+              <li><strong>Hora de salida (Check-out):</strong> La salida de todos los establecimientos es <strong>antes de las 12:00 h</strong> del día de finalización de estancia; de lo contrario, el hotel puede aplicar cargos adicionales.</li>
+              <li><strong>Comidas y cenas:</strong> En caso de necesitar servicio de comida o cena no incluido en el régimen contratado, debe contratarlo a la llegada en el establecimiento y pasar el gasto de dieta a su empresa.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex items-center gap-2">
+            <i class="fa-solid fa-shield-heart text-[#0F172A]"></i>
+            <h3 class="font-extrabold text-sm uppercase tracking-wide text-[#0F172A]">4. Seguros y Requisitos Sanitarios</h3>
+          </div>
+          <div class="p-5 space-y-2 text-xs text-slate-700 leading-relaxed">
+            <ul class="list-disc pl-4 space-y-1.5">
+              <li><strong>Seguros de viaje:</strong> Desde Viajes Planea siempre recomendamos y ofrecemos la contratación de seguro de viaje. Si aún no lo ha contratado, contacte con nosotros para gestionarlo.</li>
+              <li><strong>Información sanitaria y entrada a otros países:</strong> Es obligación del pasajero informarse de la documentación requerida por el país de destino antes del viaje. Puede consultar los requisitos oficiales actualizados en <a href="https://www.iatatravelcentre.com/" target="_blank" rel="noopener" class="text-blue-700 underline font-semibold">IATA Travel Centre</a>.</li>
+              <li><strong>Errores en documentación:</strong> Si detecta cualquier error en los servicios contratados, rogamos contacte urgentemente con nosotros para darle una pronta solución.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. PROTOCOLO INCIDENCIAS 24H Y ENCUESTA DE SATISFACCIÓN -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm grid grid-cols-1 lg:grid-cols-3 gap-5 items-center">
+        <div class="lg:col-span-2 space-y-2 text-xs text-slate-700 leading-relaxed">
+          <h4 class="font-extrabold text-sm text-[#0F172A] uppercase">
+            <i class="fa-solid fa-phone-volume text-[#C8102E] mr-1.5"></i>Protocolo de Incidencias en Destino (Asistencia 24h)
+          </h4>
+          <p>
+            Ante cualquier incidencia o deficiencia en los servicios contratados, el cliente debe informar inmediatamente a la agencia. <strong>Viajes Planea</strong> dispone de un servicio de <strong>asistencia 24 horas (<a href="tel:+34924952613" class="font-bold text-[#C8102E] underline">924 952 613</a>)</strong> para dar soporte en destino. Se entenderá por incidencia todo aquello que no tenga lugar de conformidad con lo pactado. En caso de no notificar la incidencia acaecida en destino, Viajes Planea no asumirá responsabilidad alguna sobre la misma.
+          </p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-center space-y-2">
+          <p class="font-bold text-xs text-[#0F172A]">Tu opinión nos ayuda a mejorar</p>
+          <p class="text-[11px] text-slate-600">Comparte tu experiencia con el servicio de Viajes Planea en menos de 2 minutos.</p>
+          <a href="mailto:planea@viajesplanea.com?subject=Valoracion%20Servicio%20Viajes%20Planea%20-%20Convencion%20Badajoz" class="inline-block px-4 py-2 rounded-lg bg-[#0F172A] hover:bg-slate-800 text-[#C5A059] text-xs font-extrabold uppercase tracking-wider transition">
+            Valorar Servicio <i class="fa-solid fa-star ml-1"></i>
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB 6: ASISTENTE PLANIA ==================== -->
+    <section id="view-plania" class="tab-view hidden">
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden max-w-4xl mx-auto">
+        <div class="bg-[#0F172A] text-white p-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-[#C5A059] text-[#0F172A] flex items-center justify-center font-extrabold text-lg">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-base">PlanIA · Concierge Corporativo Offline</h3>
+              <p class="text-xs text-slate-300">Consulta localizadores, horarios, coches compartidos, hotel o normativa de viaje</p>
+            </div>
+          </div>
+          <button onclick="toggleTts()" id="tts-toggle-btn" class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-600 text-xs font-semibold hover:bg-slate-700">
+            <i class="fa-solid fa-volume-high text-[#C5A059] mr-1"></i> Voz: Activa
+          </button>
+        </div>
+
+        <div id="chat-messages" class="p-4 h-80 overflow-y-auto space-y-3 bg-slate-50 text-sm">
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm max-w-[85%]">
+            <p class="font-bold text-xs text-[#0F172A] mb-1">PlanIA · Viajes Planea</p>
+            <p class="text-slate-700 text-xs leading-relaxed">
+              Hola. Tengo cargados los billetes de tren, vuelos, los dos coches compartidos (AVIS y SIXT), las reservas en el AC Hotel Badajoz (entrada 01/12, salida 03/12 en DUI con desayuno) y todas las normas operativas de Viajes Planea. ¿Qué necesitas consultar?
+            </p>
+          </div>
+        </div>
+
+        <div class="px-4 py-2 bg-slate-100 border-t border-slate-200 flex flex-wrap gap-1.5">
+          <button onclick="askPlanIA('Fechas entrada y salida hotel AC Badajoz')" class="text-xs bg-white border border-slate-300 px-2.5 py-1 rounded-full hover:bg-slate-200">Fechas Hotel AC</button>
+          <button onclick="askPlanIA('Como viajan Ana Los Huertos y Tadiana Rico')" class="text-xs bg-white border border-slate-300 px-2.5 py-1 rounded-full hover:bg-slate-200">Enlace Ana y Tadiana</button>
+          <button onclick="askPlanIA('Como van Miquel, Eugenia y Eva desde Sevilla')" class="text-xs bg-white border border-slate-300 px-2.5 py-1 rounded-full hover:bg-slate-200">Coche AVIS Sevilla</button>
+          <button onclick="askPlanIA('Normas recogida coche alquiler y combustible')" class="text-xs bg-white border border-slate-300 px-2.5 py-1 rounded-full hover:bg-slate-200">Normas coche alquiler</button>
+          <button onclick="askPlanIA('Politica minima de equipaje')" class="text-xs bg-white border border-slate-300 px-2.5 py-1 rounded-full hover:bg-slate-200">Equipaje cabina</button>
+        </div>
+
+        <form onsubmit="handleChatSubmit(event)" class="p-3 bg-white border-t border-slate-200 flex gap-2">
+          <input type="text" id="chat-input" placeholder="Ej: ¿Qué debo presentar en la recepción del hotel o al recoger el coche?" class="flex-1 text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#0F172A]" />
+          <button type="submit" class="px-4 py-2 rounded-lg bg-[#0F172A] text-white text-xs font-bold hover:bg-slate-800">
+            Consultar <i class="fa-solid fa-paper-plane ml-1"></i>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 7: DIETAS & LOGÍSTICA ==================== -->
+    <section id="view-gastos" class="tab-view hidden space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <h3 class="font-extrabold text-base text-[#0F172A]">
+            <i class="fa-solid fa-calculator text-[#C5A059] mr-2"></i>Calculadora Rápida de Kilometraje &amp; Dietas (España)
+          </h3>
+          <p class="text-xs text-slate-500">Herramienta de control de gastos corporativos para el viajero (referencia exención IRPF España: 0,26 €/km).</p>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="font-bold text-slate-700 block mb-1">Kilómetros recorridos</label>
+              <input type="number" id="calc-km" value="215" oninput="recalcExpenses()" class="w-full border border-slate-300 rounded-lg px-3 py-2 font-mono" />
+              <span class="text-[11px] text-slate-400">Ref: Sevilla SVQ &rarr; Badajoz = 215 km</span>
+            </div>
+            <div>
+              <label class="font-bold text-slate-700 block mb-1">Tarifa (€/km)</label>
+              <input type="number" step="0.01" id="calc-rate" value="0.26" oninput="recalcExpenses()" class="w-full border border-slate-300 rounded-lg px-3 py-2 font-mono" />
+            </div>
+            <div>
+              <label class="font-bold text-slate-700 block mb-1">Taxis / Peajes / Parking (€)</label>
+              <input type="number" step="0.5" id="calc-tolls" value="24" oninput="recalcExpenses()" class="w-full border border-slate-300 rounded-lg px-3 py-2 font-mono" />
+              <span class="text-[11px] text-slate-400">Ref: Taxi AC Hotel &rarr; Aeropuerto BJZ ~24 €</span>
+            </div>
+            <div>
+              <label class="font-bold text-slate-700 block mb-1">Manutención / Comidas (€)</label>
+              <input type="number" step="1" id="calc-meals" value="45" oninput="recalcExpenses()" class="w-full border border-slate-300 rounded-lg px-3 py-2 font-mono" />
+            </div>
+          </div>
+          <div class="bg-slate-900 text-white rounded-xl p-4 flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-400 uppercase font-bold">Total Liquidación Estimada</p>
+              <p class="text-[11px] text-slate-400">Kilometraje + Taxis/Peajes + Manutención</p>
+            </div>
+            <p id="calc-total" class="text-2xl font-extrabold text-[#C5A059]">124,90 €</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between">
+          <div class="space-y-3">
+            <h3 class="font-extrabold text-base text-[#0F172A]">
+              <i class="fa-solid fa-file-invoice-dollar text-[#C5A059] mr-2"></i>Resumen de Servicios Contratados (PVP)
+            </h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Por política de confidencialidad comercial de <strong>Viajes Planea</strong>, los importes netos de proveedor no se muestran en este dossier. El desglose económico PVP se incorporará tras la validación del departamento de administración/facturación.
+            </p>
+            <div class="divide-y divide-slate-200 text-xs pt-1">
+              <div class="py-2 flex justify-between">
+                <span>Alojamiento AC Hotel Badajoz (7 Hab. DUI · AD · 01–03 Dic)</span>
+                <span class="font-semibold text-slate-500">Según presupuesto PVP</span>
+              </div>
+              <div class="py-2 flex justify-between">
+                <span>Billetes Aéreos (Vueling BCN/BIO/SCQ &amp; Iberia BJZ–BCN)</span>
+                <span class="font-semibold text-slate-500">Emitidos · Según PVP</span>
+              </div>
+              <div class="py-2 flex justify-between">
+                <span>Billetes Tren Renfe Intercity (Madrid &harr; Badajoz, 2 PAX)</span>
+                <span class="font-semibold text-slate-500">Emitidos · Según PVP</span>
+              </div>
+              <div class="py-2 flex justify-between">
+                <span>Vehículos Alquiler AVIS (SVQ–BJZ) &amp; SIXT (Málaga 3 días)</span>
+                <span class="font-semibold text-slate-500">Bono Agencia · Según PVP</span>
+              </div>
+            </div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-[11px] text-slate-600">
+            <i class="fa-solid fa-circle-info text-[#C5A059] mr-1"></i>Para solicitar factura desglosada o añadir importes PVP al dossier, contactar con <strong>planea@viajesplanea.com</strong>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 8: ASISTENCIA & COBERTURAS ==================== -->
+    <section id="view-seguro" class="tab-view hidden space-y-5">
+      <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl text-xs text-amber-900">
+        <strong><i class="fa-solid fa-circle-info mr-1"></i>Nota de Auditoría de Seguros:</strong> No se ha adjuntado póliza de asistencia en viaje independiente en este lote documental. Los desplazamientos cuentan con los seguros obligatorios de transporte (S.O.V. en Renfe, Convenio de Montreal en aéreo) y las coberturas incluidas en los contratos de alquiler AVIS y SIXT. Desde Viajes Planea recomendamos siempre la contratación de seguro de viaje.
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2 text-xs">
+          <h3 class="font-bold text-sm text-[#0F172A]"><i class="fa-solid fa-car-burst text-[#C5A059] mr-1.5"></i>Coberturas Vehículo AVIS (Miquel, Mª Eugenia y Eva)</h3>
+          <p><strong>Bono / Reserva:</strong> <code class="bg-slate-100 px-1">18217171</code> / <code class="bg-slate-100 px-1">31981548ES4</code></p>
+          <ul class="list-disc pl-4 space-y-1 text-slate-700 pt-1">
+            <li>Uso exclusivo para el trayecto <strong>Sevilla SVQ (01/12 16:30) &rarr; Badajoz (devolución 02/12 16:30)</strong>.</li>
+            <li>Exención parcial por daños (CDW) y robo (TP) sin franquicia aplicada.</li>
+            <li>Kilometraje incluido: <strong>750 km</strong> (suficientes para Sevilla &rarr; Badajoz: ~215 km).</li>
+            <li><strong>Requisito en mostrador SVQ:</strong> Entregar bono adjunto, DNI, carné de conducir vigente y tarjeta de crédito a nombre de <em>Miquel Castells Briones</em>. No contratar extras sin autorización de Viajes Planea.</li>
+          </ul>
+        </div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2 text-xs">
+          <h3 class="font-bold text-sm text-[#0F172A]"><i class="fa-solid fa-car-burst text-[#C5A059] mr-1.5"></i>Coberturas Vehículo SIXT (Tadiana Rico y Ana Los Huertos)</h3>
+          <p><strong>Reserva / PIN:</strong> <code class="bg-slate-100 px-1">9741993622</code> / <code class="bg-slate-100 px-1">6zsogn</code> (Pago: Bono Full Credit)</p>
+          <ul class="list-disc pl-4 space-y-1 text-slate-700 pt-1">
+            <li>Cubre ruta Málaga &rarr; Sevilla SVQ (recogida Ana) &rarr; Badajoz (01/12) y regreso Badajoz &rarr; Sevilla SVQ (deja a Ana y Eva) &rarr; Málaga (03–04/12).</li>
+            <li>Tarifa de 3 días (01/12 10:00 a 04/12 10:00) optimizada para entregar el vehículo cómodamente en Málaga a la mañana siguiente tras regresar tarde el día 03/12.</li>
+            <li>Cobertura daños y robo con <strong>0,00 € de franquicia</strong> + ruedas y cristales + asistencia 24/7 + km ilimitados.</li>
+            <li><strong>Aviso en recogida y devolución:</strong> Entregar bono adjunto; la reserva caduca <strong>60 minutos</strong> después de la hora prevista (10:00 h del 01/12). Devolver depósito lleno y conservar justificante.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 9: TARIFAS & EQUIPAJE ==================== -->
+    <section id="view-condiciones" class="tab-view hidden space-y-4">
+      <div class="bg-slate-900 text-white p-4 rounded-xl flex items-center gap-3 text-xs">
+        <i class="fa-solid fa-suitcase-rolling text-[#C5A059] text-lg"></i>
+        <p><strong>Estándar Corporativo Viajes Planea:</strong> En todos los desplazamientos aéreos se garantiza como mínimo <strong>equipaje de mano en cabina (bolso personal + trolley de 10 kg)</strong> para todos los ejecutivos.</p>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-200">
+          <h3 class="font-bold text-base text-[#0F172A]">Condiciones Tarifarias y Política de Equipaje por Proveedor</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 uppercase border-b border-slate-200">
+                <th class="py-3 px-4">Proveedor / Trayecto</th>
+                <th class="py-3 px-4">Viajeros</th>
+                <th class="py-3 px-4">Tarifa / Flexibilidad</th>
+                <th class="py-3 px-4">Equipaje Incluido</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr>
+                <td class="py-3 px-4 font-bold">Vueling (BCN &rarr; SVQ)</td>
+                <td class="py-3 px-4">M. Castells, Mª E. Luna</td>
+                <td class="py-3 px-4">Priority + Cabin Bag (Grupo 1)</td>
+                <td class="py-3 px-4"><strong>1 trolley cabina (10 kg, 55x40x20 cm) + 1 bolso bajo asiento (40x30x20 cm)</strong>.</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-bold">Vueling (BIO &harr; SVQ / SCQ &harr; SVQ)</td>
+                <td class="py-3 px-4">A. Los Huertos, E. Del Pozo</td>
+                <td class="py-3 px-4 text-amber-800 font-semibold">Básica + Cabin Bag (No reembolsable)</td>
+                <td class="py-3 px-4"><strong>1 trolley cabina (10 kg, 55x40x20 cm) + 1 bolso bajo asiento (40x30x20 cm)</strong>.</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-bold">Iberia / Air Nostrum (BJZ &rarr; BCN)</td>
+                <td class="py-3 px-4">M. Castells, Mª E. Luna</td>
+                <td class="py-3 px-4 text-emerald-700 font-semibold">Economy Flexible (S)</td>
+                <td class="py-3 px-4"><strong>1 maleta facturada en bodega (23 kg, 158 cm)</strong> + equipaje de mano en cabina. Embarque Grupo 2.</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-bold">Renfe Intercity (MAD &harr; BJZ)</td>
+                <td class="py-3 px-4">Juan Luis Díaz, Ángel Jesús Rivas</td>
+                <td class="py-3 px-4">Ida: Confort / Vuelta: Estándar</td>
+                <td class="py-3 px-4">Hasta 3 bultos (máx. 25 kg total, mayor 85x55x35 cm). Incluye Combinado Cercanías en Madrid.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 10: APP OFFLINE (PWA) ==================== -->
+    <section id="view-pwa" class="tab-view hidden">
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm max-w-2xl mx-auto text-center space-y-4">
+        <div class="w-14 h-14 rounded-2xl bg-[#0F172A] text-[#C5A059] flex items-center justify-center text-2xl mx-auto shadow">
+          <i class="fa-solid fa-briefcase"></i>
+        </div>
+        <h3 class="text-xl font-extrabold text-[#0F172A]">Guardar Dossier en el Móvil (Modo Sin Conexión)</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Este archivo HTML es autocontenido. Puedes guardarlo en la pantalla de inicio de tu teléfono para consultar localizadores, asientos y direcciones sin cobertura durante vuelos o trayectos en tren.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left text-xs pt-2">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="font-bold text-slate-900 mb-1.5"><i class="fa-brands fa-apple mr-1"></i> iPhone / iPad (Safari)</p>
+            <ol class="list-decimal pl-4 space-y-1 text-slate-600">
+              <li>Abre este archivo en <strong>Safari</strong>.</li>
+              <li>Pulsa el botón <strong>Compartir</strong> (cuadrado con flecha hacia arriba).</li>
+              <li>Selecciona <strong>"Añadir a pantalla de inicio"</strong>.</li>
+            </ol>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="font-bold text-slate-900 mb-1.5"><i class="fa-brands fa-android mr-1 text-emerald-600"></i> Android (Chrome)</p>
+            <ol class="list-decimal pl-4 space-y-1 text-slate-600">
+              <li>Abre este archivo en <strong>Google Chrome</strong>.</li>
+              <li>Pulsa el menú de los <strong>tres puntos (&#8942;)</strong> arriba a la derecha.</li>
+              <li>Pulsa <strong>"Añadir a pantalla de inicio"</strong> o <strong>"Instalar aplicación"</strong>.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-7xl mx-auto px-4 sm:px-6 py-6 text-center text-xs text-slate-400 border-t border-slate-200 mt-10">
+    Viajes Planea · Calle Héroes de Cascorro, 5 · 06004 Badajoz · Asistencia 24h: 924 952 613 · planea@viajesplanea.com
+  </footer>
+
+  <!-- PWA MODAL -->
+  <div id="pwa-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="font-extrabold text-base text-[#0F172A]">Acceso Rápido en Móvil</h3>
+        <button onclick="closePwaModal()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <p class="text-xs text-slate-600">En iOS Safari pulsa <strong>Compartir &rarr; Añadir a pantalla de inicio</strong>. En Android Chrome pulsa <strong>Menú (&#8942;) &rarr; Instalar aplicación</strong>.</p>
+      <button onclick="closePwaModal()" class="w-full py-2 rounded-lg bg-[#0F172A] text-white text-xs font-bold">Entendido</button>
+    </div>
+  </div>
+
+  <script>
+    // ==================== STRUCTURED CORPORATE DATA ====================
+    const TRAVELERS = [
+      {
+        id: 'MIQUEL',
+        name: 'Miquel Castells Briones',
+        role: 'Conductor Principal AVIS',
+        arrival: '01/12 · 16:15 SVQ (Vuelo VY1388 desde BCN T1, Asiento 12D · Trolley 10 kg + bolso)',
+        transfer: 'Recoge coche AVIS en SVQ 16:30 (Loc. 31981548ES4) y lleva a Mª Eugenia y Eva a Badajoz. Devuelve coche en Badajoz el 02/12 (16:30).',
+        hotelInOut: 'Entrada: 01/12/2026 · Salida: 03/12/2026 (2 noches · Hab. DUI + Desayuno)',
+        departure: '03/12 · 16:00 BJZ -> 17:40 BCN T1 (Iberia IB2335, Asiento 17D, Loc. INIUFK · 23 kg). Traslado a BJZ por cuenta del viajero (recomendado Taxi).'
+      },
+      {
+        id: 'EUGENIA',
+        name: 'María Eugenia Luna Ciruela',
+        role: 'Ejecutiva',
+        arrival: '01/12 · 16:15 SVQ (Vuelo VY1388 desde BCN T1, Asiento 12E · Trolley 10 kg + bolso)',
+        transfer: 'Comparte coche AVIS con Miquel Castells y Eva Mª Del Pozo (SVQ -> Badajoz el 01/12).',
+        hotelInOut: 'Entrada: 01/12/2026 · Salida: 03/12/2026 (2 noches · Hab. DUI + Desayuno)',
+        departure: '03/12 · 16:00 BJZ -> 17:40 BCN T1 (Iberia IB2335, Asiento 17F, Loc. INIUFK · 23 kg). Traslado a BJZ por cuenta del viajero (recomendado Taxi).'
+      },
+      {
+        id: 'EVA',
+        name: 'Eva María Del Pozo Corbeira',
+        role: 'Ejecutiva',
+        arrival: '01/12 · 16:15 SVQ (Vuelo VY1722 desde Santiago SCQ 14:55, Loc. D186VC · Trolley 10 kg + bolso)',
+        transfer: 'Ida 01/12: Comparte coche AVIS con Miquel y Mª Eugenia (SVQ -> Badajoz). Vuelta 03/12: Regresa con Tadiana Rico y Ana en coche SIXT (Badajoz -> SVQ).',
+        hotelInOut: 'Entrada: 01/12/2026 · Salida: 03/12/2026 (2 noches · Hab. DUI + Desayuno)',
+        departure: '03/12 · 20:40 SVQ -> 22:10 SCQ (Vuelo VY1725 desde Sevilla, Loc. D186VC)'
+      },
+      {
+        id: 'DIAZ',
+        name: 'Juan Luis Díaz Calvet',
+        role: 'Ejecutivo',
+        arrival: '01/12 · 13:38 Estación Badajoz (Tren Renfe 00190 desde Madrid Atocha 08:51, Coche 2 Plaza 8C)',
+        transfer: 'Sin transfer contratado: conexión Estación Renfe <-> AC Hotel Badajoz por cuenta del viajero (recomendado Taxi ~6 min).',
+        hotelInOut: 'Entrada: 01/12/2026 · Salida: 03/12/2026 (2 noches · Hab. DUI + Desayuno)',
+        departure: '03/12 · 17:38 Badajoz -> 22:17 Madrid Atocha (Tren Renfe 00295, Coche 6 Plaza 6B, Loc. 8KL9ZM)'
+      },
+      {
+        id: 'RIVAS',
+        name: 'Ángel Jesús Rivas de Mier',
+        role: 'Ejecutivo',
+        arrival: '01/12 · 13:38 Estación Badajoz (Tren Renfe 00190 desde Madrid Atocha 08:51, Coche 2 Plaza 8B)',
+        transfer: 'Sin transfer contratado: conexión Estación Renfe <-> AC Hotel Badajoz por cuenta del viajero (recomendado Taxi ~6 min).',
+        hotelInOut: 'Entrada: 01/12/2026 · Salida: 03/12/2026 (2 noches · Hab. DUI + Desayuno)',
+        departure: '03/12 · 17:38 Badajoz -> 22:17 Madrid Atocha (Tren Renfe 00295, Coche 6 Plaza 6A, Loc. 8KL9ZM)'
+      },
+      {
+        id: 'ANA',
+        name: 'Ana Los Huertos Fernández',
+        role: 'Ejecutiva',
+        arrival: '01/12 · 08:35 SVQ (Vuelo VY1702 desde Bilbao BIO 07:10, Loc. HWI4RN · Trolley 10 kg + bolso)',
+        transfer: 'Enlace coche SIXT con Tadiana Rico: recogida en Sevilla SVQ el 01/12 (~12:15 h) hacia Badajoz y regreso Badajoz -> SVQ el 03/12.',
+        hotelInOut: 'Entrada: 01/12/2026 · Salida: 03/12/2026 (2 noches · Hab. DUI + Desayuno)',
+        departure: '03/12 · 21:15 SVQ -> 22:40 BIO (Vuelo VY1709 desde Sevilla, Loc. HWI4RN)'
+      },
+      {
+        id: 'TATIANA',
+        name: 'Tadiana Rico Quero',
+        role: 'Conductora SIXT',
+        arrival: '01/12 · Recogida coche SIXT Málaga Estación 10:00 (Cupra León, Loc. 9741993622)',
+        transfer: 'Ruta Málaga -> Sevilla SVQ (recoge a Ana Los Huertos) -> Badajoz (01/12). Regreso Badajoz -> Sevilla SVQ (deja a Ana y Eva) -> Málaga (03/12).',
+        hotelInOut: 'Entrada: 01/12/2026 · Salida: 03/12/2026 (2 noches · Hab. DUI + Desayuno)',
+        departure: '03/12 · Regreso en coche tras check-out (deja a Ana y Eva en SVQ y continúa a Málaga). Entrega vehículo SIXT en Málaga Estación el 04/12 a las 10:00.'
+      }
+    ];
+
+    const TRANSPORT_CARDS = [
+      {
+        paxIds: ['MIQUEL', 'EUGENIA'],
+        type: 'VUELO IDA + VUELO VUELTA',
+        badge: 'Barcelona (BCN) <-> Badajoz',
+        title: 'Miquel Castells & María Eugenia Luna',
+        details: [
+          '<strong>Ida 01/12:</strong> Vueling VY1388 · BCN T1 (14:35) -> SVQ (16:15) · Loc: <code>AF27XL</code> · Asientos: 12D y 12E · Trolley cabina 10 kg + bolso.',
+          '<strong>Vuelta 03/12:</strong> Iberia/Air Nostrum IB2335 · BJZ (16:00) -> BCN T1 (17:40) · Loc: <code>INIUFK</code> (ZXNOLF) · Asientos: 17D y 17F · 1 maleta facturada 23 kg + cabina.',
+          '<strong>Nota traslado BJZ:</strong> Sin servicio contratado Hotel/Reunión -> Aeropuerto BJZ; recomendamos Taxi (~16 min) y pasar gasto a empresa.'
+        ]
+      },
+      {
+        paxIds: ['DIAZ', 'RIVAS'],
+        type: 'TREN RENFE INTERCITY',
+        badge: 'Madrid Atocha <-> Badajoz',
+        title: 'Juan Luis Díaz Calvet & Ángel Jesús Rivas de Mier',
+        details: [
+          '<strong>Ida 01/12:</strong> Intercity 00190 · Madrid Atocha Cercanías (08:51) -> Badajoz (13:38) · Loc: <code>8KL9ZM</code> · Clase Confort · Coche 2, Plazas 8C y 8B.',
+          '<strong>Vuelta 03/12:</strong> Intercity 00295 · Badajoz (17:38) -> Madrid Atocha Cercanías (22:17) · Loc: <code>8KL9ZM</code> · Clase Estándar · Coche 6, Plazas 6B y 6A.',
+          '<strong>Nota traslado local:</strong> Sin servicio contratado Estación Badajoz <-> Hotel AC; recomendamos Taxi (~6 min) y pasar gasto a empresa.'
+        ]
+      },
+      {
+        paxIds: ['ANA'],
+        type: 'VUELOS VUELING',
+        badge: 'Bilbao (BIO) <-> Sevilla (SVQ)',
+        title: 'Ana Los Huertos Fernández',
+        details: [
+          '<strong>Ida 01/12:</strong> VY1702 · BIO (07:10) -> SVQ (08:35) · Loc: <code>HWI4RN</code> · Trolley cabina 10 kg + bolso.',
+          '<strong>Vuelta 03/12:</strong> VY1709 · SVQ (21:15) -> BIO (22:40) · Loc: <code>HWI4RN</code> · Trolley cabina 10 kg + bolso.',
+          '<strong>Enlace terrestre:</strong> Viaja en el coche SIXT con Tadiana Rico tanto en la ida (SVQ -> Badajoz) como en la vuelta (Badajoz -> SVQ).'
+        ]
+      },
+      {
+        paxIds: ['EVA'],
+        type: 'VUELOS VUELING',
+        badge: 'Santiago (SCQ) <-> Sevilla (SVQ)',
+        title: 'Eva María Del Pozo Corbeira',
+        details: [
+          '<strong>Ida 01/12:</strong> VY1722 · SCQ (14:55) -> SVQ (16:15) · Loc: <code>D186VC</code> · Trolley cabina 10 kg + bolso.',
+          '<strong>Vuelta 03/12:</strong> VY1725 · SVQ (20:40) -> SCQ (22:10) · Loc: <code>D186VC</code> · Trolley cabina 10 kg + bolso.',
+          '<strong>Enlace terrestre:</strong> Ida en coche AVIS con Miquel y Mª Eugenia (01/12); regreso en coche SIXT con Tadiana Rico y Ana (03/12).'
+        ]
+      },
+      {
+        paxIds: ['MIQUEL', 'EUGENIA', 'EVA'],
+        type: 'ALQUILER COCHE AVIS (SOLO IDA)',
+        badge: 'Sevilla SVQ -> Badajoz Centro',
+        title: 'AVIS Grupo C (Ford Focus o similar)',
+        details: [
+          '<strong>Titular / Bono:</strong> Miquel Castells Briones · Reserva: <code>31981548ES4</code> · Bono: <code>18217171</code>.',
+          '<strong>Ocupantes:</strong> Miquel Castells, Mª Eugenia Luna y Eva Mª Del Pozo.',
+          '<strong>Recogida:</strong> 01/12 a las 16:30 en Aeropuerto de Sevilla (SVQ).',
+          '<strong>Devolución:</strong> 02/12 a las 16:30 en oficina AVIS Badajoz (C. Julio Cienfuegos Linares, 14, Loc 2). Entregar bono adjunto; no contratar extras sin autorización.'
+        ]
+      },
+      {
+        paxIds: ['TATIANA', 'ANA', 'EVA'],
+        type: 'ALQUILER COCHE SIXT',
+        badge: 'Málaga <-> Sevilla <-> Badajoz',
+        title: 'SIXT Cupra León (CDMR)',
+        details: [
+          '<strong>Titular / Reserva:</strong> Tadiana Rico Quero · Reserva: <code>9741993622</code> · PIN: <code>6zsogn</code> · Bono Full Credit.',
+          '<strong>Operativa compartida:</strong> Recoge a Ana Los Huertos en SVQ el 01/12 hacia Badajoz, y realiza el regreso Badajoz -> SVQ el 03/12 con Ana y Eva.',
+          '<strong>Recogida y Devolución:</strong> Recogida 01/12 (10:00) y devolución 04/12 (10:00) en Málaga Estación. Entregar depósito lleno y guardar ticket de repostaje.'
+        ]
+      }
+    ];
+
+    const ITINERARY_DAYS = [
+      {
+        id: 'day-1',
+        dayLabel: 'DÍA 1 · MARTES 01 DICIEMBRE 2026',
+        subtitle: 'Convergencia en Badajoz y Check-in en AC Hotel Badajoz',
+        events: [
+          { time: '07:10 – 08:35', pax: ['ANA'], badge: 'VUELO', title: 'Vuelo Bilbao (BIO) -> Sevilla (SVQ) · VY1702', desc: 'Ana Los Huertos Fernández. Localizador HWI4RN. Trolley cabina 10 kg + bolso bajo asiento.' },
+          { time: '08:51 – 13:38', pax: ['DIAZ', 'RIVAS'], badge: 'TREN', title: 'Tren Renfe Intercity 00190 · Madrid Atocha Cercanías -> Badajoz', desc: 'Juan Luis Díaz Calvet (Coche 2, Plaza 8C) y Ángel Jesús Rivas de Mier (Coche 2, Plaza 8B). Clase Confort. Loc. 8KL9ZM. Al llegar a Badajoz, traslado recomendado en Taxi al AC Hotel (~6 min).' },
+          { time: '10:00', pax: ['TATIANA', 'ANA'], badge: 'COCHE COMPARTIDO', title: 'Salida SIXT Málaga Estación -> Parada Sevilla SVQ (recogida Ana) -> Badajoz', desc: 'Tadiana Rico Quero (Cupra León, Loc. 9741993622) sale de Málaga a las 10:00, recoge a Ana Los Huertos en Aeropuerto de Sevilla (~12:15 h) y continúan juntas hacia Badajoz.' },
+          { time: '14:35 – 16:15', pax: ['MIQUEL', 'EUGENIA'], badge: 'VUELO', title: 'Vuelo Barcelona (BCN T1) -> Sevilla (SVQ) · VY1388', desc: 'Miquel Castells (12D) y Mª Eugenia Luna (12E). Grupo 1 Priority + Cabin Bag (trolley 10 kg + bolso). Loc. AF27XL.' },
+          { time: '14:55 – 16:15', pax: ['EVA'], badge: 'VUELO', title: 'Vuelo Santiago (SCQ) -> Sevilla (SVQ) · VY1722', desc: 'Eva Mª Del Pozo Corbeira. Loc. D186VC. Trolley cabina 10 kg + bolso. Aterrizaje simultáneo con el vuelo de Barcelona.' },
+          { time: '16:30', pax: ['MIQUEL', 'EUGENIA', 'EVA'], badge: 'COCHE COMPARTIDO', title: 'Recogida Vehículo AVIS en Sevilla SVQ -> Traslado a Badajoz', desc: 'Miquel Castells recoge AVIS (Loc. 31981548ES4) y viaja junto a Mª Eugenia Luna y Eva Mª Del Pozo hacia el AC Hotel Badajoz (~2h 15m por A-66).' },
+          { time: 'Desde 15:00', pax: ['ALL'], badge: 'HOTEL CHECK-IN', title: 'Entrada AC Hotel Badajoz · 7 Habitaciones DUI con Desayuno', desc: 'Av. de Elvas, S/N, 06006 Badajoz. Entrada: 01/12/2026 · Salida: 03/12/2026. Reserva directa con el hotel: no requiere bono, basta presentar el DNI en recepción (avisar al hotel si llega después de las 20:00 h).' }
+        ]
+      },
+      {
+        id: 'day-2',
+        dayLabel: 'DÍA 2 · MIÉRCOLES 02 DICIEMBRE 2026',
+        subtitle: 'Jornada Corporativa en Badajoz y Devolución Vehículo AVIS',
+        events: [
+          { time: '07:30 – 10:30', pax: ['ALL'], badge: 'HOTEL', title: 'Desayuno Buffet Ejecutivo en AC Hotel Badajoz', desc: 'Incluido en las 7 habitaciones DUI.' },
+          { time: '09:30 – 16:00', pax: ['ALL'], badge: 'AGENDA', title: 'Jornada de Trabajo / Reuniones Corporativas en Badajoz', desc: 'Bloque reservado para agenda profesional de los 7 ejecutivos.' },
+          { time: '16:30', pax: ['MIQUEL'], badge: 'COCHE', title: 'Devolución Vehículo AVIS en Oficina Badajoz Centro', desc: 'Miquel Castells entrega el vehículo con depósito lleno en C. Julio Cienfuegos Linares, 14, Loc 2 (Loc. 31981548ES4).' }
+        ]
+      },
+      {
+        id: 'day-3',
+        dayLabel: 'DÍA 3 · JUEVES 03 DICIEMBRE 2026',
+        subtitle: 'Check-out Hotel y Operación Retorno Escalonada',
+        events: [
+          { time: 'Antes 12:00', pax: ['ALL'], badge: 'HOTEL CHECK-OUT', title: 'Desayuno y Salida (Check-out) AC Hotel Badajoz', desc: 'Salida obligatoria antes de las 12:00 h del 03/12/2026 para los 7 viajeros.' },
+          { time: '14:00 (Rec.)', pax: ['MIQUEL', 'EUGENIA'], badge: 'TAXI RECOMENDADO', title: 'Traslado Hotel AC / Reunión -> Aeropuerto de Badajoz (BJZ)', desc: 'Sin servicio privado contratado: recomendamos solicitar Taxi (~16 min) para llegar con la antelación recomendada de 2 horas antes del vuelo.' },
+          { time: '16:00 – 17:40', pax: ['MIQUEL', 'EUGENIA'], badge: 'VUELO', title: 'Vuelo Directo Badajoz (BJZ) -> Barcelona (BCN T1) · IB2335', desc: 'Operado por Air Nostrum. Embarque 15:30 (Grupo 2). Asientos 17D y 17F. Incluye 1 maleta facturada de 23 kg + cabina. Loc. INIUFK.' },
+          { time: '16:30 (Rec.)', pax: ['TATIANA', 'ANA', 'EVA'], badge: 'COCHE COMPARTIDO', title: 'Salida Coche SIXT Badajoz -> Aeropuerto de Sevilla (SVQ) -> Málaga', desc: 'Tadiana Rico traslada en su vehículo SIXT (Loc. 9741993622) a Eva Mª Del Pozo y Ana Los Huertos hasta el Aeropuerto de Sevilla SVQ (~2h 15m) y continúa hacia Málaga.' },
+          { time: '17:38 – 22:17', pax: ['DIAZ', 'RIVAS'], badge: 'TREN', title: 'Tren Renfe Intercity 00295 · Badajoz -> Madrid Atocha Cercanías', desc: 'Juan Luis Díaz Calvet (Coche 6, Plaza 6B) y Ángel Jesús Rivas de Mier (Coche 6, Plaza 6A). Clase Estándar. Loc. 8KL9ZM. Traslado a estación recomendado en Taxi.' },
+          { time: '20:40 – 22:10', pax: ['EVA'], badge: 'VUELO', title: 'Vuelo Sevilla (SVQ) -> Santiago (SCQ) · VY1725', desc: 'Eva Mª Del Pozo. Loc. D186VC. Trolley cabina 10 kg + bolso.' },
+          { time: '21:15 – 22:40', pax: ['ANA'], badge: 'VUELO', title: 'Vuelo Sevilla (SVQ) -> Bilbao (BIO) · VY1709', desc: 'Ana Los Huertos. Loc. HWI4RN. Trolley cabina 10 kg + bolso.' }
+        ]
+      },
+      {
+        id: 'day-4',
+        dayLabel: 'DÍA 4 · VIERNES 04 DICIEMBRE 2026',
+        subtitle: 'Devolución Vehículo SIXT en Málaga Estación',
+        events: [
+          { time: '10:00', pax: ['TATIANA'], badge: 'COCHE', title: 'Entrega Vehículo SIXT en Málaga Estación María Zambrano', desc: 'Tadiana Rico Quero devuelve el Cupra León (Loc. 9741993622) con depósito lleno y justificante de repostaje.' }
+        ]
+      }
+    ];
+
+    // ==================== VERIFIED COORDINATES ====================
+    const MAP_POINTS = [
+      {
+        name: 'AC Hotel Badajoz by Marriott (Sede Alojamiento)',
+        cat: 'HOTEL',
+        lat: 38.88375,
+        lng: -6.99375,
+        address: 'Av. de Elvas, S/N, 06006 Badajoz · Tel. 924 28 62 47',
+        desc: 'Entrada 01/12 · Salida 03/12 · 7 Hab. DUI AD (Check-in con DNI, sin bono)'
+      },
+      {
+        name: 'Avis Alquiler de Coches en Badajoz (Devolución 02/12)',
+        cat: 'COCHE',
+        lat: 38.86895,
+        lng: -6.98215,
+        address: 'C. Julio Cienfuegos Linares, 14, Loc 2, 06006 Badajoz · Tel. 924 90 29 41',
+        desc: 'Entrega vehículo AVIS (Loc. 31981548ES4) el 02/12 a las 16:30'
+      },
+      {
+        name: 'Estación de Tren Renfe Badajoz',
+        cat: 'TRANSPORTE',
+        lat: 38.89020,
+        lng: -6.98220,
+        address: 'Av. Carolina Coronado, s/n, 06007 Badajoz',
+        desc: 'Llegada/Salida Intercity Madrid Atocha (Juan Luis Díaz y Ángel Jesús Rivas)'
+      },
+      {
+        name: 'Aeropuerto de Badajoz (BJZ)',
+        cat: 'TRANSPORTE',
+        lat: 38.89125,
+        lng: -6.82133,
+        address: 'Ctra. Badajoz-Balboa, s/n, 06195 Badajoz · Tel. 913 21 10 00',
+        desc: 'Salida vuelo Iberia IB2335 a Barcelona (03/12 16:00). Ir en Taxi (~16 min).'
+      },
+      {
+        name: 'Viajes Planea (Agencia Emisora)',
+        cat: 'COCHE',
+        lat: 38.87555,
+        lng: -6.97185,
+        address: 'C. Héroes de Cascorro, 5, 06004 Badajoz · Tel. 924 95 26 13',
+        desc: 'Asistencia corporativa 24h Viajes Planea'
+      },
+      {
+        name: 'Restaurante Marchivirito (Recomendación)',
+        cat: 'DINING',
+        lat: 38.89245,
+        lng: -6.97360,
+        address: 'Carr. de Cáceres, N 37, 06007 Badajoz · Tel. 924 27 42 15',
+        desc: 'Sugerencia gastronómica · Cocina española vanguardista y terraza'
+      },
+      {
+        name: 'Restaurante Lugaris (Recomendación)',
+        cat: 'DINING',
+        lat: 38.88085,
+        lng: -6.98745,
+        address: 'Av. Adolfo Díaz Ambrona, 44, 06006 Badajoz · Tel. 924 27 45 40',
+        desc: 'Sugerencia gastronómica · Cocina de autor junto al AC Hotel Badajoz'
+      },
+      {
+        name: 'Restaurante El Alma del Genio (Recomendación)',
+        cat: 'DINING',
+        lat: 38.87680,
+        lng: -6.97140,
+        address: 'C. Bartolomé José Gallardo, 6, 06001 Badajoz · Tel. 824 63 33 17',
+        desc: 'Sugerencia gastronómica · Centro de Badajoz'
+      },
+      {
+        name: 'Restaurante La Bistrológica (Recomendación)',
+        cat: 'DINING',
+        lat: 38.87120,
+        lng: -6.97520,
+        address: 'C. Jacinta García Hernández, 4, 06011 Badajoz · Tel. 600 05 61 75',
+        desc: 'Sugerencia gastronómica · Cocina de mercado actualizada'
+      },
+      {
+        name: 'Bidaia Restaurante (Recomendación)',
+        cat: 'DINING',
+        lat: 38.87810,
+        lng: -6.97080,
+        address: 'C. Meléndez Valdés, 2, 06002 Badajoz · Tel. 689 82 03 32',
+        desc: 'Sugerencia gastronómica · Cocina creativa junto al casco antiguo'
+      },
+      {
+        name: 'Restaurante El Laurel (Recomendación)',
+        cat: 'DINING',
+        lat: 38.87050,
+        lng: -6.97740,
+        address: 'C. Hermanos Segura Covarsí, 3, 06011 Badajoz · Tel. 623 33 55 00',
+        desc: 'Sugerencia gastronómica · Producto tradicional extremeño'
+      },
+      {
+        name: 'Aeropuerto de Sevilla (SVQ · Hub Enlace)',
+        cat: 'TRANSPORTE',
+        lat: 37.41800,
+        lng: -5.89310,
+        address: 'Autovía A-4, km 532, 41020 Sevilla',
+        desc: 'Enlace vuelos BCN/BIO/SCQ y coches AVIS / SIXT'
+      },
+      {
+        name: 'SIXT Málaga Estación María Zambrano',
+        cat: 'COCHE',
+        lat: 36.71180,
+        lng: -4.43190,
+        address: 'Explanada de la Estación, s/n, 29002 Málaga',
+        desc: 'Recogida 01/12 10:00 y Devolución 04/12 10:00 (Tadiana Rico)'
+      }
+    ];
+
+    // ==================== STATE & FILTERING ====================
+    let currentPax = 'ALL';
+    let mapInstance = null;
+    let mapMarkers = [];
+    let mapRetryCount = 0;
+    let ttsEnabled = true;
+
+    function setPaxFilter(paxId) {
+      currentPax = paxId;
+      document.querySelectorAll('.pax-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.pax === paxId);
+      });
+      renderAll();
+    }
+
+    function renderAll() {
+      const filteredTravelers = currentPax === 'ALL'
+        ? TRAVELERS
+        : TRAVELERS.filter(t => t.id === currentPax);
+
+      const roomingEl = document.getElementById('hotel-rooming-list');
+      roomingEl.innerHTML = filteredTravelers.map(t => `
+        <div class="bg-white p-2 rounded border border-slate-200 flex items-center justify-between gap-2">
+          <span><i class="fa-solid fa-bed text-[#C5A059] mr-1.5"></i><strong>${t.name}</strong></span>
+          <span class="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold shrink-0">In: 01/12 · Out: 03/12 · DUI AD</span>
+        </div>
+      `).join('');
+
+      const tbodyEl = document.getElementById('matrix-tbody');
+      tbodyEl.innerHTML = filteredTravelers.map(t => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-3 px-4 font-bold text-[#0F172A]">
+            ${t.name}
+            <span class="block text-[11px] font-normal text-slate-500">${t.role}</span>
+          </td>
+          <td class="py-3 px-4 text-xs text-slate-700">${t.arrival}</td>
+          <td class="py-3 px-4 text-xs text-slate-700">${t.transfer}</td>
+          <td class="py-3 px-4 text-xs font-semibold text-slate-800">${t.hotelInOut}</td>
+          <td class="py-3 px-4 text-xs text-slate-700">${t.departure}</td>
+        </tr>
+      `).join('');
+
+      const filteredCards = currentPax === 'ALL'
+        ? TRANSPORT_CARDS
+        : TRANSPORT_CARDS.filter(c => c.paxIds.includes(currentPax));
+
+      document.getElementById('transport-cards-grid').innerHTML = filteredCards.map(c => `
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#0F172A] text-[#C5A059]">${c.type}</span>
+            <span class="text-xs font-semibold text-slate-500">${c.badge}</span>
+          </div>
+          <h4 class="font-bold text-base text-slate-900">${c.title}</h4>
+          <ul class="space-y-1.5 text-xs text-slate-700 list-disc pl-4">
+            ${c.details.map(d => `<li>${d}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('');
+
+      const itinEl = document.getElementById('itinerary-container');
+      itinEl.innerHTML = ITINERARY_DAYS.map(day => {
+        const visibleEvents = currentPax === 'ALL'
+          ? day.events
+          : day.events.filter(ev => ev.pax.includes('ALL') || ev.pax.includes(currentPax));
+
+        if (visibleEvents.length === 0) return '';
+
+        return `
+          <div id="${day.id}" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="bg-[#0F172A] text-white px-5 py-3 flex flex-wrap items-center justify-between gap-2">
+              <h3 class="font-extrabold text-sm tracking-wide text-[#C5A059]">${day.dayLabel}</h3>
+              <span class="text-xs text-slate-300">${day.subtitle}</span>
+            </div>
+            <div class="divide-y divide-slate-100">
+              ${visibleEvents.map(ev => `
+                <div class="p-4 flex flex-col sm:flex-row sm:items-start gap-3 hover:bg-slate-50">
+                  <div class="sm:w-32 shrink-0">
+                    <span class="inline-block font-mono text-xs font-bold bg-slate-100 text-slate-900 px-2.5 py-1 rounded">${ev.time}</span>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-1">
+                      <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-900">${ev.badge}</span>
+                      <h4 class="font-bold text-sm text-slate-900">${ev.title}</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">${ev.desc}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ==================== TABS & MAP (ESRI ARCGIS LOCAL-SAFE) ====================
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'text-white');
+        if (btn.id === 'tab-importante') {
+          btn.classList.add('text-[#C8102E]');
+        } else {
+          btn.classList.add('text-slate-600');
+        }
+      });
+
+      document.getElementById('view-' + tabName).classList.remove('hidden');
+      const activeBtn = document.getElementById('tab-' + tabName);
+      activeBtn.classList.add('active');
+      activeBtn.classList.remove('text-slate-600', 'text-[#C8102E]');
+
+      if (tabName === 'mapa') {
+        setTimeout(() => initMap(), 150);
+        setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(true); }, 450);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToDay(dayId) {
+      const el = document.getElementById(dayId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function initMap() {
+      if (typeof L === 'undefined') {
+        if (mapRetryCount < 6) {
+          mapRetryCount++;
+          setTimeout(initMap, 200);
+        }
+        return;
+      }
+      if (!mapInstance) {
+        mapInstance = L.map('corporate-map').setView([38.8780, -6.9840], 13);
+        const street = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Tiles &copy; Esri',
+          maxZoom: 19
+        }).addTo(mapInstance);
+        const topo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Tiles &copy; Esri',
+          maxZoom: 19
+        });
+        const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Tiles &copy; Esri',
+          maxZoom: 19
+        });
+        L.control.layers({ 'Callejero Esri': street, 'Topográfico': topo, 'Satélite': sat }, null, { position: 'topright' }).addTo(mapInstance);
+        filterMapMarkers('ALL');
+        window.addEventListener('resize', () => {
+          if (mapInstance) mapInstance.invalidateSize(true);
+        });
+      }
+      setTimeout(() => mapInstance.invalidateSize(true), 150);
+    }
+
+    function filterMapMarkers(cat) {
+      if (!mapInstance) return;
+      mapMarkers.forEach(m => { if (m) mapInstance.removeLayer(m); });
+      mapMarkers = [];
+
+      const pts = cat === 'ALL' ? MAP_POINTS : MAP_POINTS.filter(p => p.cat === cat);
+      const listEl = document.getElementById('map-points-list');
+      listEl.innerHTML = '';
+      const boundsCoords = [];
+
+      pts.forEach((pt, idx) => {
+        const color = pt.cat === 'HOTEL' ? '#C5A059' : pt.cat === 'TRANSPORTE' ? '#1D4ED8' : pt.cat === 'COCHE' ? '#059669' : '#C8102E';
+        const iconHtml = `<div style="background:${color};color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.35);font-size:12px;"><i class="fa-solid fa-location-dot"></i></div>`;
+        const marker = L.marker([pt.lat, pt.lng], {
+          icon: L.divIcon({ className: 'leaflet-div-icon', html: iconHtml, iconSize: [30, 30], iconAnchor: [15, 15] })
+        }).addTo(mapInstance).bindPopup(`<strong>${pt.name}</strong><br><span style="font-size:11px;color:#475569;">${pt.address}</span><br><span style="font-size:12px;">${pt.desc}</span>`);
+        mapMarkers.push(marker);
+        boundsCoords.push([pt.lat, pt.lng]);
+
+        const item = document.createElement('div');
+        item.className = 'p-3 rounded-lg border border-slate-200 hover:border-[#0F172A] cursor-pointer transition';
+        item.innerHTML = `<p class="font-bold text-xs text-[#0F172A]">${pt.name}</p><p class="text-[11px] font-semibold text-slate-600 mt-0.5"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>${pt.address}</p><p class="text-[11px] text-slate-500 mt-0.5">${pt.desc}</p>`;
+        item.onclick = () => focusMapByIndex(idx);
+        listEl.appendChild(item);
+      });
+
+      if (boundsCoords.length > 1) {
+        mapInstance.fitBounds(L.latLngBounds(boundsCoords), { padding: [40, 40], maxZoom: 13 });
+      } else if (boundsCoords.length === 1) {
+        mapInstance.setView(boundsCoords[0], 15);
+      }
+    }
+
+    function focusMapByIndex(idx) {
+      const marker = mapMarkers[idx];
+      if (!marker || !mapInstance) return;
+      mapInstance.flyTo(marker.getLatLng(), 15, { animate: true, duration: 0.8 });
+      marker.openPopup();
+    }
+
+    // ==================== PLANIA ASSISTANT & TTS ====================
+    function toggleTts() {
+      ttsEnabled = !ttsEnabled;
+      document.getElementById('tts-toggle-btn').innerHTML = ttsEnabled
+        ? '<i class="fa-solid fa-volume-high text-[#C5A059] mr-1"></i> Voz: Activa'
+        : '<i class="fa-solid fa-volume-xmark text-slate-400 mr-1"></i> Voz: Silenciada';
+    }
+
+    function speakText(text) {
+      if (!ttsEnabled || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'es-ES';
+      const voices = window.speechSynthesis.getVoices();
+      const femaleEs = voices.find(v => v.lang.startsWith('es') && /helena|laura|monica|elvira|lucia|female/i.test(v.name))
+        || voices.find(v => v.lang.startsWith('es'));
+      if (femaleEs) utter.voice = femaleEs;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const q = input.value.trim();
+      if (!q) return;
+      input.value = '';
+      askPlanIA(q);
+    }
+
+    function askPlanIA(question) {
+      const box = document.getElementById('chat-messages');
+      box.innerHTML += `<div class="bg-[#0F172A] text-white rounded-xl p-3 max-w-[80%] ml-auto text-xs">${question}</div>`;
+
+      const q = question.toLowerCase();
+      let reply = 'Los 7 viajeros tienen habitación DUI con desayuno en el AC Hotel Badajoz (Av. de Elvas, S/N) con entrada el 1 de diciembre y salida antes de las 12:00 del 3 de diciembre. Para cualquier duda adicional puedes revisar la pestaña Información Importante o llamar al 924 952 613.';
+
+      if (q.includes('hotel') || q.includes('entrada') || q.includes('salida') || q.includes('dni')) {
+        reply = 'El alojamiento para los 7 ejecutivos es en el AC Hotel Badajoz by Marriott (Av. de Elvas, S/N), con entrada el 1 de diciembre y salida antes de las 12:00 del 3 de diciembre de 2026, en habitación DUI con desayuno incluido. Al ser reserva directa con el hotel no se requiere bono: basta presentar tu DNI en recepción. Si llegas después de las 20:00 h debes avisar directamente al hotel.';
+      } else if (q.includes('ana') || q.includes('tadiana') || q.includes('tatiana')) {
+        reply = 'Tadiana Rico recoge su coche SIXT en Málaga Estación el 1 de diciembre a las 10:00 (Loc. 9741993622), recoge a Ana Los Huertos en el Aeropuerto de Sevilla y suben juntas a Badajoz. El 3 de diciembre Tadiana lleva en coche a Ana y a Eva Mª Del Pozo hasta el Aeropuerto de Sevilla y continúa hacia Málaga, devolviendo el coche el día 4 a las 10:00.';
+      } else if (q.includes('avis') || q.includes('miquel') || q.includes('eugenia') || q.includes('eva')) {
+        reply = 'Miquel Castells, Mª Eugenia Luna y Eva Mª Del Pozo comparten el coche AVIS (Loc. 31981548ES4) el 1 de diciembre a las 16:30 para subir desde Sevilla a Badajoz. El 2 de diciembre a las 16:30 Miquel lo devuelve en la oficina AVIS de Badajoz (Calle Julio Cienfuegos Linares, 14, Local 2).';
+      } else if (q.includes('coche') || q.includes('combustible') || q.includes('norma') || q.includes('recogida')) {
+        reply = 'Al recoger un coche de alquiler es obligatorio presentar bono adjunto, DNI y carné de conducir vigente con al menos 1 año de antigüedad. No contrates ningún servicio extra en mostrador sin autorización de Viajes Planea y recuerda devolver siempre el depósito lleno guardando el justificante del último repostaje.';
+      } else if (q.includes('aeropuerto') || q.includes('taxi') || q.includes('bjz')) {
+        reply = 'No hay servicio de traslado privado contratado en Badajoz. En caso de necesitar taxi o transporte público para ir del hotel al Aeropuerto de Badajoz (recomendamos estar 2 horas antes del vuelo) o a la estación de tren, debes contratarlo por tu cuenta y pasar el gasto a tu empresa. Radio Taxi Badajoz: 924 24 31 01.';
+      } else if (q.includes('equipaje')) {
+        reply = 'Como estándar de Viajes Planea, todos los vuelos incluyen accesorio personal bajo el asiento y maleta de cabina de 10 kg en el compartimento superior. Además, el vuelo de vuelta de Iberia Badajoz-Barcelona incluye una maleta facturada de 23 kg por pasajero.';
+      }
+
+      box.innerHTML += `<div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm max-w-[85%] text-xs text-slate-800"><strong class="text-[#0F172A] block mb-1">PlanIA</strong>${reply}</div>`;
+      box.scrollTop = box.scrollHeight;
+      speakText(reply);
+    }
+
+    // ==================== EXPENSE CALCULATOR ====================
+    function recalcExpenses() {
+      const km = parseFloat(document.getElementById('calc-km').value) || 0;
+      const rate = parseFloat(document.getElementById('calc-rate').value) || 0;
+      const tolls = parseFloat(document.getElementById('calc-tolls').value) || 0;
+      const meals = parseFloat(document.getElementById('calc-meals').value) || 0;
+      const total = (km * rate) + tolls + meals;
+      document.getElementById('calc-total').textContent = total.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
+    function openPwaModal() {
+      const m = document.getElementById('pwa-modal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+    function closePwaModal() {
+      const m = document.getElementById('pwa-modal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    // Dynamic PWA Manifest
+    (function injectManifest() {
+      const manifest = {
+        name: 'Dossier Corporativo · Convención Badajoz 2026 | Viajes Planea',
+        short_name: 'Planea Badajoz',
+        start_url: '.',
+        display: 'standalone',
+        background_color: '#0F172A',
+        theme_color: '#0F172A'
+      };
+      const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = URL.createObjectURL(blob);
+      document.head.appendChild(link);
+    })();
+
+    // Initial render
+    renderAll();
+  </script>
+</body>
+</html>
