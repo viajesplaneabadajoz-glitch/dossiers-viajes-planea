@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Disneyland Paris Mágico: Hotel New York - The Art of Marvel | Familia Pérez Prieto</title>
+  
+  <!-- Configuración PWA App Web Instalable -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Disney Marvel 2026">
+  <meta name="theme-color" content="#0C2340">
+  
+  <!-- Iconos de Aplicación -->
+  <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=180&h=180&q=80">
+  <link rel="icon" type="image/png" href="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=180&h=180&q=80">
+
+  <!-- Tailwind CSS -->
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=09WN8OJDDRmp-bqBK6x3QHop2-cldtBSu_gyNZ6dh6ytJ2e4PtifDXlwn2BuDuirYIzKJa9M8lUlvHcH1QCgYPfl5ufcrpfjhhy3F-fQUrmiW2bpI50JgZYQ04uCFbGTg9DJ3fh-mvV9DEnJzPHx_R47jCwE7xZk_r_F2eYQ_CpL5u9rucsK9Esx4vZGpsThbUmyErcN02aYgnpbR_K2XadEFevTJio3-ffW_DWrVweqkUU14L1OWH8r0qRXpFyXyWvgtRobRQteAcI2xH3eLrxOi28pbYTzdnDHgn9feI2D-4bjJra9AWlZHSaFH00SQtAHzYEGjhUKn-k148pz9ta_bRZ_clN2sCCBguUwoxrQA8cKVZkgTRuVf0exwDuM" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jb250cmlidXRpb24udXNlcmNvbnRlbnQuZ29vZ2xlLmNvbS9kb3dubG9hZD9jPUNneGlZWEprWDNOMGIzSmhaMlVTVUJJTmNtVnpjRzl1YzJWZlpHRjBZUm9fQ2pBMU9UUTRaVFZrTldRNU5qbGhObVUyTURBd05qWXhNRFJsTmpnellqa3hNREF5TWpjNU1UbGhZekV4T0RRME4ySVNDeElIRVBXVDVwYXFCUmdCJmZpbGVuYW1lPWZvbGxldG9fZGlzbmV5bGFuZF9wYXJpc19tYXJ2ZWxfZmFtaWxpYV9wZXJlel9wcmlldG8uaHRtbCZvcGk9MTAzMTM1MDUw"/><script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Leaflet.js para el Mapa Interactivo -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            imperialNavy: '#0C2340',   // Azul Marino Imperial (Europa / Disney Marvel)
+            goldAccent: '#C5A059',     // Dorado Viejo de Lujo
+            crimsonMarvel: '#C8102E',  // Carmesí Marvel / París
+            creamBackground: '#F7F5EE',// Fondo Crema de Lienzo
+            charcoalText: '#2C3E50'    // Texto Oscuro Principal
+          },
+          fontFamily: {
+            calibri: ['Calibri', 'Plus Jakarta Sans', 'sans-serif'],
+            playfair: ['Playfair Display', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Calibri', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #F7F5EE;
+      scroll-behavior: smooth;
+    }
+    .header-title {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F7F5EE;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #C5A059;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0C2340;
+    }
+    .tab-transition {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .leaflet-container {
+      z-index: 1 !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+    .leaflet-pane {
+      z-index: 1 !important;
+    }
+    .leaflet-top, .leaflet-bottom {
+      z-index: 10 !important;
+    }
+    .leaflet-div-icon {
+      background: transparent !important;
+      border: none !important;
+    }
+    #avatar-guide-widget {
+      z-index: 9999 !important;
+    }
+    .tab-content { display: none; }
+    .tab-content.block { display: block !important; }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: white !important;
+        color: black !important;
+      }
+    }
+  </style>
+</head>
+<body class="text-charcoalText antialiased">
+
+  <!-- HERO/HEADER EXCLUSIVO DISNEYLAND PARIS 2026 -->
+  <header class="relative bg-imperialNavy text-white overflow-hidden py-12 md:py-20 shadow-2xl">
+    <div class="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-overlay" style="background-image: url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1600&q=80');"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-goldAccent/30 pb-6 mb-6">
+        <div>
+          <span class="inline-block bg-crimsonMarvel text-white text-xs uppercase font-bold tracking-widest px-3 py-1 rounded-full mb-3 shadow-md border border-goldAccent/50">
+            <i class="fa-solid fa-crown mr-1 text-goldAccent"></i> Expediente Confirmado y Emitido • Viajes Planea
+          </span>
+          <h1 class="header-title text-3xl md:text-5xl font-bold tracking-tight mb-2">DISNEYLAND PARIS &amp; MARVEL</h1>
+          <p class="header-title text-lg md:text-2xl text-goldAccent italic">Disney Hotel New York - The Art of Marvel &amp; Pensión Completa Plus</p>
+        </div>
+        <div class="text-left md:text-right bg-white/5 backdrop-blur-md border border-white/15 rounded-xl p-5 shadow-lg">
+          <p class="text-xs text-goldAccent uppercase font-semibold tracking-wider">Diseñado a medida para</p>
+          <p class="text-xl font-bold text-white">Familia Pérez Prieto <span class="text-sm font-normal text-gray-300">(4 Pax: 2 Adultos + 2 Niños)</span></p>
+          <p class="text-sm text-gray-300 mt-1"><i class="fa-solid fa-calendar-days text-goldAccent mr-1 animate-pulse"></i> 03 al 06 de Diciembre de 2026 (4 Días / 3 Noches)</p>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div class="bg-imperialNavy/60 border border-goldAccent/30 p-3.5 rounded-xl shadow-sm">
+          <div class="text-goldAccent text-xl mb-1"><i class="fa-solid fa-hotel"></i></div>
+          <span class="block text-[11px] uppercase text-gray-300">Alojamiento Oficial</span>
+          <span class="text-xs font-semibold">Hotel New York Marvel ★★★★★</span>
+        </div>
+        <div class="bg-imperialNavy/60 border border-goldAccent/30 p-3.5 rounded-xl shadow-sm">
+          <div class="text-goldAccent text-xl mb-1"><i class="fa-solid fa-ticket"></i></div>
+          <span class="block text-[11px] uppercase text-gray-300">Entradas &amp; Régimen</span>
+          <span class="text-xs font-semibold">2 Parques (4 Días) + PC Plus</span>
+        </div>
+        <div class="bg-imperialNavy/60 border border-goldAccent/30 p-3.5 rounded-xl shadow-sm">
+          <div class="text-goldAccent text-xl mb-1"><i class="fa-solid fa-plane"></i></div>
+          <span class="block text-[11px] uppercase text-gray-300">Vuelos Directos</span>
+          <span class="text-xs font-semibold">TAP Air Portugal (LIS ↔ ORY)</span>
+        </div>
+        <div class="bg-imperialNavy/60 border border-goldAccent/30 p-3.5 rounded-xl shadow-sm">
+          <div class="text-goldAccent text-xl mb-1"><i class="fa-solid fa-shield-halved"></i></div>
+          <span class="block text-[11px] uppercase text-gray-300">Seguro &amp; Asistencia</span>
+          <span class="text-xs font-semibold">Travelfine Excellent 24h</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MENÚ DE NAVEGACIÓN INTERACTIVA (9 PESTAÑAS) -->
+  <nav class="sticky top-0 bg-white shadow-md z-40 no-print border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
+      <div class="flex overflow-x-auto lg:overflow-x-visible lg:flex-wrap lg:justify-center items-center gap-1.5 md:gap-2 py-3 no-scrollbar text-xs">
+        <button onclick="switchTab('resumen')" id="tab-resumen" class="tab-btn active shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-bold text-xs whitespace-nowrap tab-transition bg-imperialNavy text-white shadow-sm hover:shadow-md">
+          <i class="fa-solid fa-passport mr-1.5"></i>Resumen &amp; Logística
+        </button>
+        <button onclick="switchTab('itinerario')" id="tab-itinerario" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-semibold text-xs whitespace-nowrap tab-transition bg-gray-100 text-charcoalText hover:bg-goldAccent/15">
+          <i class="fa-solid fa-map-location-dot mr-1.5"></i>Itinerario Diario
+        </button>
+        <button onclick="switchTab('mapa')" id="tab-mapa" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-semibold text-xs whitespace-nowrap tab-transition bg-gray-100 text-charcoalText hover:bg-goldAccent/15">
+          <i class="fa-solid fa-map mr-1.5"></i>Mapa de Ruta
+        </button>
+        <button onclick="switchTab('enciclopedia')" id="tab-enciclopedia" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-bold text-xs whitespace-nowrap tab-transition bg-goldAccent/15 text-imperialNavy border border-goldAccent/40 hover:bg-goldAccent/30 flex items-center gap-1.5">
+          <i class="fa-solid fa-book-bookmark text-goldAccent"></i>Enciclopedia del Destino
+        </button>
+        <button onclick="switchTab('asistente')" id="tab-asistente" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-bold text-xs whitespace-nowrap tab-transition bg-gray-100 border border-goldAccent/30 text-imperialNavy hover:bg-goldAccent/15 flex items-center gap-1.5">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-crimsonMarvel opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-crimsonMarvel"></span>
+          </span>
+          <i class="fa-solid fa-robot text-goldAccent"></i>Asistente PlanIA
+        </button>
+        <button onclick="switchTab('practica')" id="tab-practica" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-semibold text-xs whitespace-nowrap tab-transition bg-gray-100 text-charcoalText hover:bg-goldAccent/15">
+          <i class="fa-solid fa-calculator mr-1.5"></i>Guía &amp; Presupuesto
+        </button>
+        <button onclick="switchTab('seguro')" id="tab-seguro" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-bold text-xs whitespace-nowrap tab-transition bg-red-50 text-red-900 border border-red-200 hover:bg-red-100 flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-heart text-crimsonMarvel"></i>Seguro 24h
+        </button>
+        <button onclick="switchTab('condiciones')" id="tab-condiciones" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-semibold text-xs whitespace-nowrap tab-transition bg-gray-100 text-charcoalText hover:bg-goldAccent/15">
+          <i class="fa-solid fa-clipboard-list mr-1.5"></i>Condiciones
+        </button>
+        <button onclick="switchTab('instalar')" id="tab-instalar" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-extrabold text-xs whitespace-nowrap tab-transition bg-goldAccent text-imperialNavy hover:bg-imperialNavy hover:text-goldAccent flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-mobile-screen-button"></i>Instalar App
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CUERPO DE CONTENIDOS -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- PESTAÑA 1: RESUMEN Y LOGÍSTICA -->
+    <section id="content-resumen" class="tab-content block space-y-8">
+      
+      <!-- BANNERS DE AUDITORÍA CRUZADA (PRE-FLIGHT AUDIT) -->
+      <div class="space-y-4">
+        <!-- Alerta 1: Equipaje de Mano Tarifa Discount (L) TAP Air Portugal -->
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl shadow-sm flex items-start gap-3">
+          <span class="text-amber-600 text-xl mt-0.5"><i class="fa-solid fa-suitcase-rolling"></i></span>
+          <div class="text-xs text-amber-950 space-y-1">
+            <h4 class="font-bold uppercase tracking-wider text-amber-900">Aviso Importante de Equipaje • Vuelos TAP Air Portugal (Tarifa Discount - L)</h4>
+            <p class="leading-relaxed">Los billetes emitidos (Localizador <strong>9RHSRD</strong> / Aerolínea <strong>ZLGHJF</strong>) incluyen <strong>0 piezas facturadas en bodega</strong> para los 4 pasajeros. Cada viajero puede llevar únicamente <strong>1 maleta de cabina (máx. 10 kg, medidas 55x40x20 cm) + 1 artículo personal pequeño (máx. 2 kg, medidas 40x30x15 cm)</strong>. Si deseáis facturar una maleta adicional, avisad a Viajes Planea antes de la salida para añadirla con tarifa reducida.</p>
+          </div>
+        </div>
+
+        <!-- Alerta 2: Traslados Aeropuerto ORY ↔ Hotel Disney No Incluidos en Bonos -->
+        <div class="bg-red-50 border-l-4 border-crimsonMarvel p-4 rounded-xl shadow-sm flex items-start gap-3">
+          <span class="text-crimsonMarvel text-xl mt-0.5"><i class="fa-solid fa-van-shuttle"></i></span>
+          <div class="text-xs text-red-950 space-y-1">
+            <h4 class="font-bold uppercase tracking-wider text-crimsonMarvel">Verificación Logística • Traslados París-Orly (ORY) ↔ Disneyland Paris</h4>
+            <p class="leading-relaxed">En los bonos emitidos no figura traslado privado precontratado entre el Aeropuerto de París-Orly y Chessy (45 km / aprox. 40-50 min). Recomendamos utilizar el autobús oficial <strong>Magical Shuttle</strong> desde Orly, taxi oficial de tarifa fija o solicitar a Viajes Planea la contratación de un traslado privado puerta a puerta.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETALLES OPERATIVOS INTEGRADOS -->
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100">
+        <h2 class="header-title text-2xl md:text-3xl font-bold text-imperialNavy mb-4"><i class="fa-solid fa-circle-info text-goldAccent mr-2"></i>Detalles Operativos del Expediente</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div class="flex items-start gap-3 bg-creamBackground p-4 rounded-xl border-l-4 border-goldAccent shadow-sm">
+              <span class="text-goldAccent text-lg mt-0.5"><i class="fa-solid fa-users"></i></span>
+              <div>
+                <h4 class="font-bold text-imperialNavy text-sm uppercase tracking-wider">Pasajeros Confirmados (4 Pax)</h4>
+                <ul class="text-xs text-gray-700 mt-1.5 space-y-1">
+                  <li><strong>1. Tomás Pérez Cervera</strong> (Adulto) • DNI: <code>08872267V</code></li>
+                  <li><strong>2. María Prieto León</strong> (Adulto) • DNI: <code>80087019F</code></li>
+                  <li><strong>3. Javier Pérez Prieto</strong> (Niño - 9 años) • DNI: <code>80266604P</code></li>
+                  <li><strong>4. Julia Pérez Prieto</strong> (Niña - 6 años) • DNI: <code>80266605D</code></li>
+                </ul>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 bg-creamBackground p-4 rounded-xl border-l-4 border-imperialNavy shadow-sm">
+              <span class="text-imperialNavy text-lg mt-0.5"><i class="fa-solid fa-bed"></i></span>
+              <div>
+                <h4 class="font-bold text-imperialNavy text-sm uppercase tracking-wider">Distribución &amp; Régimen Disney</h4>
+                <p class="text-xs text-gray-700 mt-1 leading-relaxed"><strong>1 Habitación Classic (2+2)</strong> en el <strong>Disney Hotel New York - The Art of Marvel ★★★★★</strong> con régimen de <strong>Pensión Completa Plus</strong> (desayuno, comida y cena con cupones) + <strong>Entradas a los 2 Parques Disney</strong> durante los 4 días de estancia.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex items-start gap-3 bg-creamBackground p-4 rounded-xl border-l-4 border-crimsonMarvel shadow-sm">
+              <span class="text-crimsonMarvel text-lg mt-0.5"><i class="fa-solid fa-id-card"></i></span>
+              <div>
+                <h4 class="font-bold text-imperialNavy text-sm uppercase tracking-wider">Documentación Obligatoria (Adultos y Niños)</h4>
+                <p class="text-xs text-gray-700 mt-1 leading-relaxed">Es imprescindible que los <strong>4 pasajeros (incluidos Javier de 9 años y Julia de 6 años)</strong> porten su <strong>DNI físico en vigor o Pasaporte</strong> para embarcar en los vuelos internacionales Lisboa ↔ París (el Libro de Familia no es válido para volar).</p>
+              </div>
+            </div>
+            <div class="bg-imperialNavy text-white p-4 rounded-xl flex items-center justify-between shadow-md border border-goldAccent/30">
+              <div class="flex items-center gap-3">
+                <span class="text-goldAccent text-2xl"><i class="fa-solid fa-headset animate-pulse"></i></span>
+                <div>
+                  <h4 class="font-semibold text-sm">Asistencia 24h en Destino</h4>
+                  <p class="text-xs text-gray-300">Viajes Planea: <strong>+34 924 95 26 13</strong> | Emergencia Bono: <strong>+34 971 62 73 64</strong></p>
+                </div>
+              </div>
+              <span class="bg-goldAccent text-imperialNavy text-xs font-bold px-3 py-1 rounded-full uppercase">Activo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CUADRO DE VUELOS TAP AIR PORTUGAL -->
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 border-b border-gray-100 pb-4">
+          <div>
+            <h3 class="header-title text-xl md:text-2xl font-bold text-imperialNavy"><i class="fa-solid fa-plane-departure text-goldAccent mr-2"></i>Vuelos Confirmados • TAP Air Portugal</h3>
+            <p class="text-xs text-gray-500 mt-0.5">Localizador Agencia: <code class="font-bold text-imperialNavy">9RHSRD</code> • Localizador Aerolínea TAP: <code class="font-bold text-crimsonMarvel">ZLGHJF</code> • Emisión: 02 OCT 2026</p>
+          </div>
+          <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold self-start sm:self-auto"><i class="fa-solid fa-circle-check mr-1"></i>Billetes Emitidos</span>
+        </div>
+
+        <div class="overflow-x-auto no-scrollbar mb-6">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-creamBackground text-imperialNavy font-bold">
+                <th class="p-3 rounded-l-lg">Vuelo</th>
+                <th class="p-3">Trayecto</th>
+                <th class="p-3">Fecha</th>
+                <th class="p-3">Salida / Llegada</th>
+                <th class="p-3">Duración</th>
+                <th class="p-3 rounded-r-lg">Equipaje Incluido</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr class="hover:bg-gray-50/70">
+                <td class="p-3 font-bold text-imperialNavy">TP432</td>
+                <td class="p-3 font-semibold">Lisboa (LIS) ➡️ París-Orly (ORY)</td>
+                <td class="p-3 whitespace-nowrap">Jueves 03 Dic 2026</td>
+                <td class="p-3 whitespace-nowrap font-bold text-crimsonMarvel">08:10 h - 11:45 h</td>
+                <td class="p-3">2h 35m</td>
+                <td class="p-3 text-amber-800 font-semibold">Tarifa (L) • 0 pzas facturadas (Solo cabina)</td>
+              </tr>
+              <tr class="hover:bg-gray-50/70">
+                <td class="p-3 font-bold text-imperialNavy">TP437</td>
+                <td class="p-3 font-semibold">París-Orly (ORY) ➡️ Lisboa (LIS)</td>
+                <td class="p-3 whitespace-nowrap">Domingo 06 Dic 2026</td>
+                <td class="p-3 whitespace-nowrap font-bold text-crimsonMarvel">17:40 h - 19:15 h</td>
+                <td class="p-3">2h 35m</td>
+                <td class="p-3 text-amber-800 font-semibold">Tarifa (L) • 0 pzas facturadas (Solo cabina)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Números de Billete Electrónico por Pasajero -->
+        <div class="bg-creamBackground p-4 rounded-xl border border-goldAccent/30">
+          <h4 class="font-bold text-imperialNavy text-xs uppercase tracking-wider mb-2"><i class="fa-solid fa-ticket text-goldAccent mr-1.5"></i>Billetes Electrónicos Emitidos (e-Tickets TAP 047)</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div class="bg-white p-2.5 rounded-lg border border-gray-200">
+              <span class="block font-bold text-imperialNavy">Tomás Pérez Cervera</span>
+              <span class="font-mono text-crimsonMarvel font-semibold">047-2527475912</span>
+            </div>
+            <div class="bg-white p-2.5 rounded-lg border border-gray-200">
+              <span class="block font-bold text-imperialNavy">María Prieto León</span>
+              <span class="font-mono text-crimsonMarvel font-semibold">047-2527475913</span>
+            </div>
+            <div class="bg-white p-2.5 rounded-lg border border-gray-200">
+              <span class="block font-bold text-imperialNavy">Javier Pérez Prieto (Niño)</span>
+              <span class="font-mono text-crimsonMarvel font-semibold">047-2527475914</span>
+            </div>
+            <div class="bg-white p-2.5 rounded-lg border border-gray-200">
+              <span class="block font-bold text-imperialNavy">Julia Pérez Prieto (Niña)</span>
+              <span class="font-mono text-crimsonMarvel font-semibold">047-2527475915</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FICHA DEL ALOJAMIENTO OFICIAL DISNEY -->
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border-2 border-goldAccent">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-6">
+          <div>
+            <span class="bg-imperialNavy text-goldAccent text-xs uppercase font-bold px-3 py-1 rounded-full">Alojamiento Oficial Disneyland Paris ★★★★★</span>
+            <h3 class="header-title text-2xl font-bold text-imperialNavy mt-2"><i class="fa-solid fa-hotel text-goldAccent mr-2"></i>Disney Hotel New York - The Art of Marvel</h3>
+            <p class="text-xs text-gray-600 mt-1"><strong>📍 Dirección:</strong> Avenue René Goscinny, 77700 Chessy, Francia • <strong>📞 Teléfono:</strong> +33 1 60 30 50 10</p>
+          </div>
+          <div class="bg-creamBackground p-3 rounded-xl border border-goldAccent/40 text-xs space-y-1 shrink-0">
+            <p><strong>Localizador Disney:</strong> <code class="text-crimsonMarvel font-bold text-sm">36534398</code></p>
+            <p><strong>Ref. Agencia:</strong> <code>1329430466</code></p>
+            <p><strong>GPS:</strong> 48.87059, 2.78771</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-4 bg-creamBackground rounded-xl border-l-4 border-imperialNavy space-y-1.5">
+            <span class="font-bold text-imperialNavy uppercase block"><i class="fa-solid fa-clock text-goldAccent mr-1"></i> Horarios Check-in / Out</span>
+            <p><strong>Entrada (03 Dic):</strong> Registro desde la mañana para recoger Magic Pass y entrar al parque. Habitación disponible a partir de las <strong>15:00 h</strong> (consigna gratuita de maletas).</p>
+            <p><strong>Salida (06 Dic):</strong> Antes de las <strong>11:00 h</strong> (consigna disponible hasta ir al aeropuerto).</p>
+          </div>
+          <div class="p-4 bg-creamBackground rounded-xl border-l-4 border-goldAccent space-y-1.5">
+            <span class="font-bold text-imperialNavy uppercase block"><i class="fa-solid fa-utensils text-goldAccent mr-1"></i> Pensión Completa Plus</span>
+            <p>Incluye desayuno en el hotel + 1 cupón de comida y 1 cupón de cena por persona y noche de estancia, canjeables en restaurantes con servicio de mesa o buffet de los Parques, Hoteles Disney y Disney Village.</p>
+            <p class="text-crimsonMarvel font-semibold">⚠️ Imprescindible reservar mesa en la App Disneyland Paris con antelación.</p>
+          </div>
+          <div class="p-4 bg-creamBackground rounded-xl border-l-4 border-crimsonMarvel space-y-1.5">
+            <span class="font-bold text-imperialNavy uppercase block"><i class="fa-solid fa-wand-magic-sparkles text-crimsonMarvel mr-1"></i> Magic Pass &amp; Extra Magic Time</span>
+            <p>Al llegar recibiréis vuestra tarjeta <strong>Magic Pass</strong> que integra: llave de la habitación, entradas a los 2 Parques Disney (del 3 al 6 de diciembre), cupones de comida y acceso exclusivo <strong>Extra Magic Time</strong> antes de la apertura oficial.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PESTAÑA 2: ITINERARIO DIARIO -->
+    <section id="content-itinerario" class="tab-content hidden space-y-6">
+      <!-- NAVEGADOR DE DÍAS DIRECTO -->
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex overflow-x-auto gap-2 no-print no-scrollbar">
+        <span class="flex-shrink-0 flex items-center text-xs uppercase font-bold text-imperialNavy px-3">Ir a:</span>
+        <button onclick="scrollToDay(1)" class="px-3.5 py-1.5 bg-creamBackground text-imperialNavy rounded-lg text-xs font-bold hover:bg-goldAccent/20">D1 (Jue 03 Dic)</button>
+        <button onclick="scrollToDay(2)" class="px-3.5 py-1.5 bg-creamBackground text-imperialNavy rounded-lg text-xs font-bold hover:bg-goldAccent/20">D2 (Vie 04 Dic)</button>
+        <button onclick="scrollToDay(3)" class="px-3.5 py-1.5 bg-creamBackground text-imperialNavy rounded-lg text-xs font-bold hover:bg-goldAccent/20">D3 (Sáb 05 Dic)</button>
+        <button onclick="scrollToDay(4)" class="px-3.5 py-1.5 bg-creamBackground text-imperialNavy rounded-lg text-xs font-bold hover:bg-goldAccent/20">D4 (Dom 06 Dic)</button>
+      </div>
+
+      <!-- TARJETAS CRONOLÓGICAS -->
+      <div class="relative border-l-2 border-goldAccent/40 pl-4 md:pl-8 space-y-10 py-4">
+
+        <!-- DÍA 1 -->
+        <div id="day-card-1" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+          <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-imperialNavy text-goldAccent w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow border-2 border-goldAccent">01</div>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+            <div>
+              <span class="text-xs uppercase text-crimsonMarvel font-bold">Jueves 03 de Diciembre de 2026</span>
+              <h3 class="header-title text-2xl font-bold text-imperialNavy">Vuelo Lisboa ✈️ París-Orly • Check-in Hotel Marvel &amp; Primer Día de Parques</h3>
+            </div>
+            <span class="bg-goldAccent/20 text-imperialNavy text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-utensils mr-1"></i>[- / A / C] Pensión Completa Plus</span>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+            <div class="lg:col-span-2 text-sm text-gray-700 space-y-3 leading-relaxed">
+              <p><strong>06:10 h • Presentación en Aeropuerto de Lisboa (LIS):</strong> Presentación con al menos 2 horas de antelación en la Terminal 1 de Lisboa Humberto Delgado-Portela. Recordad llevar los 4 DNIs/Pasaportes físicos en vigor y respetar la franquicia de cabina de TAP (1 maleta de cabina máx. 10 kg + 1 bolso pequeño por persona).</p>
+              <p class="bg-creamBackground p-3 rounded-lg border-l-4 border-crimsonMarvel font-bold text-crimsonMarvel text-xs">
+                <i class="fa-solid fa-plane-departure mr-1.5"></i> VUELO TAP AIR PORTUGAL TP432: Salida LIS 08:10 h ➡️ Llegada París-Orly (ORY) 11:45 h (Duración: 2h 35m • Loc: ZLGHJF).
+              </p>
+              <p><strong>12:15 h • Traslado a Chessy (Disneyland Paris):</strong> Desplazamiento desde París-Orly hasta el <strong>Disney Hotel New York - The Art of Marvel ★★★★★</strong> (Avenue René Goscinny, 77700 Chessy • Loc. Disney: <code>36534398</code>).</p>
+              <p><strong>13:15 h • Registro en Recepción y Entrega de Magic Pass:</strong> Aunque la habitación Classic (2+2) se entrega a partir de las <strong>15:00 h</strong>, podéis realizar el check-in nada más llegar, dejar las maletas en la consigna gratuita del hotel y recoger vuestras tarjetas <strong>Magic Pass</strong> con las entradas incluidas para entrar inmediatamente a los parques.</p>
+              <p><strong>Tarde y Noche • Magia Navideña en Disneyland Paris:</strong> Primer recorrido por Main Street U.S.A. decorada de Navidad, visita a la galería de arte Marvel en el hotel (con más de 350 obras originales) y encuentro en la <em>Super Hero Station</em> (requiere reserva previa en la App). Uso de cupones de comida y cena de la <strong>Pensión Completa Plus</strong>.</p>
+              <p class="font-bold text-imperialNavy">NOCHE EN DISNEY HOTEL NEW YORK - THE ART OF MARVEL ★★★★★.</p>
+            </div>
+            <div>
+              <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80" alt="París y Escapada Disney" class="w-full h-56 object-cover rounded-xl shadow-inner border border-gray-100" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- DÍA 2 -->
+        <div id="day-card-2" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+          <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-imperialNavy text-goldAccent w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow border-2 border-goldAccent">02</div>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+            <div>
+              <span class="text-xs uppercase text-crimsonMarvel font-bold">Viernes 04 de Diciembre de 2026</span>
+              <h3 class="header-title text-2xl font-bold text-imperialNavy">Extra Magic Time • Parque Disneyland &amp; Desfile Disney Enchanted Christmas</h3>
+            </div>
+            <span class="bg-goldAccent/20 text-imperialNavy text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-utensils mr-1"></i>[D / A / C] Pensión Completa Plus</span>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+            <div class="lg:col-span-2 text-sm text-gray-700 space-y-3 leading-relaxed">
+              <p><strong>Desayuno Buffet en el Hotel:</strong> Desayuno incluido en el Downtown Restaurant o Manhattan Restaurant del Hotel New York - The Art of Marvel (sin necesidad de reserva previa, asignación de turno en recepción).</p>
+              <p><strong>08:30 h • Extra Magic Time (Acceso Exclusivo):</strong> Gracias a alojaros en un Hotel Disney oficial, accedéis a los parques 1 hora antes de la apertura al público general. Ideal para subir sin colas a <em>Peter Pan's Flight</em>, <em>Big Thunder Mountain</em> o <em>Buzz Lightyear Laser Blast</em>.</p>
+              <p><strong>Jornada Completa en el Parque Disneyland:</strong> Exploración de las 5 tierras temáticas (Fantasyland, Adventureland, Frontierland, Discoveryland y Main Street). Almuerzo y cena con vuestros cupones de Pensión Completa Plus (recomendado reservar con antelación en <em>Bistrot Chez Rémy</em>, <em>Captain Jack's</em> o <em>Plaza Gardens</em>).</p>
+              <p><strong>Noche • Espectáculo Nocturno en el Castillo de la Bella Durmiente:</strong> Disfrutad del espectáculo nocturno de luces, drones, proyecciones y fuegos artificiales sobre el Castillo antes de regresar dando un agradable paseo de 8 minutos a través de Disney Village hasta vuestro hotel.</p>
+              <p class="font-bold text-imperialNavy">NOCHE EN DISNEY HOTEL NEW YORK - THE ART OF MARVEL ★★★★★.</p>
+            </div>
+            <div>
+              <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80" alt="Arquitectura y Magia Invernal" class="w-full h-56 object-cover rounded-xl shadow-inner border border-gray-100" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- DÍA 3 -->
+        <div id="day-card-3" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+          <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-imperialNavy text-goldAccent w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow border-2 border-goldAccent">03</div>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+            <div>
+              <span class="text-xs uppercase text-crimsonMarvel font-bold">Sábado 05 de Diciembre de 2026</span>
+              <h3 class="header-title text-2xl font-bold text-imperialNavy">Avengers Campus &amp; Walt Disney Studios Park</h3>
+            </div>
+            <span class="bg-goldAccent/20 text-imperialNavy text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-utensils mr-1"></i>[D / A / C] Pensión Completa Plus</span>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+            <div class="lg:col-span-2 text-sm text-gray-700 space-y-3 leading-relaxed">
+              <p><strong>Desayuno Buffet en el Hotel:</strong> Desayuno incluido en el hotel antes de dirigiros a <strong>Walt Disney Studios Park</strong>.</p>
+              <p><strong>Mañana • Inmersión Total en Marvel Avengers Campus:</strong> El complemento perfecto para vuestro hotel temático. Disfrutad de atracciones estrella como <em>Spider-Man W.E.B. Adventure</em> (ideal para Javier y Julia), <em>Avengers Assemble: Flight Force</em> y los encuentros heroicos en el <em>Hero Training Center</em>.</p>
+              <p><strong>Mediodía y Tarde • Worlds of Pixar y Espectáculos Musicales:</strong> Recorrido por <em>Ratatouille: The Adventure</em>, <em>Crush's Coaster</em>, <em>Toy Story Playland</em> y musicales de Broadway Disney como <em>Mickey and the Magician</em> o <em>Frozen: A Musical Invitation</em>.</p>
+              <p><strong>Cena Temática • Downtown Restaurant o Manhattan Restaurant:</strong> Uso del último cupón de cena de vuestra Pensión Completa Plus en el propio hotel (buffet internacional con especialidades inspiradas en Marvel) o en Disney Village.</p>
+              <p class="font-bold text-imperialNavy">NOCHE EN DISNEY HOTEL NEW YORK - THE ART OF MARVEL ★★★★★.</p>
+            </div>
+            <div>
+              <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=800&q=80" alt="Inspiración Manhattan Nueva York" class="w-full h-56 object-cover rounded-xl shadow-inner border border-gray-100" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- DÍA 4 -->
+        <div id="day-card-4" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+          <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-imperialNavy text-goldAccent w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow border-2 border-goldAccent">04</div>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+            <div>
+              <span class="text-xs uppercase text-crimsonMarvel font-bold">Domingo 06 de Diciembre de 2026</span>
+              <h3 class="header-title text-2xl font-bold text-imperialNavy">Última Mañana en los Parques • Regreso París-Orly ✈️ Lisboa</h3>
+            </div>
+            <span class="bg-gray-100 text-charcoalText text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-plane-arrival mr-1"></i>[D / - / -] Regreso a Casa</span>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+            <div class="lg:col-span-2 text-sm text-gray-700 space-y-3 leading-relaxed">
+              <p><strong>Desayuno Buffet &amp; Check-out (Antes de las 11:00 h):</strong> Desayuno en el hotel, entrega de la habitación antes de las <strong>11:00 h</strong> y depósito de las maletas en la consigna del hotel.</p>
+              <p><strong>Mañana • Últimas Compras y Atracciones Favoritas:</strong> Vuestra entrada sigue siendo válida durante todo el domingo 06 de diciembre. Aprovechad para repetir vuestras atracciones preferidas y realizar compras de recuerdos en <em>World of Disney</em> (Disney Village).</p>
+              <p><strong>14:15 h • Salida hacia el Aeropuerto de París-Orly (ORY):</strong> Recogida de equipaje en consigna y salida hacia París-Orly con margen suficiente (aprox. 45-50 min de trayecto) para llegar 2 horas antes del vuelo.</p>
+              <p class="bg-creamBackground p-3 rounded-lg border-l-4 border-crimsonMarvel font-bold text-crimsonMarvel text-xs">
+                <i class="fa-solid fa-plane-departure mr-1.5"></i> VUELO TAP AIR PORTUGAL TP437: Salida París-Orly (ORY) 17:40 h ➡️ Llegada Lisboa (LIS) 19:15 h (Duración: 2h 35m).
+              </p>
+            </div>
+            <div>
+              <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80" alt="Vuelo de Regreso TAP Air Portugal" class="w-full h-56 object-cover rounded-xl shadow-inner border border-gray-100" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- CIERRE OFICIAL DEL ITINERARIO -->
+        <div class="text-center py-8 border-t-2 border-goldAccent/30 mt-10">
+          <span class="header-title text-xl md:text-2xl font-extrabold text-imperialNavy uppercase tracking-widest bg-goldAccent/20 px-8 py-3 rounded-full border-2 border-goldAccent shadow-md inline-block">
+            🏁 FIN DE NUESTROS SERVICIOS 🏁
+          </span>
+          <p class="text-xs text-gray-500 mt-3 font-semibold">Viajes Planea Badajoz desea a la Familia Pérez Prieto un viaje inolvidable lleno de magia.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PESTAÑA 3: MAPA INTERACTIVO COMPLETO (LEAFLET.JS) -->
+    <section id="content-mapa" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4 mb-6">
+          <div>
+            <h2 class="header-title text-2xl md:text-3xl font-bold text-imperialNavy"><i class="fa-solid fa-map-pin text-goldAccent mr-2"></i>Mapa Interactivo Disneyland Paris &amp; Alrededores</h2>
+            <p class="text-xs text-slate-500 mt-1">Explora tu hotel oficial, los dos parques Disney, los restaurantes recomendados para vuestros cupones Plus y rincones secretos:</p>
+          </div>
+          <div class="flex flex-wrap gap-2 no-print">
+            <button onclick="filterMapMarkers('all')" class="px-3 py-1.5 bg-imperialNavy text-white rounded-lg text-xs font-bold">Todos</button>
+            <button onclick="filterMapMarkers('hotel')" class="px-3 py-1.5 bg-goldAccent text-imperialNavy rounded-lg text-xs font-bold">🏨 Hotel &amp; Aeropuerto</button>
+            <button onclick="filterMapMarkers('visita')" class="px-3 py-1.5 bg-blue-100 text-blue-900 rounded-lg text-xs font-bold">🏰 Parques &amp; Atracciones</button>
+            <button onclick="filterMapMarkers('comida')" class="px-3 py-1.5 bg-green-100 text-green-900 rounded-lg text-xs font-bold">🍽️ Restaurantes Plus</button>
+            <button onclick="filterMapMarkers('opcional')" class="px-3 py-1.5 bg-purple-100 text-purple-900 rounded-lg text-xs font-bold border border-purple-300">⭐ Rincones Extra</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <!-- Listado lateral interactivo completo -->
+          <div class="lg:col-span-1 max-h-[520px] overflow-y-auto pr-2 space-y-2 border-r border-gray-100 text-xs no-scrollbar">
+            <h4 class="font-bold text-imperialNavy border-b pb-1 text-sm mb-2">Puntos Clave del Viaje</h4>
+            
+            <div onclick="focusMapOnPoint(48.87059, 2.78771)" class="p-2.5 bg-amber-50 border-l-4 border-goldAccent rounded-lg cursor-pointer hover:bg-goldAccent/20 transition-colors">
+              <span class="font-bold text-imperialNavy">🏨 Disney Hotel New York - The Art of Marvel</span>
+              <span class="block text-[10px] text-gray-500">Vuestro Hotel 5★ • Loc: 36534398</span>
+            </div>
+
+            <div onclick="focusMapOnPoint(48.7262, 2.3652)" class="p-2.5 bg-creamBackground border-l-4 border-goldAccent rounded-lg cursor-pointer hover:bg-goldAccent/20 transition-colors">
+              <span class="font-bold text-imperialNavy">✈️ Aeropuerto de París-Orly (ORY)</span>
+              <span class="block text-[10px] text-gray-500">Llegada 03 Dic (11:45) / Salida 06 Dic (17:40)</span>
+            </div>
+
+            <div onclick="focusMapOnPoint(48.8722, 2.7758)" class="p-2.5 bg-blue-50/60 border-l-4 border-blue-600 rounded-lg cursor-pointer hover:bg-blue-100/60 transition-colors">
+              <span class="font-bold text-blue-950">🏰 Parque Disneyland (Castillo)</span>
+              <span class="block text-[10px] text-gray-500">Acceso incluido 4 días + Extra Magic Time</span>
+            </div>
+
+            <div onclick="focusMapOnPoint(48.8673, 2.7790)" class="p-2.5 bg-blue-50/60 border-l-4 border-blue-600 rounded-lg cursor-pointer hover:bg-blue-100/60 transition-colors">
+              <span class="font-bold text-blue-950">🦸 Walt Disney Studios &amp; Avengers Campus</span>
+              <span class="block text-[10px] text-gray-500">Acceso incluido 4 días • Zona Marvel</span>
+            </div>
+
+            <h4 class="font-bold text-green-900 border-b pb-1 text-xs mt-3 pt-2">🍽️ Restaurantes Recomendados (Cupones Plus)</h4>
+
+            <div onclick="focusMapOnPoint(48.8661, 2.7805)" class="p-2.5 bg-green-50/60 border-l-4 border-green-600 rounded-lg cursor-pointer hover:bg-green-100/60 transition-colors">
+              <span class="font-bold text-green-950">🍽️ Bistrot Chez Rémy (Studios)</span>
+              <span class="block text-[10px] text-gray-500">D1/D3 • Cocina francesa tamaño Ratatouille</span>
+            </div>
+
+            <div onclick="focusMapOnPoint(48.8744, 2.7725)" class="p-2.5 bg-green-50/60 border-l-4 border-green-600 rounded-lg cursor-pointer hover:bg-green-100/60 transition-colors">
+              <span class="font-bold text-green-950">🍽️ Captain Jack's - Restaurant des Pirates</span>
+              <span class="block text-[10px] text-gray-500">D2 • Dentro de Piratas del Caribe</span>
+            </div>
+
+            <div onclick="focusMapOnPoint(48.8708, 2.7875)" class="p-2.5 bg-green-50/60 border-l-4 border-green-600 rounded-lg cursor-pointer hover:bg-green-100/60 transition-colors">
+              <span class="font-bold text-green-950">🍽️ Downtown &amp; Manhattan Restaurant</span>
+              <span class="block text-[10px] text-gray-500">D3 • Alta cocina italiana y buffet Marvel</span>
+            </div>
+
+            <div onclick="focusMapOnPoint(48.8675, 2.7778)" class="p-2.5 bg-green-50/60 border-l-4 border-green-600 rounded-lg cursor-pointer hover:bg-green-100/60 transition-colors">
+              <span class="font-bold text-green-950">🍽️ PYM Kitchen (Avengers Campus)</span>
+              <span class="block text-[10px] text-gray-500">D4 • Buffet gigante/diminuto de Ant-Man</span>
+            </div>
+
+            <h4 class="font-bold text-purple-900 border-b pb-1 text-xs mt-3 pt-2">⭐ Rincones Secretos &amp; Experiencias Extra</h4>
+
+            <div onclick="focusMapOnPoint(48.8726, 2.7760)" class="p-2.5 bg-purple-50/60 border-l-4 border-purple-600 rounded-lg cursor-pointer hover:bg-purple-100/60 transition-colors">
+              <span class="font-bold text-purple-950">🐉 La Guarida del Dragón (Bajo el Castillo)</span>
+              <span class="block text-[10px] text-gray-500">Rincón D1 • Dragón animatrónico gigante de 27m</span>
+            </div>
+
+            <div onclick="focusMapOnPoint(48.8716, 2.7768)" class="p-2.5 bg-purple-50/60 border-l-4 border-purple-600 rounded-lg cursor-pointer hover:bg-purple-100/60 transition-colors">
+              <span class="font-bold text-purple-950">🏛️ Liberty Arcade &amp; Discovery Arcade</span>
+              <span class="block text-[10px] text-gray-500">Rincón D2 • Pasajes cubiertos climatizados</span>
+            </div>
+
+            <div onclick="focusMapOnPoint(48.8703, 2.7879)" class="p-2.5 bg-purple-50/60 border-l-4 border-purple-600 rounded-lg cursor-pointer hover:bg-purple-100/60 transition-colors">
+              <span class="font-bold text-purple-950">🎨 Marvel Design Studio &amp; Skyline Bar</span>
+              <span class="block text-[10px] text-gray-500">Rincón D3 • Taller de dibujo para Javier y Julia</span>
+            </div>
+
+            <div onclick="focusMapOnPoint(48.8545, 2.7830)" class="p-2.5 bg-purple-50/60 border-l-4 border-purple-600 rounded-lg cursor-pointer hover:bg-purple-100/60 transition-colors">
+              <span class="font-bold text-purple-950">🛍️ La Vallée Village Outlet (Val d'Europe)</span>
+              <span class="block text-[10px] text-gray-500">Rincón D4 • A 1 parada de RER A (5 min)</span>
+            </div>
+          </div>
+
+          <!-- El Mapa Leaflet -->
+          <div class="lg:col-span-3 h-[520px] rounded-2xl overflow-hidden relative shadow-inner border border-gray-100">
+            <div id="map" class="w-full h-full min-h-[520px]"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PESTAÑA 4: ENCICLOPEDIA DEL DESTINO (RATIO 1:1 - 4 DÍAS) -->
+    <section id="content-enciclopedia" class="tab-content hidden space-y-8">
+      <div class="bg-gradient-to-r from-imperialNavy to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-lg border border-goldAccent/40">
+        <div class="flex items-center gap-4 mb-2">
+          <span class="text-3xl text-goldAccent"><i class="fa-solid fa-book-bookmark"></i></span>
+          <div>
+            <h2 class="header-title text-2xl md:text-3xl font-bold">Enciclopedia Disneyland Paris en Navidad &amp; Secretos Marvel</h2>
+            <p class="text-xs text-gray-300 mt-1">Climatología en diciembre, vestimenta térmica para niños, guía de uso de cupones Pensión Completa Plus y 4 restaurantes + 4 rincones secretos geolocalizados.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MÓDULO: CLIMATOLOGÍA EN DICIEMBRE Y VESTIMENTA -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-goldAccent/30 space-y-3">
+          <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+            <span class="text-goldAccent text-2xl"><i class="fa-solid fa-snowflake"></i></span>
+            <div>
+              <h3 class="header-title text-lg font-bold text-imperialNavy">Climatología en Chessy / París (03 - 06 Diciembre)</h3>
+              <p class="text-[11px] text-gray-500">Ambiente plenamente navideño con temperaturas invernales:</p>
+            </div>
+          </div>
+          <div class="text-xs text-gray-700 space-y-2.5 leading-relaxed">
+            <div class="p-3 bg-creamBackground rounded-xl border-l-4 border-imperialNavy">
+              <strong class="text-imperialNavy block">Temperaturas Previstas (3°C a 8°C):</strong>
+              <p>A principios de diciembre en Île-de-France las máximas rondan los <strong>7°C - 9°C</strong> al mediodía y las mínimas bajan a <strong>2°C - 4°C</strong> a primera hora (Extra Magic Time) y durante el espectáculo nocturno frente al Castillo.</p>
+            </div>
+            <div class="p-3 bg-creamBackground rounded-xl border-l-4 border-goldAccent">
+              <strong class="text-imperialNavy block">Ambiente Invernal y Nieve Artificial:</strong>
+              <p>En Main Street U.S.A. cae nieve mágica varias veces al día durante el desfile navideño. Puede haber llovizna fina o niebla matinal, por lo que conviene llevar calzado impermeable.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-goldAccent/30 space-y-3">
+          <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+            <span class="text-crimsonMarvel text-2xl"><i class="fa-solid fa-mitten"></i></span>
+            <div>
+              <h3 class="header-title text-lg font-bold text-imperialNavy">Vestimenta Térmica &amp; Mochila Familiar</h3>
+              <p class="text-[11px] text-gray-500">Equipamiento recomendado para Javier (9), Julia (6) y adultos:</p>
+            </div>
+          </div>
+          <div class="text-xs text-gray-700 space-y-2.5 leading-relaxed">
+            <div class="p-3 bg-amber-50 rounded-xl border-l-4 border-goldAccent">
+              <strong class="text-amber-950 block"><i class="fa-solid fa-layer-group text-goldAccent mr-1"></i> Sistema de 3 Capas:</strong>
+              <p class="text-amber-900 mt-1">Camiseta térmica interior, jersey polar o sudadera (los restaurantes e interiores tienen calefacción alta) y abrigo cortavientos/impermeable con capucha. Indispensables <strong>gorro, bufanda y guantes</strong> para esperar los desfiles.</p>
+            </div>
+            <div class="p-3 bg-creamBackground rounded-xl border-l-4 border-imperialNavy">
+              <strong class="text-imperialNavy block">En la Mochila Diaria del Parque:</strong>
+              <p>• Calzado deportivo o botas cómodas ya estrenadas (se caminan 12-16 km diarios).<br>• Batería externa (PowerBank) para el móvil: la App oficial de Disneyland Paris consume mucha batería al consultar tiempos de espera y reservas.<br>• Chubasqueros ligeros plegables para los 4.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RATIO 1:1 - 4 RESTAURANTES PLUS + 4 RINCONES SECRETOS (1 POR CADA DÍA DE ESTANCIA) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- DÍA 1: RESTAURANTE + RINCÓN -->
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-3">
+          <span class="bg-imperialNavy text-goldAccent text-[10px] font-bold uppercase px-2.5 py-1 rounded-full">Día 1 • Jueves 03 Dic</span>
+          <h4 class="font-bold text-imperialNavy text-base">Gastronomía &amp; Secreto en Parque Disneyland</h4>
+          <div class="p-3 bg-green-50/70 rounded-xl border-l-4 border-green-600 text-xs space-y-1">
+            <strong class="text-green-950 block">🍽️ Restaurante Plus: Bistrot Chez Rémy (Studios)</strong>
+            <p class="text-gray-700">Inmersión total donde te encoges al tamaño de una rata junto a la atracción de Ratatouille. Sillas hechas con chapas de champán y menú francés delicioso incluido en vuestro cupón Plus.</p>
+          </div>
+          <div class="p-3 bg-purple-50/70 rounded-xl border-l-4 border-purple-600 text-xs space-y-1">
+            <strong class="text-purple-950 block">🐉 Rincón Secreto: La Guarida del Dragón (La Tanière du Dragon)</strong>
+            <p class="text-gray-700">Justo debajo del Castillo de la Bella Durmiente (acceso lateral por Fantasyland) duerme un enorme dragón animatrónico de 27 metros que despierta echando humo. ¡A Javier y Julia les encantará!</p>
+          </div>
+        </div>
+
+        <!-- DÍA 2: RESTAURANTE + RINCÓN -->
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-3">
+          <span class="bg-imperialNavy text-goldAccent text-[10px] font-bold uppercase px-2.5 py-1 rounded-full">Día 2 • Viernes 04 Dic</span>
+          <h4 class="font-bold text-imperialNavy text-base">Gastronomía &amp; Secreto en Adventureland / Main Street</h4>
+          <div class="p-3 bg-green-50/70 rounded-xl border-l-4 border-green-600 text-xs space-y-1">
+            <strong class="text-green-950 block">🍽️ Restaurante Plus: Captain Jack's - Restaurant des Pirates</strong>
+            <p class="text-gray-700">Ubicado literalmente dentro de la atracción <em>Piratas del Caribe</em> a orillas de una laguna tropical nocturna. Ambiente espectacular bajo antorchas viendo pasar las barcas.</p>
+          </div>
+          <div class="p-3 bg-purple-50/70 rounded-xl border-l-4 border-purple-600 text-xs space-y-1">
+            <strong class="text-purple-950 block">🏛️ Rincón Secreto: Liberty Arcade &amp; Discovery Arcade</strong>
+            <p class="text-gray-700">Dos galerías cubiertas y calefactadas paralelas a Main Street U.S.A. Perfectas para resguardarse del frío de diciembre, ver la exposición de la Estatua de la Libertad y salir rápido tras los fuegos artificiales.</p>
+          </div>
+        </div>
+
+        <!-- DÍA 3: RESTAURANTE + RINCÓN -->
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-3">
+          <span class="bg-imperialNavy text-goldAccent text-[10px] font-bold uppercase px-2.5 py-1 rounded-full">Día 3 • Sábado 05 Dic</span>
+          <h4 class="font-bold text-imperialNavy text-base">Gastronomía &amp; Secreto en Vuestro Hotel Marvel</h4>
+          <div class="p-3 bg-green-50/70 rounded-xl border-l-4 border-green-600 text-xs space-y-1">
+            <strong class="text-green-950 block">🍽️ Restaurante Plus: Downtown Restaurant &amp; Manhattan Restaurant</strong>
+            <p class="text-gray-700">En vuestro propio hotel 5★: el <em>Downtown</em> ofrece buffet cosmopolita con postres inspirados en superhéroes Marvel, y el <em>Manhattan</em> sirve cocina italiana elegante bajo una lámpara inspirada en Asgard.</p>
+          </div>
+          <div class="p-3 bg-purple-50/70 rounded-xl border-l-4 border-purple-600 text-xs space-y-1">
+            <strong class="text-purple-950 block">🎨 Rincón Secreto: Marvel Design Studio &amp; Skyline Bar</strong>
+            <p class="text-gray-700">En el hotel podéis apuntar a los niños al taller gratuito para aprender a dibujar cómics de Marvel como verdaderos artistas, mientras los adultos disfrutáis de vistas panorámicas de Nueva York en el Skyline Bar.</p>
+          </div>
+        </div>
+
+        <!-- DÍA 4: RESTAURANTE + RINCÓN -->
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-3">
+          <span class="bg-imperialNavy text-goldAccent text-[10px] font-bold uppercase px-2.5 py-1 rounded-full">Día 4 • Domingo 06 Dic</span>
+          <h4 class="font-bold text-imperialNavy text-base">Gastronomía &amp; Secreto en Avengers Campus / Val d'Europe</h4>
+          <div class="p-3 bg-green-50/70 rounded-xl border-l-4 border-green-600 text-xs space-y-1">
+            <strong class="text-green-950 block">🍽️ Restaurante Plus: PYM Kitchen (Avengers Campus)</strong>
+            <p class="text-gray-700">Laboratorio experimental de Ant-Man y la Avispa donde los alimentos tienen tamaños gigantes o diminutos (pretzels enormes, mini hamburguesas, bebidas en probetas). ¡Diversión asegurada para niños!</p>
+          </div>
+          <div class="p-3 bg-purple-50/70 rounded-xl border-l-4 border-purple-600 text-xs space-y-1">
+            <strong class="text-purple-950 block">🛍️ Rincón Secreto: La Vallée Village Outlet (Val d'Europe)</strong>
+            <p class="text-gray-700">A solo 5 minutos en tren RER A (estación Val d'Europe) se encuentra este pueblo comercial al aire libre de primeras marcas con descuentos todo el año y decoración navideña.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PESTAÑA 5: ASISTENTE PLANIA & AVATAR GUÍA VIRTUAL -->
+    <section id="content-asistente" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100">
+        <div class="flex items-center justify-between border-b pb-4 mb-6">
+          <div class="flex items-center gap-3">
+            <div class="bg-imperialNavy text-goldAccent p-3 rounded-xl text-xl">
+              <i class="fa-solid fa-robot animate-pulse"></i>
+            </div>
+            <div>
+              <h2 class="header-title text-2xl md:text-3xl font-bold text-imperialNavy">Asistente PlanIA • Concierge Disneyland Paris</h2>
+              <p class="text-xs text-slate-500 mt-1">Consulta instantánea offline sobre vuelos TAP, equipaje de cabina, localizador Disney, Pensión Completa Plus, clima o seguro médico.</p>
+            </div>
+          </div>
+          <div class="hidden sm:flex items-center gap-2 bg-imperialNavy/5 border border-goldAccent/40 px-3 py-1.5 rounded-full text-[11px] font-bold text-imperialNavy">
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+            <span>PlanIA Concierge Activo</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <!-- Panel Izquierdo -->
+          <div class="lg:col-span-1 space-y-4">
+            <div class="p-4 bg-creamBackground rounded-xl border border-goldAccent/30">
+              <h4 class="font-bold text-imperialNavy text-xs uppercase tracking-wider mb-2"><i class="fa-solid fa-hotel text-goldAccent mr-1"></i> Hotel Marvel &amp; Magic Pass</h4>
+              <button onclick="sendPresetPrompt('Dime los datos del Hotel New York Marvel, localizador Disney, check-in y cómo funciona la Magic Pass')" class="w-full py-2 bg-goldAccent text-imperialNavy font-bold rounded-lg text-[10px] uppercase transition-all shadow-md">
+                Ver Hotel &amp; Magic Pass
+              </button>
+            </div>
+
+            <div class="p-4 bg-creamBackground rounded-xl border border-goldAccent/30">
+              <h4 class="font-bold text-imperialNavy text-xs uppercase tracking-wider mb-2"><i class="fa-solid fa-plane text-crimsonMarvel mr-1"></i> Vuelos TAP &amp; Equipaje</h4>
+              <button onclick="sendPresetPrompt('¿Cuáles son los horarios de nuestros vuelos TAP y qué equipaje tenemos permitido?')" class="w-full py-2 bg-imperialNavy text-goldAccent font-bold rounded-lg text-[10px] uppercase transition-all shadow-md">
+                Consultar Vuelos &amp; Maletas
+              </button>
+            </div>
+
+            <div class="p-4 bg-creamBackground rounded-xl border border-goldAccent/30">
+              <h4 class="font-bold text-imperialNavy text-xs uppercase tracking-wider mb-2"><i class="fa-solid fa-circle-question text-goldAccent mr-1"></i> Consultas Rápidas</h4>
+              <div class="space-y-2 text-[10px] font-semibold text-imperialNavy">
+                <button onclick="sendPresetPrompt('¿Qué tenemos previsto para el viernes 4 de diciembre?')" class="w-full text-left p-2 hover:bg-goldAccent/15 rounded border border-goldAccent/30 transition-all">Plan Viernes 04 Diciembre</button>
+                <button onclick="sendPresetPrompt('¿Cómo funcionan los cupones de Pensión Completa Plus?')" class="w-full text-left p-2 hover:bg-goldAccent/15 rounded border border-goldAccent/30 transition-all">Pensión Completa Plus</button>
+                <button onclick="sendPresetPrompt('¿Cuál es el teléfono y póliza de nuestro seguro de viaje?')" class="w-full text-left p-2 hover:bg-goldAccent/15 rounded border border-goldAccent/30 transition-all">Seguro Médico 24h</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat UI -->
+          <div class="lg:col-span-3 flex flex-col h-[500px] bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden relative">
+            <div class="bg-imperialNavy text-white px-4 py-3 flex items-center justify-between shadow-sm">
+              <div class="flex items-center gap-2">
+                <div class="w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></div>
+                <span class="font-bold text-xs uppercase tracking-widest text-goldAccent">Asistente PlanIA • Viajes Planea</span>
+              </div>
+              <span class="text-[10px] bg-goldAccent/20 text-goldAccent px-2 py-0.5 rounded font-mono font-bold">Offline Ready</span>
+            </div>
+
+            <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 text-xs no-scrollbar">
+              <div class="flex gap-2.5 items-start max-w-[90%]">
+                <div class="bg-goldAccent text-imperialNavy w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 shadow-md"><i class="fa-solid fa-robot text-sm"></i></div>
+                <div class="p-4 bg-white border-l-4 border-goldAccent rounded-2xl rounded-tl-none shadow-md text-slate-700 leading-relaxed space-y-2">
+                  <p class="font-bold text-imperialNavy text-sm"><i class="fa-solid fa-sparkles text-goldAccent mr-1"></i> Asistente Oficial de Viajes Planea</p>
+                  <p>¡Bonjour, <strong>Familia Pérez Prieto</strong>! Soy vuestro <strong>Asistente PlanIA</strong>.</p>
+                  <p>Tengo cargado todo vuestro expediente de Disneyland Paris: vuelos TAP Air Portugal (<code>ZLGHJF</code>), reserva en <strong>Disney Hotel New York - The Art of Marvel ★★★★★</strong> (<code>36534398</code>), Pensión Completa Plus y vuestra póliza Travelfine (<code>U2ZS0S8C20</code>). ¿En qué puedo ayudaros?</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-3 bg-white border-t border-slate-200 flex gap-2 no-print">
+              <input type="text" id="ai-chat-input" onkeypress="handleChatKeyPress(event)" placeholder="Pregunta sobre horarios de vuelos, equipaje, Magic Pass, restaurantes o seguro..." class="flex-1 border border-slate-200 rounded-xl px-4 py-2 text-xs focus:outline-none focus:border-goldAccent">
+              <button onclick="sendChatMessage()" class="bg-imperialNavy hover:bg-slate-900 text-goldAccent font-bold px-4 py-2 rounded-xl transition-all shadow-md text-xs flex items-center gap-1.5">
+                <i class="fa-solid fa-paper-plane"></i> Enviar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PESTAÑA 6: GUÍA PRÁCTICA & CALCULADORA DE PRESUPUESTO -->
+    <section id="content-practica" class="tab-content hidden space-y-8">
+      <!-- CALCULADORA INTERACTIVA DE PRESUPUESTO EXTRA EN PARQUE (EUROZONA) -->
+      <div class="bg-imperialNavy text-white rounded-2xl p-6 md:p-8 shadow-lg border border-goldAccent/40">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div class="space-y-2">
+            <span class="bg-goldAccent text-imperialNavy text-xs uppercase font-bold tracking-widest px-2.5 py-1 rounded-full">Eurozona (€) • Sin Cambio de Divisa</span>
+            <h3 class="header-title text-2xl font-bold">Calculadora de Presupuesto Extra en Disneyland Paris</h3>
+            <p class="text-xs text-gray-300">Como ya tenéis incluida la <strong>Pensión Completa Plus</strong>, calcula aquí vuestro presupuesto estimado para traslados, snacks navideños y souvenirs:</p>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4 bg-white/5 p-4 rounded-xl border border-white/15">
+            <div>
+              <label class="block text-xs uppercase text-gray-300 mb-1 font-bold">Días en Parques</label>
+              <input type="number" id="calc-days" value="4" min="1" max="10" class="w-full bg-imperialNavy border border-goldAccent/50 rounded-lg py-1 px-3 text-white text-center font-bold focus:outline-none focus:border-goldAccent">
+            </div>
+            <div>
+              <label class="block text-xs uppercase text-gray-300 mb-1 font-bold">Viajeros (Pax)</label>
+              <input type="number" id="calc-pax" value="4" min="1" max="10" class="w-full bg-imperialNavy border border-goldAccent/50 rounded-lg py-1 px-3 text-white text-center font-bold focus:outline-none focus:border-goldAccent">
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 border-t border-white/15 pt-6 text-center">
+          <div class="bg-imperialNavy/60 p-4 rounded-xl border border-goldAccent/30">
+            <span class="text-xs text-gray-300 block uppercase font-bold mb-1">Snacks, Meriendas &amp; Bebidas</span>
+            <span class="text-goldAccent text-sm block font-semibold">(8 - 12 € / día / pax)</span>
+            <span class="text-2xl font-bold block mt-2" id="budget-snacks">32 - 48 € / día</span>
+            <span class="text-xs text-gray-300 block mt-1" id="budget-snacks-total">Total 4 días: 128 - 192 €</span>
+          </div>
+          <div class="bg-imperialNavy/60 p-4 rounded-xl border border-goldAccent/30">
+            <span class="text-xs text-gray-300 block uppercase font-bold mb-1">Souvenirs Marvel &amp; Orejas Disney</span>
+            <span class="text-goldAccent text-sm block font-semibold">(15 - 25 € / día / pax)</span>
+            <span class="text-2xl font-bold block mt-2" id="budget-souvenirs">60 - 100 € / día</span>
+            <span class="text-xs text-gray-300 block mt-1" id="budget-souvenirs-total">Total 4 días: 240 - 400 €</span>
+          </div>
+          <div class="bg-imperialNavy/60 p-4 rounded-xl border border-goldAccent/30 flex flex-col justify-center">
+            <span class="text-xs text-gray-300 block uppercase font-bold mb-1">Traslados Aeropuerto ORY ↔ Disney</span>
+            <span class="text-xs text-gray-200 px-3">Magical Shuttle oficial aprox. <strong>24 € adulto / 11 € niño</strong> por trayecto (140 € i/v los 4 pax) o taxi oficial París-Orly aprox. <strong>85 - 100 €</strong> por trayecto.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONSEJOS PRÁCTICOS EN DESTINO -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-3">
+          <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+            <span class="text-goldAccent text-2xl"><i class="fa-solid fa-mobile-screen"></i></span>
+            <h4 class="font-bold text-imperialNavy text-lg">App Disneyland Paris</h4>
+          </div>
+          <ul class="list-disc list-inside text-xs text-gray-700 space-y-2 leading-relaxed bg-creamBackground p-3.5 rounded-xl">
+            <li>Descargad la App oficial y vinculad el localizador <strong>36534398</strong> antes de viajar.</li>
+            <li>Reservad mesa para comidas y cenas con vuestros cupones <strong>Pensión Completa Plus</strong>.</li>
+            <li>Consultad tiempos de espera en tiempo real y horarios de espectáculos navideños.</li>
+            <li>Permite reservar turno en la <em>Super Hero Station</em> de vuestro hotel Marvel.</li>
+          </ul>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-3">
+          <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+            <span class="text-goldAccent text-2xl"><i class="fa-solid fa-plug"></i></span>
+            <h4 class="font-bold text-imperialNavy text-lg">Enchufes &amp; Conectividad</h4>
+          </div>
+          <div class="text-xs text-gray-700 space-y-2 leading-relaxed">
+            <p><strong>Enchufes Tipo E/F (230V):</strong> Exactamente iguales que en España y Portugal. No necesitáis adaptador de corriente.</p>
+            <p><strong>Roaming Gratuito UE:</strong> Vuestras tarifas móviles españolas funcionan en Francia sin coste adicional de datos ni llamadas.</p>
+            <p><strong>Wi-Fi Gratuito:</strong> Disponible en todo el Hotel New York Marvel y en ambos parques Disney.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-3">
+          <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+            <span class="text-crimsonMarvel text-2xl"><i class="fa-solid fa-child-reaching"></i></span>
+            <h4 class="font-bold text-imperialNavy text-lg">Servicios para Familias</h4>
+          </div>
+          <div class="text-xs text-gray-700 space-y-2 leading-relaxed">
+            <p><strong>Rider Switch (Cambio de Adulto):</strong> Si una atracción tiene restricción de altura para Julia (6 años), uno de los padres sube primero mientras el otro espera con ella, y luego el segundo adulto accede sin volver a hacer fila.</p>
+            <p><strong>Tasa Turística Local:</strong> Cualquier impuesto municipal local de estancia en Chessy se abona directamente en recepción a la llegada.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PESTAÑA 7: SEGURO DE VIAJE 24H -->
+    <section id="content-seguro" class="tab-content hidden space-y-8">
+      <div class="bg-gradient-to-r from-crimsonMarvel via-imperialNavy to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-goldAccent">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-white/20 pb-6 mb-6">
+          <div>
+            <span class="bg-goldAccent text-imperialNavy text-xs uppercase font-extrabold px-3 py-1 rounded-full shadow-sm">
+              <i class="fa-solid fa-shield-halved mr-1"></i> Cobertura Europea Activa
+            </span>
+            <h2 class="header-title text-3xl font-bold mt-2 text-white">Seguro de Asistencia en Viaje &amp; Reembolsos</h2>
+            <p class="text-xs text-goldAccent italic mt-1">Póliza Travelfine / Iris Global • Modalidad AV Vacacional EXCELLENT</p>
+          </div>
+          
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20 text-center shrink-0">
+            <span class="text-[10px] text-gray-300 uppercase block font-bold">Teléfono de Emergencias 24h</span>
+            <a href="tel:+34915724343" class="text-2xl font-mono font-bold text-goldAccent hover:underline block mt-0.5"><i class="fa-solid fa-phone-volume animate-pulse mr-1.5"></i>+34 915 72 43 43</a>
+            <span class="text-[11px] text-gray-200 block mt-1"><i class="fa-solid fa-envelope text-goldAccent mr-1"></i>madrid_ops@irisglobal.es</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="bg-white/10 p-3.5 rounded-xl border border-white/15 space-y-1">
+            <span class="text-goldAccent font-bold uppercase text-[10px] block">Nº de Póliza / Certificado</span>
+            <p class="text-base font-mono font-bold text-white">U2ZS0S8C20</p>
+            <p class="text-[10px] text-gray-300">Nº Póliza IRIS Global: <strong>530766</strong></p>
+          </div>
+          <div class="bg-white/10 p-3.5 rounded-xl border border-white/15 space-y-1">
+            <span class="text-goldAccent font-bold uppercase text-[10px] block">Vigencia de Cobertura</span>
+            <p class="text-sm font-semibold text-white">03/12/2026 ➔ 06/12/2026</p>
+            <p class="text-[10px] text-gray-300">4 Días completos de viaje cubiertos</p>
+          </div>
+          <div class="bg-white/10 p-3.5 rounded-xl border border-white/15 space-y-1">
+            <span class="text-goldAccent font-bold uppercase text-[10px] block">Límite Gastos Médicos Europa</span>
+            <p class="text-base font-bold text-green-300">Hasta 1.000.000 € / pax</p>
+            <p class="text-[10px] text-gray-300">Enf. crónicas/preexistentes hasta 2.000.000 €</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASEGURADOS NOMINALES -->
+      <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-4">
+        <h3 class="header-title text-xl font-bold text-imperialNavy"><i class="fa-solid fa-users text-goldAccent mr-2"></i>Asegurados Incluidos en Certificado (4 Pax)</h3>
+        <div class="overflow-x-auto no-scrollbar">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-creamBackground text-imperialNavy font-bold">
+                <th class="p-2.5 rounded-l-lg">Asegurado</th>
+                <th class="p-2.5">DNI / NIF</th>
+                <th class="p-2.5">Fecha Nacimiento</th>
+                <th class="p-2.5">Modalidad Póliza</th>
+                <th class="p-2.5 rounded-r-lg">Estado</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr class="hover:bg-gray-50/50">
+                <td class="p-2.5 font-bold text-imperialNavy">TOMÁS PÉREZ</td>
+                <td class="p-2.5 font-mono">08872267V</td>
+                <td class="p-2.5">13/08/1986</td>
+                <td class="p-2.5 font-semibold text-goldAccent">AV Vacacional EXCELLENT</td>
+                <td class="p-2.5 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i>Asegurado</td>
+              </tr>
+              <tr class="hover:bg-gray-50/50">
+                <td class="p-2.5 font-bold text-imperialNavy">MARÍA LEÓN PRIETO</td>
+                <td class="p-2.5 font-mono">80087019F</td>
+                <td class="p-2.5">13/05/1987</td>
+                <td class="p-2.5 font-semibold text-goldAccent">AV Vacacional EXCELLENT</td>
+                <td class="p-2.5 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i>Asegurado</td>
+              </tr>
+              <tr class="hover:bg-gray-50/50">
+                <td class="p-2.5 font-bold text-imperialNavy">JAVIER PÉREZ PRIETO</td>
+                <td class="p-2.5 font-mono">80266604P</td>
+                <td class="p-2.5">01/10/2017</td>
+                <td class="p-2.5 font-semibold text-goldAccent">AV Vacacional EXCELLENT</td>
+                <td class="p-2.5 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i>Asegurado</td>
+              </tr>
+              <tr class="hover:bg-gray-50/50">
+                <td class="p-2.5 font-bold text-imperialNavy">JULIA PÉREZ PRIETO</td>
+                <td class="p-2.5 font-mono">80266605D</td>
+                <td class="p-2.5">31/03/2020</td>
+                <td class="p-2.5 font-semibold text-goldAccent">AV Vacacional EXCELLENT</td>
+                <td class="p-2.5 text-green-700 font-bold"><i class="fa-solid fa-check mr-1"></i>Asegurado</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DESGLOSE DE COBERTURAS PRINCIPALES -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-3">
+          <h3 class="text-sm font-bold text-imperialNavy uppercase tracking-wider flex items-center gap-2 border-b border-gray-100 pb-3">
+            <span class="text-goldAccent text-base"><i class="fa-solid fa-user-nurse"></i></span> ASISTENCIA MÉDICA Y SANITARIA
+          </h3>
+          <div class="divide-y divide-gray-100 text-xs text-gray-700">
+            <div class="flex justify-between py-2">
+              <span>Gastos médicos, farmacéuticos y hospitalización (Europa):</span>
+              <strong class="text-imperialNavy font-bold">1.000.000 €</strong>
+            </div>
+            <div class="flex justify-between py-2">
+              <span>Enfermedades crónicas / preexistentes (urgencia):</span>
+              <strong class="text-imperialNavy font-bold">2.000.000 €</strong>
+            </div>
+            <div class="flex justify-between py-2">
+              <span>Gastos odontológicos de urgencia en el extranjero:</span>
+              <strong class="text-imperialNavy font-bold">100 €</strong>
+            </div>
+            <div class="flex justify-between py-2">
+              <span>Traslado sanitario o repatriación médica:</span>
+              <strong class="text-green-700 font-extrabold uppercase">ILIMITADO</strong>
+            </div>
+            <div class="flex justify-between py-2">
+              <span>Prolongación de estancia / estancia acompañante:</span>
+              <strong class="text-imperialNavy font-bold">120 € / día (máx. 10 días)</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-3">
+          <h3 class="text-sm font-bold text-imperialNavy uppercase tracking-wider flex items-center gap-2 border-b border-gray-100 pb-3">
+            <span class="text-goldAccent text-base"><i class="fa-solid fa-plane-circle-exclamation"></i></span> EQUIPAJE, VUELOS Y GARANTÍAS
+          </h3>
+          <div class="divide-y divide-gray-100 text-xs text-gray-700">
+            <div class="flex justify-between py-2">
+              <span>Pérdida, daños o robo de equipaje (Europa):</span>
+              <strong class="text-imperialNavy font-bold">1.000 €</strong>
+            </div>
+            <div class="flex justify-between py-2">
+              <span>Demora medio transporte / pérdida conexiones:</span>
+              <strong class="text-imperialNavy font-bold">100 € (200 € sobreventa)</strong>
+            </div>
+            <div class="flex justify-between py-2">
+              <span>Cancelación del medio de transporte:</span>
+              <strong class="text-imperialNavy font-bold">1.000 €</strong>
+            </div>
+            <div class="flex justify-between py-2">
+              <span>Reembolso de vacaciones por regreso anticipado (Europa):</span>
+              <strong class="text-imperialNavy font-bold">3.000 €</strong>
+            </div>
+            <div class="flex justify-between py-2">
+              <span>Responsabilidad Civil Privada (franquicia 60 €):</span>
+              <strong class="text-imperialNavy font-bold">30.000 €</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROTOCOLO DE ACTUACIÓN MÉDICA EN 3 PASOS -->
+      <div class="bg-amber-50/70 rounded-2xl p-6 border border-goldAccent/40 space-y-4">
+        <h3 class="text-sm font-bold text-imperialNavy uppercase tracking-wider flex items-center gap-2">
+          <span class="text-crimsonMarvel text-base"><i class="fa-solid fa-notes-medical"></i></span> PROTOCOLO DE ACTUACIÓN MÉDICA EN 3 PASOS
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-1.5">
+            <h4 class="font-bold text-imperialNavy">1. Llamar antes de acudir al médico</h4>
+            <p class="text-gray-600 leading-relaxed">Contactar inmediatamente con la Central de Asistencia 24h de Iris Global al <a href="tel:+34915724343" class="font-bold text-crimsonMarvel hover:underline">+34 915 72 43 43</a> facilitando el certificado <strong class="text-imperialNavy">U2ZS0S8C20</strong>.</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-1.5">
+            <h4 class="font-bold text-imperialNavy">2. Asignación de centro concertado</h4>
+            <p class="text-gray-600 leading-relaxed">El equipo médico coordinará la asistencia en el centro hospitalario más cercano a Disneyland Paris (Centre Hospitalier de Marne-la-Vallée) sin que tengáis que adelantar gastos.</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-1.5">
+            <h4 class="font-bold text-imperialNavy">3. Conservar informes y justificantes</h4>
+            <p class="text-gray-600 leading-relaxed">Para cualquier incidencia de vuelo o farmacia de urgencia, conservad siempre los informes médicos, parte de la aerolínea y facturas originales.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PESTAÑA 8: SERVICIOS INCLUIDOS / CONDICIONES -->
+    <section id="content-condiciones" class="tab-content hidden space-y-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- INCLUIDO -->
+        <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 space-y-5">
+          <h3 class="header-title text-2xl font-bold text-imperialNavy border-b border-gray-100 pb-4"><i class="fa-solid fa-square-check text-emerald-600 mr-2"></i>Servicios Incluidos</h3>
+          <ul class="space-y-3 text-sm text-gray-700">
+            <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span><strong>Vuelos directos TAP Air Portugal:</strong> Lisboa ↔ París-Orly (vuelos TP432 y TP437, loc. <code>ZLGHJF</code>) con 1 pieza de equipaje de cabina (máx. 10 kg) + 1 bolso pequeño por pasajero.</span></li>
+            <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span><strong>Estancia 3 Noches en Hotel Oficial 5★:</strong> Disney Hotel New York - The Art of Marvel en 1 Habitación Classic (2 adultos + 2 niños, loc. <code>36534398</code>).</span></li>
+            <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span><strong>Entradas a los 2 Parques Disney (4 Días):</strong> Acceso ilimitado a Parque Disneyland y Walt Disney Studios Park del 03 al 06 de diciembre incluidos + <strong>Extra Magic Time</strong>.</span></li>
+            <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span><strong>Pensión Completa Plus:</strong> Desayunos en el hotel + cupones de comida y cena para los 4 miembros de la familia.</span></li>
+            <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span><strong>Seguro de Asistencia en Viaje:</strong> Póliza Travelfine / Iris Global <em>AV Vacacional EXCELLENT</em> (certificado <code>U2ZS0S8C20</code>) con cobertura médica europea hasta 1.000.000 € por persona.</span></li>
+          </ul>
+        </div>
+
+        <!-- EXCLUIDO / NOTAS -->
+        <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 space-y-5">
+          <h3 class="header-title text-2xl font-bold text-imperialNavy border-b border-gray-100 pb-4"><i class="fa-solid fa-square-xmark text-crimsonMarvel mr-2"></i>Servicios No Incluidos &amp; Notas</h3>
+          <ul class="space-y-3 text-sm text-gray-700">
+            <li class="flex items-start gap-3"><span class="text-crimsonMarvel mt-1"><i class="fa-solid fa-xmark"></i></span><span><strong>Equipaje facturado en bodega:</strong> Tarifa Discount (L) de TAP Air Portugal no incluye maleta facturada (0 piezas).</span></li>
+            <li class="flex items-start gap-3"><span class="text-crimsonMarvel mt-1"><i class="fa-solid fa-xmark"></i></span><span><strong>Traslados Aeropuerto París-Orly ↔ Disneyland Paris:</strong> No incluidos en el bono hotelero (disponible Magical Shuttle, taxi o contratación privada previa solicitud).</span></li>
+            <li class="flex items-start gap-3"><span class="text-crimsonMarvel mt-1"><i class="fa-solid fa-xmark"></i></span><span><strong>Gastos de Anulación en Póliza:</strong> La garantía opcional de gastos de anulación figura como NO contratada en el certificado <code>U2ZS0S8C20</code>.</span></li>
+            <li class="flex items-start gap-3"><span class="text-amber-600 mt-1"><i class="fa-solid fa-circle-info"></i></span><span><strong>Tasa turística local y comidas con personajes:</strong> Cualquier impuesto municipal local se abona en el hotel. Las comidas con personajes o princesas requieren reserva y suplemento según condiciones Disney.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PESTAÑA 9: INSTALAR APP (PWA) -->
+    <section id="content-instalar" class="tab-content hidden space-y-8">
+      <div class="bg-gradient-to-r from-imperialNavy via-slate-900 to-imperialNavy text-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-goldAccent">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-goldAccent/30 pb-6 mb-6">
+          <div>
+            <span class="bg-goldAccent text-imperialNavy text-xs uppercase font-extrabold px-3 py-1 rounded-full shadow-sm">
+              <i class="fa-solid fa-mobile-screen-button mr-1"></i> PWA App Web Instalable
+            </span>
+            <h2 class="header-title text-3xl font-bold mt-2 text-white">Instala tu Cuaderno Disney Marvel en el Móvil</h2>
+            <p class="text-xs text-goldAccent italic mt-1">Accede sin conexión a vuestros billetes TAP, localizador Disney, mapa de parques y Asistente PlanIA en un clic.</p>
+          </div>
+          <div>
+            <button onclick="triggerPwaInstallPrompt()" class="bg-goldAccent hover:bg-white text-imperialNavy font-extrabold px-6 py-3 rounded-xl shadow-lg transition duration-300 text-xs uppercase tracking-wider flex items-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-download text-base"></i> Instalar Aplicación Ahora
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs">
+          <!-- Instrucciones iPhone / iOS (Safari) -->
+          <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 space-y-4">
+            <div class="flex items-center gap-3 border-b border-goldAccent/30 pb-3">
+              <span class="text-goldAccent text-2xl"><i class="fa-brands fa-apple"></i></span>
+              <h3 class="header-title text-lg font-bold text-white">En iPhone &amp; iPad (Safari)</h3>
+            </div>
+            <ol class="space-y-3 text-gray-200">
+              <li class="flex items-start gap-3">
+                <span class="bg-goldAccent text-imperialNavy font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">1</span>
+                <p>Abre este archivo o enlace desde el navegador <strong>Safari</strong> de tu iPhone o iPad.</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="bg-goldAccent text-imperialNavy font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">2</span>
+                <p>Toca el botón <strong>Compartir</strong> <i class="fa-solid fa-arrow-up-from-bracket text-goldAccent font-bold mx-1"></i> en la barra inferior.</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="bg-goldAccent text-imperialNavy font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">3</span>
+                <p>Pulsa en <strong>"Añadir a la pantalla de inicio"</strong> <i class="fa-solid fa-square-plus text-goldAccent font-bold mx-1"></i>.</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="bg-goldAccent text-imperialNavy font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">4</span>
+                <p>Confirma pulsando <strong>"Añadir"</strong> arriba a la derecha. ¡Tendrás el icono <strong>Disney Marvel 2026</strong> listo en tu pantalla!</p>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Instrucciones Android & Ordenador (Chrome) -->
+          <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 space-y-4">
+            <div class="flex items-center gap-3 border-b border-goldAccent/30 pb-3">
+              <span class="text-goldAccent text-2xl"><i class="fa-brands fa-android"></i></span>
+              <h3 class="header-title text-lg font-bold text-white">En Android &amp; PC / Mac (Chrome / Edge)</h3>
+            </div>
+            <ol class="space-y-3 text-gray-200">
+              <li class="flex items-start gap-3">
+                <span class="bg-goldAccent text-imperialNavy font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">1</span>
+                <p>Haz clic en el botón superior <strong>"Instalar Aplicación Ahora"</strong>.</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="bg-goldAccent text-imperialNavy font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">2</span>
+                <p>En Android Chrome: Toca el menú de <strong>tres puntos</strong> <i class="fa-solid fa-ellipsis-vertical text-goldAccent font-bold mx-1"></i> arriba a la derecha.</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="bg-goldAccent text-imperialNavy font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">3</span>
+                <p>Selecciona <strong>"Instalar aplicación"</strong> o <strong>"Añadir a la pantalla principal"</strong>.</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="bg-goldAccent text-imperialNavy font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">4</span>
+                <p>Acepta la instalación para abrir la guía a pantalla completa como una App nativa.</p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL GUÍA DE INSTALACIÓN PWA -->
+  <div id="pwa-install-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-[99999] flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 text-slate-800 space-y-4 shadow-2xl relative border-2 border-goldAccent">
+      <button onclick="closePwaModal()" class="absolute top-3 right-3 bg-imperialNavy text-goldAccent hover:bg-slate-900 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold shadow-md">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="text-center space-y-2">
+        <div class="w-14 h-14 bg-imperialNavy text-goldAccent rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-md">
+          <i class="fa-solid fa-mobile-screen-button animate-bounce"></i>
+        </div>
+        <h3 class="header-title font-bold text-xl text-imperialNavy">Guardar App en Pantalla de Inicio</h3>
+        <p class="text-xs text-slate-600">Sigue estos pasos para instalar <strong>Disney Marvel 2026</strong>:</p>
+      </div>
+      
+      <div class="space-y-2.5 text-xs bg-creamBackground p-4 rounded-xl border border-goldAccent/30">
+        <p class="font-bold text-imperialNavy flex items-center gap-1.5 text-sm border-b border-goldAccent/20 pb-1.5">
+          <i class="fa-brands fa-apple text-goldAccent text-base"></i> En iPhone / iPad (Safari):
+        </p>
+        <p>1. Pulsa <strong>Compartir</strong> <i class="fa-solid fa-arrow-up-from-bracket text-goldAccent font-bold"></i> abajo en Safari.</p>
+        <p>2. Selecciona <strong>"Añadir a la pantalla de inicio"</strong> <i class="fa-solid fa-square-plus text-goldAccent font-bold"></i>.</p>
+        <p>3. Pulsa <strong>"Añadir"</strong> arriba a la derecha.</p>
+      </div>
+
+      <div class="space-y-2.5 text-xs bg-creamBackground p-4 rounded-xl border border-goldAccent/30">
+        <p class="font-bold text-imperialNavy flex items-center gap-1.5 text-sm border-b border-goldAccent/20 pb-1.5">
+          <i class="fa-brands fa-android text-imperialNavy text-base"></i> En Android / Chrome / PC:
+        </p>
+        <p>1. Abre los <strong>tres puntos</strong> <i class="fa-solid fa-ellipsis-vertical text-imperialNavy font-bold"></i> arriba a la derecha.</p>
+        <p>2. Pulsa en <strong>"Instalar aplicación"</strong> o <strong>"Añadir a pantalla principal"</strong>.</p>
+      </div>
+
+      <button onclick="closePwaModal()" class="w-full py-2.5 bg-imperialNavy text-goldAccent font-bold rounded-xl text-xs uppercase tracking-wider shadow-md hover:bg-slate-900 transition-all">
+        Entendido
+      </button>
+    </div>
+  </div>
+
+  <!-- FOOTER CORPORATIVO VIAJES PLANEA -->
+  <footer class="bg-imperialNavy text-white border-t border-goldAccent/40 mt-16 py-12 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8 border-b border-white/10 pb-8 mb-8">
+        <div class="space-y-2 text-center md:text-left">
+          <h2 class="header-title text-2xl font-bold tracking-widest text-goldAccent">VIAJES PLANEA</h2>
+          <p class="text-xs text-gray-300">CI: EX 06-00192-M • Asesoramiento Exclusivo y Viajes a Medida</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-xs text-gray-300">
+          <div class="flex items-start gap-2.5">
+            <span class="text-goldAccent text-base"><i class="fa-solid fa-location-dot"></i></span>
+            <div>
+              <p class="font-bold text-white">Sede Central Badajoz</p>
+              <p>Calle Héroes de Cascorro, 5 Bajo<br>06004 Badajoz (España)</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="text-goldAccent text-base"><i class="fa-solid fa-phone"></i></span>
+            <div>
+              <p class="font-bold text-white">Contacto Agencia</p>
+              <p>+34 924 95 26 13</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="text-goldAccent text-base"><i class="fa-solid fa-envelope"></i></span>
+            <div>
+              <p class="font-bold text-white">Email Corporativo</p>
+              <p>planea@viajesplanea.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400 text-center">
+        <p>&copy; 2026 Viajes Planea Badajoz. Todos los derechos reservados.</p>
+        <button onclick="window.print()" class="no-print bg-goldAccent text-imperialNavy px-4 py-2 rounded-lg font-bold hover:bg-white transition duration-300">
+          <i class="fa-solid fa-print mr-1.5"></i>Imprimir o Guardar PDF
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- AVATAR GUÍA VIRTUAL "CLAIRE" CON SÍNTESIS DE VOZ FEMENINA EN ESPAÑOL -->
+  <div id="avatar-guide-widget" class="fixed bottom-5 right-5 z-[9999] no-print flex flex-col items-end gap-3" style="z-index: 9999 !important;">
+    <!-- BURBUJA DE DIÁLOGO -->
+    <div id="avatar-dialog-bubble" class="bg-white/95 backdrop-blur-md border-2 border-goldAccent p-4 rounded-2xl shadow-2xl max-w-xs sm:max-w-sm text-xs text-slate-700 relative transition-all duration-300">
+      <button onclick="closeAvatarBubble()" class="absolute -top-2 -right-2 bg-imperialNavy text-goldAccent hover:bg-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-md">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="flex items-center gap-2 border-b border-gray-100 pb-2 mb-2">
+        <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+        <span class="font-bold text-imperialNavy uppercase tracking-wider text-[11px]">Claire • Concierge Disneyland Paris</span>
+        <button id="speech-toggle-btn" onclick="toggleVoiceSpeech()" class="ml-auto text-imperialNavy hover:text-goldAccent text-sm p-1" title="Activar/Silenciar Voz">
+          <i id="speech-icon" class="fa-solid fa-volume-high text-goldAccent"></i>
+        </button>
+      </div>
+      <p id="avatar-dialog-text" class="leading-relaxed">
+        ¡Bonjour, <strong>Familia Pérez Prieto</strong>! Soy <strong>Claire</strong>, vuestra concierge virtual para Disneyland Paris. Os acompañaré en vuestra estancia en el <strong>Hotel New York - The Art of Marvel</strong> con Pensión Completa Plus. ¡Pulsad en cualquier botón para explorar vuestro viaje!
+      </p>
+      <div class="mt-3 pt-2 border-t border-gray-100 flex gap-1 flex-wrap">
+        <button onclick="avatarQuickAction('resumen')" class="px-2 py-1 bg-creamBackground text-imperialNavy rounded-md text-[10px] font-bold hover:bg-goldAccent/20">📋 Resumen</button>
+        <button onclick="avatarQuickAction('itinerario')" class="px-2 py-1 bg-creamBackground text-imperialNavy rounded-md text-[10px] font-bold hover:bg-goldAccent/20">📅 Itinerario</button>
+        <button onclick="avatarQuickAction('mapa')" class="px-2 py-1 bg-creamBackground text-imperialNavy rounded-md text-[10px] font-bold hover:bg-goldAccent/20">🗺️ Mapa</button>
+        <button onclick="avatarQuickAction('enciclopedia')" class="px-2 py-1 bg-goldAccent/20 text-imperialNavy rounded-md text-[10px] font-bold hover:bg-goldAccent/30">📚 Enciclopedia</button>
+        <button onclick="avatarQuickAction('asistente')" class="px-2 py-1 bg-goldAccent text-imperialNavy rounded-md text-[10px] font-bold hover:bg-imperialNavy hover:text-white">🤖 PlanIA</button>
+        <button onclick="avatarQuickAction('practica')" class="px-2 py-1 bg-creamBackground text-imperialNavy rounded-md text-[10px] font-bold hover:bg-goldAccent/20">💶 Presupuesto</button>
+        <button onclick="avatarQuickAction('seguro')" class="px-2 py-1 bg-red-100 text-red-900 rounded-md text-[10px] font-bold hover:bg-red-200">🏥 Seguro 24h</button>
+        <button onclick="avatarQuickAction('instalar')" class="px-2 py-1 bg-imperialNavy text-goldAccent rounded-md text-[10px] font-extrabold hover:bg-goldAccent hover:text-imperialNavy">📱 Instalar App</button>
+      </div>
+    </div>
+
+    <!-- BOTÓN CREDENCIAL VIP AVATAR -->
+    <button onclick="toggleAvatarBubble()" class="group relative flex flex-col items-center justify-between w-20 h-24 rounded-2xl shadow-2xl border-2 border-goldAccent hover:scale-105 transition-all duration-300 focus:outline-none overflow-hidden bg-imperialNavy">
+      <span class="absolute inset-0 rounded-2xl bg-goldAccent/20 animate-pulse opacity-70"></span>
+      <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&h=400&q=80" alt="Claire Guía Virtual Disneyland Paris" class="w-full h-full object-cover object-top relative z-10 scale-105 group-hover:scale-110 transition-transform duration-300" onerror="this.style.display='none'">
+      <span class="absolute bottom-0 inset-x-0 bg-imperialNavy/95 text-goldAccent text-[9px] font-extrabold py-1 text-center border-t border-goldAccent/60 z-20 tracking-wider shadow-md">CLAIRE GUÍA</span>
+    </button>
+  </div>
+
+  <!-- SCRIPTS DE INTERACTIVIDAD, MAPA VECTORIAL Y MOTOR PLANIA -->
+  <script>
+    var map = null;
+    var markersGroup = [];
+    var isVoiceEnabled = true;
+    var deferredPrompt = null;
+
+    // REGISTRO DINÁMICO DE MANIFEST PWA
+    function registerDynamicPWA() {
+      try {
+        var manifestData = {
+          "name": "Disneyland Paris Marvel - Familia Pérez Prieto",
+          "short_name": "Disney Marvel 2026",
+          "start_url": window.location.href,
+          "display": "standalone",
+          "background_color": "#0C2340",
+          "theme_color": "#0C2340",
+          "icons": [{
+            "src": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=192&h=192&q=80",
+            "sizes": "192x192",
+            "type": "image/jpeg"
+          }]
+        };
+        var stringManifest = JSON.stringify(manifestData);
+        var blob = new Blob([stringManifest], {type: 'application/json'});
+        var manifestURL = URL.createObjectURL(blob);
+        var linkEl = document.createElement('link');
+        linkEl.rel = 'manifest';
+        linkEl.href = manifestURL;
+        document.head.appendChild(linkEl);
+      } catch(e) {}
+    }
+
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    function triggerPwaInstallPrompt() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function() {
+          deferredPrompt = null;
+        });
+      } else {
+        openPwaModal();
+      }
+    }
+
+    function openPwaModal() {
+      var modal = document.getElementById('pwa-install-modal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closePwaModal() {
+      var modal = document.getElementById('pwa-install-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function closeAvatarBubble() {
+      var bubble = document.getElementById('avatar-dialog-bubble');
+      if (bubble) bubble.classList.add('hidden');
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+    }
+
+    function toggleAvatarBubble() {
+      var bubble = document.getElementById('avatar-dialog-bubble');
+      if (!bubble) return;
+      if (bubble.classList.contains('hidden')) {
+        bubble.classList.remove('hidden');
+      } else {
+        bubble.classList.add('hidden');
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+      }
+    }
+
+    function toggleVoiceSpeech() {
+      isVoiceEnabled = !isVoiceEnabled;
+      var speechIcon = document.getElementById('speech-icon');
+      if (speechIcon) {
+        speechIcon.className = isVoiceEnabled ? "fa-solid fa-volume-high text-goldAccent" : "fa-solid fa-volume-xmark text-gray-400";
+      }
+      if (!isVoiceEnabled && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    // SÍNTESIS DE VOZ FEMENINA EN ESPAÑOL PARA CLAIRE
+    var bestFemaleSpanishVoice = null;
+
+    function loadFemaleSpanishVoices() {
+      if (!('speechSynthesis' in window)) return;
+      var voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return;
+
+      bestFemaleSpanishVoice = voices.find(function(v) {
+        return (v.lang.indexOf('es') === 0) && (
+          v.name.indexOf('Monica') !== -1 ||
+          v.name.indexOf('Helena') !== -1 ||
+          v.name.indexOf('Laura') !== -1 ||
+          v.name.indexOf('Paulina') !== -1 ||
+          v.name.indexOf('Elvira') !== -1 ||
+          v.name.indexOf('Lucia') !== -1 ||
+          v.name.indexOf('Google español') !== -1
+        );
+      }) || voices.find(function(v) {
+        return v.lang.indexOf('es') === 0;
+      });
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadFemaleSpanishVoices;
+      loadFemaleSpanishVoices();
+    }
+
+    function cleanTextForSpeech(text) {
+      if (!text) return '';
+      var t = text.replace(/<[^>]*>?/gm, ' ');
+      t = t.replace(/[*_`#~]/g, '');
+      t = t.replace(/[\u{1F300}-\u{1F9FF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, ' ');
+      t = t.replace(/\bpax\b/gi, 'personas');
+      t = t.replace(/\bmin\b/gi, 'minutos');
+      return t.replace(/\s+/g, ' ').trim();
+    }
+
+    function speakAvatarText(textToSpeak) {
+      try {
+        if (!isVoiceEnabled || !('speechSynthesis' in window)) return;
+        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+        window.speechSynthesis.cancel();
+
+        var text = cleanTextForSpeech(textToSpeak);
+        if (!text) return;
+
+        var utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES';
+        utterance.rate = 0.96;
+        utterance.pitch = 1.05;
+        if (bestFemaleSpanishVoice) {
+          utterance.voice = bestFemaleSpanishVoice;
+        }
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {}
+    }
+
+    function avatarQuickAction(action) {
+      switchTab(action);
+      var textEl = document.getElementById('avatar-dialog-text');
+      var msg = "";
+      switch (action) {
+        case 'resumen':
+          msg = "Aquí tenéis los datos clave de vuestra reserva: vuelos TAP Air Portugal Lisboa París Orly, el aviso importante sobre equipaje de cabina, vuestra habitación Classic en el Hotel New York The Art of Marvel y las ventajas de la Magic Pass.";
+          break;
+        case 'itinerario':
+          msg = "Os muestro el programa día a día del tres al seis de diciembre, incluyendo la hora mágica extra por la mañana, el acceso a los dos parques Disney y vuestra Pensión Completa Plus.";
+          break;
+        case 'mapa':
+          msg = "En este mapa interactivo tenéis ubicados vuestro hotel Marvel, los dos parques Disney, los cuatro restaurantes recomendados para vuestros cupones Plus y cuatro rincones secretos.";
+          break;
+        case 'enciclopedia':
+          msg = "En la Enciclopedia del Destino tenéis la previsión de temperaturas en diciembre, consejos de ropa térmica para Javier y Julia y nuestras recomendaciones gastronómicas.";
+          break;
+        case 'asistente':
+          msg = "Estoy lista en el chat de PlanIA para responder cualquier duda sobre horarios de vuelos, equipaje permitido, restaurantes o vuestro seguro médico.";
+          break;
+        case 'practica':
+          msg = "En esta sección podéis calcular vuestro presupuesto estimado en euros para snacks y recuerdos, además de trucos como el servicio Rider Switch para atracciones.";
+          break;
+        case 'seguro':
+          msg = "Vuestra familia viaja protegida con la póliza Travelfine Iris Global U2ZS0S8C20, con un millón de euros en gastos médicos en Europa y teléfono de emergencia veinticuatro horas.";
+          break;
+        case 'condiciones':
+          msg = "Aquí podéis revisar el desglose transparente de servicios incluidos y notas importantes sobre equipaje y traslados desde Orly.";
+          break;
+        case 'instalar':
+          msg = "Aquí os explico cómo guardar esta guía como aplicación en vuestro teléfono iPhone o Android para tenerla siempre a mano.";
+          break;
+      }
+      if (textEl && msg) textEl.innerHTML = msg;
+      if (msg) speakAvatarText(msg);
+    }
+
+    // PUNTOS GEOLOCALIZADOS CON MARCADORES VECTORIALES L.divIcon (SIN URLs EXTERNAS ROTAS)
+    var mapPoints = [
+      { lat: 48.87059, lng: 2.78771, title: "Disney Hotel New York - The Art of Marvel ★★★★★", category: "hotel", desc: "Avenue René Goscinny, Chessy • Loc: 36534398" },
+      { lat: 48.72620, lng: 2.36520, title: "Aeropuerto de París-Orly (ORY)", category: "hotel", desc: "Vuelos TAP TP432 (Llegada 11:45) y TP437 (Salida 17:40)" },
+      { lat: 48.87220, lng: 2.77580, title: "Parque Disneyland (Castillo de la Bella Durmiente)", category: "visita", desc: "Entrada incluida 4 días + Extra Magic Time" },
+      { lat: 48.86730, lng: 2.77900, title: "Walt Disney Studios Park & Avengers Campus", category: "visita", desc: "Entrada incluida 4 días • Atracciones Marvel y Pixar" },
+      { lat: 48.86610, lng: 2.78050, title: "Bistrot Chez Rémy (Studios)", category: "comida", desc: "🍽️ Restaurante Plus: Cocina francesa temática Ratatouille" },
+      { lat: 48.87440, lng: 2.77250, title: "Captain Jack's - Restaurant des Pirates", category: "comida", desc: "🍽️ Restaurante Plus: Dentro de Piratas del Caribe" },
+      { lat: 48.87080, lng: 2.78750, title: "Downtown & Manhattan Restaurant (Hotel Marvel)", category: "comida", desc: "🍽️ Restaurante Plus: Buffet Marvel y cocina italiana" },
+      { lat: 48.86750, lng: 2.77780, title: "PYM Kitchen (Avengers Campus)", category: "comida", desc: "🍽️ Restaurante Plus: Buffet experimental Ant-Man" },
+      { lat: 48.87260, lng: 2.77600, title: "La Guarida del Dragón (Bajo el Castillo)", category: "opcional", desc: "⭐ Rincón Secreto: Dragón animatrónico de 27 metros" },
+      { lat: 48.87160, lng: 2.77680, title: "Liberty Arcade & Discovery Arcade", category: "opcional", desc: "⭐ Rincón Secreto: Galerías cubiertas calefactadas" },
+      { lat: 48.87030, lng: 2.78790, title: "Marvel Design Studio & Skyline Bar", category: "opcional", desc: "⭐ Rincón Secreto: Taller de dibujo Marvel para niños" },
+      { lat: 48.85450, lng: 2.78300, title: "La Vallée Village Outlet (Val d'Europe)", category: "opcional", desc: "⭐ Rincón Secreto: Compras de lujo a 5 min en RER A" }
+    ];
+
+    function createVectorMarkerIcon(category) {
+      var bgColor = '#0C2340';
+      var iconClass = 'fa-hotel';
+      if (category === 'visita') {
+        bgColor = '#C8102E';
+        iconClass = 'fa-fort-awesome';
+      } else if (category === 'comida') {
+        bgColor = '#15803d';
+        iconClass = 'fa-utensils';
+      } else if (category === 'opcional') {
+        bgColor = '#7e22ce';
+        iconClass = 'fa-star';
+      }
+
+      var html = '<div style="background-color:' + bgColor + '; width:32px; height:32px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); border:2px solid #C5A059; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0,0,0,0.35);">' +
+                 '<i class="fa-solid ' + iconClass + '" style="color:#FFFFFF; font-size:13px; transform:rotate(45deg);"></i>' +
+                 '</div>';
+
+      return L.divIcon({
+        html: html,
+        className: 'leaflet-div-icon',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+      });
+    }
+
+    function initMap() {
+      var mapEl = document.getElementById('map');
+      if (!mapEl) return;
+
+      if (map) {
+        map.invalidateSize();
+        return;
+      }
+
+      map = L.map('map', {
+        center: [48.8695, 2.7810],
+        zoom: 14,
+        scrollWheelZoom: true
+      });
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 20
+      }).addTo(map);
+
+      mapPoints.forEach(function(point) {
+        var vectorIcon = createVectorMarkerIcon(point.category);
+        var marker = L.marker([point.lat, point.lng], { icon: vectorIcon })
+          .bindPopup('<strong style="color:#0C2340;">' + point.title + '</strong><br><span class="text-xs text-gray-600">' + point.desc + '</span>')
+          .addTo(map);
+
+        marker.categoryType = point.category;
+        markersGroup.push(marker);
+      });
+    }
+
+    function focusMapOnPoint(lat, lng) {
+      if (!map) return;
+      var zoomLevel = (lat < 48.80) ? 12 : 16;
+      map.setView([lat, lng], zoomLevel, { animate: true, duration: 1 });
+      
+      markersGroup.forEach(function(marker) {
+        if (Math.abs(marker.getLatLng().lat - lat) < 0.0005 && Math.abs(marker.getLatLng().lng - lng) < 0.0005) {
+          marker.openPopup();
+        }
+      });
+    }
+
+    function filterMapMarkers(category) {
+      markersGroup.forEach(function(marker) {
+        if (category === 'all' || marker.categoryType === category) {
+          map.addLayer(marker);
+        } else {
+          map.removeLayer(marker);
+        }
+      });
+    }
+
+    function switchTab(tabName) {
+      var contents = document.querySelectorAll('.tab-content');
+      contents.forEach(function(content) {
+        content.classList.add('hidden');
+        content.classList.remove('block');
+      });
+
+      var activeContent = document.getElementById('content-' + tabName);
+      if (activeContent) {
+        activeContent.classList.remove('hidden');
+        activeContent.classList.add('block');
+      }
+
+      var buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(function(btn) {
+        btn.classList.remove('bg-imperialNavy', 'text-white', 'shadow-md');
+        btn.classList.add('bg-gray-100', 'text-charcoalText');
+      });
+
+      var activeBtn = document.getElementById('tab-' + tabName);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-gray-100', 'text-charcoalText');
+        activeBtn.classList.add('bg-imperialNavy', 'text-white', 'shadow-md');
+      }
+
+      if (tabName === 'mapa') {
+        setTimeout(function() {
+          initMap();
+          if (map) map.invalidateSize();
+        }, 150);
+      }
+    }
+
+    function scrollToDay(dayNumber) {
+      var dayCard = document.getElementById('day-card-' + dayNumber);
+      if (dayCard) {
+        dayCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        dayCard.classList.add('ring-4', 'ring-goldAccent/40', 'scale-[1.01]');
+        setTimeout(function() {
+          dayCard.classList.remove('ring-4', 'ring-goldAccent/40', 'scale-[1.01]');
+        }, 2000);
+      }
+    }
+
+    function calculateBudget() {
+      var daysInput = document.getElementById('calc-days');
+      var paxInput = document.getElementById('calc-pax');
+      if (!daysInput || !paxInput) return;
+
+      var days = parseInt(daysInput.value) || 0;
+      var pax = parseInt(paxInput.value) || 0;
+
+      var minSnacksDay = 8 * pax;
+      var maxSnacksDay = 12 * pax;
+      var minSouvDay = 15 * pax;
+      var maxSouvDay = 25 * pax;
+
+      var elSnacks = document.getElementById('budget-snacks');
+      var elSnacksTot = document.getElementById('budget-snacks-total');
+      var elSouv = document.getElementById('budget-souvenirs');
+      var elSouvTot = document.getElementById('budget-souvenirs-total');
+
+      if (elSnacks) elSnacks.innerText = minSnacksDay + " - " + maxSnacksDay + " € / día";
+      if (elSnacksTot) elSnacksTot.innerText = "Total (" + days + " días): " + (minSnacksDay * days) + " - " + (maxSnacksDay * days) + " €";
+      if (elSouv) elSouv.innerText = minSouvDay + " - " + maxSouvDay + " € / día";
+      if (elSouvTot) elSouvTot.innerText = "Total (" + days + " días): " + (minSouvDay * days) + " - " + (maxSouvDay * days) + " €";
+    }
+
+    // MOTOR PLANIA OFFLINE (PARSEO DE FECHAS, VUELOS, HOTEL MARVEL, EQUIPAJES Y SEGURO)
+    function getSmartButlerResponse(prompt) {
+      var orig = prompt.trim();
+      var q = orig.toLowerCase()
+        .replace(/[áàäâ]/g, 'a')
+        .replace(/[éèëê]/g, 'e')
+        .replace(/[íìïî]/g, 'i')
+        .replace(/[óòöô]/g, 'o')
+        .replace(/[úùüû]/g, 'u')
+        .replace(/ñ/g, 'n');
+
+      // PARSEO DE FECHAS DE DICIEMBRE (3, 4, 5, 6)
+      var decDay = null;
+      if (q.indexOf('diciembre') !== -1 || q.indexOf('/12') !== -1 || q.indexOf('jueves') !== -1 || q.indexOf('viernes') !== -1 || q.indexOf('sabado') !== -1 || q.indexOf('domingo') !== -1) {
+        if (q.indexOf('3') !== -1 || q.indexOf('jueves') !== -1 || q.indexOf('primer') !== -1) decDay = 3;
+        else if (q.indexOf('4') !== -1 || q.indexOf('viernes') !== -1 || q.indexOf('segundo') !== -1) decDay = 4;
+        else if (q.indexOf('5') !== -1 || q.indexOf('sabado') !== -1 || q.indexOf('tercer') !== -1) decDay = 5;
+        else if (q.indexOf('6') !== -1 || q.indexOf('domingo') !== -1 || q.indexOf('cuarto') !== -1 || q.indexOf('ultimo') !== -1) decDay = 6;
+      }
+
+      if (decDay === 3) {
+        return "🗓️ <strong>Jueves 03 de Diciembre (Día 1)</strong>:<br><br>" +
+               "• ✈️ <strong>08:10 - 11:45 h:</strong> Vuelo TAP Air Portugal <code>TP432</code> Lisboa (LIS) ➡️ París-Orly (ORY).<br>" +
+               "• 🏨 <strong>Check-in Hotel New York - The Art of Marvel:</strong> Registro desde la llegada para recoger vuestras <strong>Magic Pass</strong> y dejar maletas en consigna (habitación lista a las 15:00 h).<br>" +
+               "• 🏰 <strong>Tarde y Noche:</strong> Primer paseo por los parques Disney con Pensión Completa Plus.";
+      }
+      if (decDay === 4) {
+        return "🗓️ <strong>Viernes 04 de Diciembre (Día 2)</strong>:<br><br>" +
+               "• 🥐 <strong>Desayuno Buffet</strong> incluido en el hotel.<br>" +
+               "• ✨ <strong>08:30 h - Extra Magic Time:</strong> Acceso exclusivo 1 hora antes de la apertura oficial.<br>" +
+               "• 🏰 <strong>Jornada en Parque Disneyland:</strong> Desfile navideño, comidas con cupones Plus y espectáculo nocturno en el Castillo.";
+      }
+      if (decDay === 5) {
+        return "🗓️ <strong>Sábado 05 de Diciembre (Día 3)</strong>:<br><br>" +
+               "• 🦸 <strong>Walt Disney Studios &amp; Avengers Campus:</strong> Día ideal para disfrutar de las atracciones Marvel (<em>Spider-Man W.E.B. Adventure</em>, <em>Flight Force</em>) y Worlds of Pixar.<br>" +
+               "• 🍽️ Comida y cena incluidas con vuestra <strong>Pensión Completa Plus</strong>.";
+      }
+      if (decDay === 6) {
+        return "🗓️ <strong>Domingo 06 de Diciembre (Día 4 - Regreso)</strong>:<br><br>" +
+               "• 🧳 <strong>Antes de las 11:00 h:</strong> Check-out de la habitación (consigna gratuita de maletas y entradas válidas todo el día).<br>" +
+               "• ✈️ <strong>17:40 - 19:15 h:</strong> Vuelo TAP Air Portugal <code>TP437</code> París-Orly (ORY) ➡️ Lisboa (LIS).";
+      }
+
+      // VUELOS Y EQUIPAJE
+      if (q.indexOf('vuelo') !== -1 || q.indexOf('tap') !== -1 || q.indexOf('equipaje') !== -1 || q.indexOf('maleta') !== -1 || q.indexOf('horario') !== -1) {
+        return "✈️ <strong>Vuelos TAP Air Portugal (Loc: ZLGHJF / 9RHSRD)</strong>:<br><br>" +
+               "• <strong>Ida (Jue 03 Dic):</strong> Vuelo <code>TP432</code> • Salida Lisboa (LIS) <strong>08:10 h</strong> ➡️ Llegada París-Orly (ORY) <strong>11:45 h</strong>.<br>" +
+               "• <strong>Vuelta (Dom 06 Dic):</strong> Vuelo <code>TP437</code> • Salida París-Orly (ORY) <strong>17:40 h</strong> ➡️ Llegada Lisboa (LIS) <strong>19:15 h</strong>.<br>" +
+               "• ⚠️ <strong>Equipaje (Tarifa Discount L):</strong> Incluye <strong>0 maletas facturadas</strong>. Permitido por pasajero: 1 maleta de cabina (máx. 10 kg, 55x40x20 cm) + 1 bolso personal (máx. 2 kg, 40x30x15 cm).";
+      }
+
+      // HOTEL MARVEL Y MAGIC PASS
+      if (q.indexOf('hotel') !== -1 || q.indexOf('marvel') !== -1 || q.indexOf('magic') !== -1 || q.indexOf('habitacion') !== -1 || q.indexOf('check') !== -1) {
+        return "🏨 <strong>Disney Hotel New York - The Art of Marvel ★★★★★</strong>:<br><br>" +
+               "• <strong>Localizador Disney:</strong> <code>36534398</code> (Ref. Agencia: <code>1329430466</code>).<br>" +
+               "• <strong>Dirección:</strong> Avenue René Goscinny, 77700 Chessy (Tel: <code>+33 1 60 30 50 10</code>).<br>" +
+               "• <strong>Habitaciones:</strong> 1 Habitación Classic (2 adultos + 2 niños). Check-in habitación desde 15:00 h / Check-out antes de 11:00 h.<br>" +
+               "• <strong>Magic Pass:</strong> Se entrega al llegar en recepción e incluye llave de habitación, entradas a los 2 parques los 4 días, cupones de Pensión Completa Plus y <em>Extra Magic Time</em>.";
+      }
+
+      // PENSIÓN COMPLETA PLUS Y RESTAURANTES
+      if (q.indexOf('comida') !== -1 || q.indexOf('pension') !== -1 || q.indexOf('cupon') !== -1 || q.indexOf('restaurante') !== -1 || q.indexOf('cena') !== -1) {
+        return "🍽️ <strong>Pensión Completa Plus &amp; Restaurantes</strong>:<br><br>" +
+               "• Incluye desayuno buffet diario en el hotel + 1 cupón de comida y 1 cupón de cena por persona y noche.<br>" +
+               "• Los cupones se aceptan por su valor monetario en los restaurantes de los Parques, Hoteles Disney y Disney Village.<br>" +
+               "• 💡 <strong>Consejo clave:</strong> Vinculad el localizador <code>36534398</code> en la App Disneyland Paris para reservar mesa en restaurantes temáticos como <em>Bistrot Chez Rémy</em>, <em>Captain Jack's</em> o <em>PYM Kitchen</em>.";
+      }
+
+      // SEGURO DE VIAJE
+      if (q.indexOf('seguro') !== -1 || q.indexOf('medico') !== -1 || q.indexOf('poliza') !== -1 || q.indexOf('emergencia') !== -1 || q.indexOf('iris') !== -1) {
+        return "🏥 <strong>Seguro de Viaje Travelfine / Iris Global (AV Vacacional EXCELLENT)</strong>:<br><br>" +
+               "• <strong>Nº de Póliza / Certificado:</strong> <code>U2ZS0S8C20</code> (Póliza IRIS: <code>530766</code>).<br>" +
+               "• <strong>Teléfono Emergencias 24h:</strong> <a href='tel:+34915724343' class='font-bold text-crimsonMarvel underline'>+34 915 72 43 43</a> (Email: <code>madrid_ops@irisglobal.es</code>).<br>" +
+               "• <strong>Coberturas:</strong> Gastos médicos en Europa hasta <strong>1.000.000 €</strong> por asegurado, enfermedades preexistentes hasta 2.000.000 €, equipajes hasta 1.000 € y repatriación médica ilimitada.";
+      }
+
+      return "Estimada <strong>Familia Pérez Prieto</strong>, soy vuestro <strong>Asistente PlanIA</strong> de Viajes Planea.<br><br>" +
+             "Podéis preguntarme sobre:<br>" +
+             "• <strong>Vuelos TAP &amp; Equipaje:</strong> Horarios LIS ↔ ORY y medidas de cabina.<br>" +
+             "• <strong>Hotel Marvel &amp; Magic Pass:</strong> Localizador <code>36534398</code>, horarios y ventajas.<br>" +
+             "• <strong>Pensión Completa Plus:</strong> Uso de cupones y reserva de restaurantes.<br>" +
+             "• <strong>Itinerario por día:</strong> Jueves 3, Viernes 4, Sábado 5 o Domingo 6 de diciembre.<br>" +
+             "• <strong>Seguro Médico 24h:</strong> Póliza <code>U2ZS0S8C20</code> y teléfono de asistencia.";
+    }
+
+    function sendChatMessage() {
+      var inputEl = document.getElementById('ai-chat-input');
+      if (!inputEl || !inputEl.value.trim()) return;
+
+      var userText = inputEl.value.trim();
+      inputEl.value = '';
+
+      appendMessageToUI("user", userText);
+      var response = getSmartButlerResponse(userText);
+      appendMessageToUI("butler", response);
+      speakAvatarText(response);
+    }
+
+    function sendPresetPrompt(promptText) {
+      switchTab('asistente');
+      appendMessageToUI("user", promptText);
+      var response = getSmartButlerResponse(promptText);
+      appendMessageToUI("butler", response);
+      speakAvatarText(response);
+    }
+
+    function appendMessageToUI(sender, text) {
+      var chatMessagesContainer = document.getElementById('ai-chat-messages');
+      if (!chatMessagesContainer) return;
+
+      var messageDiv = document.createElement('div');
+      messageDiv.className = sender === 'user' ? 'flex gap-2.5 items-start justify-end max-w-[85%] ml-auto' : 'flex gap-2.5 items-start max-w-[85%]';
+
+      var formattedText = text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>');
+
+      var avatarHTML = sender === 'user' 
+        ? '<div class="p-3 bg-imperialNavy text-goldAccent rounded-2xl rounded-tr-none shadow-sm leading-relaxed">' + formattedText + '</div>' +
+          '<div class="bg-imperialNavy text-goldAccent w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 shadow-sm"><i class="fa-solid fa-user"></i></div>'
+        : '<div class="bg-goldAccent text-imperialNavy w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 shadow-sm"><i class="fa-solid fa-robot"></i></div>' +
+          '<div class="p-3 bg-white border border-slate-100 rounded-2xl rounded-tl-none shadow-sm text-slate-700 leading-relaxed">' + formattedText + '</div>';
+
+      messageDiv.innerHTML = avatarHTML;
+      chatMessagesContainer.appendChild(messageDiv);
+      chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+    }
+
+    function handleChatKeyPress(event) {
+      if (event.key === 'Enter') sendChatMessage();
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      calculateBudget();
+      registerDynamicPWA();
+
+      var daysInput = document.getElementById('calc-days');
+      var paxInput = document.getElementById('calc-pax');
+      if (daysInput) daysInput.addEventListener('input', calculateBudget);
+      if (paxInput) paxInput.addEventListener('input', calculateBudget);
+    });
+  </script>
+</body>
+</html>
