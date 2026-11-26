@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Dossier Corporativo · Desplazamiento Madrid 2026 | Viajes Planea</title>
+ <meta name="theme-color" content="#0F172A" />
+ <script src="https://cdn.tailwindcss.com"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+ <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+ <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+ <style>
+ :root {
+ --navy: #0F172A;
+ --slate: #1E293B;
+ --gold: #C5A059;
+ --crimson: #C8102E;
+ --bg: #F8FAFC;
+ }
+ body, * {
+ font-family: 'Calibri', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+ -webkit-tap-highlight-color: transparent;
+ box-sizing: border-box;
+ }
+ body {
+ background-color: var(--bg);
+ color: #1E293B;
+ }
+ .leaflet-div-icon {
+ background: transparent !important;
+ border: none !important;
+ }
+ #corporate-map {
+ width: 100%;
+ height: 480px;
+ min-height: 440px;
+ z-index: 10;
+ }
+ .tab-btn.active {
+ background-color: var(--navy);
+ color: #FFFFFF;
+ border-bottom: 3px solid var(--gold);
+ }
+ .pax-pill.active {
+ background-color: var(--gold);
+ color: #0F172A;
+ font-weight: 700;
+ box-shadow: 0 2px 6px rgba(197, 160, 89, 0.35);
+ }
+ .no-scrollbar::-webkit-scrollbar { display: none; }
+ .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+ </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-slate-900">
+
+ <!-- TOP EXECUTIVE HEADER -->
+ <header class="bg-[#0F172A] text-white border-b-4 border-[#C5A059] shadow-lg">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+ <div>
+ <div class="flex flex-wrap items-center gap-3 mb-1">
+ <span class="px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider bg-[#C5A059] text-[#0F172A] rounded">Viajes Planea · Corporate</span>
+ <span class="text-xs text-slate-300"><i class="fa-regular fa-calendar mr-1"></i>01 – 02 Diciembre 2026</span>
+ <span class="text-xs text-slate-300"><i class="fa-solid fa-location-dot mr-1 text-[#C5A059]"></i>Madrid (Ref. VITALY/ADEPLUS)</span>
+ </div>
+ <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+ Dossier Logístico &amp; Movilidad Ejecutiva · Madrid 2026
+ </h1>
+ <p class="text-sm text-slate-300 mt-0.5">
+ 2 Ejecutivos · Origen Badajoz (BJZ) &rarr; Madrid (MAD T4) · Alojamiento Hotel Érase un Hotel (2 Hab. DUI + Desayuno)
+ </p>
+ </div>
+ <div class="flex flex-wrap items-center gap-2">
+ <button onclick="openPwaModal()" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs font-semibold flex items-center gap-2 transition">
+ <i class="fa-solid fa-mobile-screen-button text-[#C5A059]"></i> Instalar App (PWA)
+ </button>
+ <a href="tel:+34924952613" class="px-3.5 py-2 rounded-lg bg-[#C8102E] hover:bg-red-700 text-white text-xs font-bold flex items-center gap-2 shadow transition">
+ <i class="fa-solid fa-phone-volume"></i> Asistencia 24h Planea: 924 952 613
+ </a>
+ </div>
+ </div>
+
+ <!-- EXECUTIVE PAX FILTER BAR -->
+ <div class="bg-[#1E293B] border-t border-slate-700/80">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar">
+ <span class="text-xs uppercase tracking-wider text-slate-400 font-bold shrink-0 mr-1">
+ <i class="fa-solid fa-user-tie mr-1 text-[#C5A059]"></i>Vista Viajero:
+ </span>
+ <button onclick="setPaxFilter('ALL')" data-pax="ALL" class="pax-pill active px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+ Todos (2 PAX)
+ </button>
+ <button onclick="setPaxFilter('DAVID')" data-pax="DAVID" class="pax-pill px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+ Pascual David Peñarrocha López
+ </button>
+ <button onclick="setPaxFilter('RUBEN')" data-pax="RUBEN" class="pax-pill px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 transition shrink-0">
+ Rubén Marcos Delgado
+ </button>
+ </div>
+ </div>
+ </header>
+
+ <!-- STICKY NAVIGATION TABS (10 CORPORATE VIEWS) -->
+ <nav class="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
+ <div class="max-w-7xl mx-auto px-2 sm:px-6 flex overflow-x-auto no-scrollbar">
+ <button onclick="switchTab('resumen')" id="tab-resumen" class="tab-btn active px-3.5 py-3.5 text-xs sm:text-sm font-bold whitespace-nowrap flex items-center gap-1.5 transition">
+ <i class="fa-solid fa-clipboard-check text-[#C5A059]"></i> 1. Resumen &amp; Auditoría
+ </button>
+ <button onclick="switchTab('itinerario')" id="tab-itinerario" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+ <i class="fa-solid fa-timeline text-[#C5A059]"></i> 2. Cronograma Diario
+ </button>
+ <button onclick="switchTab('mapa')" id="tab-mapa" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+ <i class="fa-solid fa-map-location-dot text-[#C5A059]"></i> 3. Mapa Operativo
+ </button>
+ <button onclick="switchTab('sede')" id="tab-sede" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+ <i class="fa-solid fa-building-user text-[#C5A059]"></i> 4. Guía Ejecutiva
+ </button>
+ <button onclick="switchTab('importante')" id="tab-importante" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-bold text-[#C8102E] hover:text-red-800 whitespace-nowrap flex items-center gap-1.5 transition">
+ <i class="fa-solid fa-circle-exclamation text-[#C8102E]"></i> 5. Información Importante
+ </button>
+ <button onclick="switchTab('plania')" id="tab-plania" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+ <i class="fa-solid fa-headset text-[#C5A059]"></i> 6. Asistente PlanIA
+ </button>
+ <button onclick="switchTab('gastos')" id="tab-gastos" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+ <i class="fa-solid fa-calculator text-[#C5A059]"></i> 7. Dietas &amp; Logística
+ </button>
+ <button onclick="switchTab('seguro')" id="tab-seguro" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+ <i class="fa-solid fa-shield-halved text-[#C5A059]"></i> 8. Asistencia &amp; Coberturas
+ </button>
+ <button onclick="switchTab('condiciones')" id="tab-condiciones" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+ <i class="fa-solid fa-file-contract text-[#C5A059]"></i> 9. Tarifas &amp; Equipaje
+ </button>
+ <button onclick="switchTab('pwa')" id="tab-pwa" class="tab-btn px-3.5 py-3.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+ <i class="fa-solid fa-download text-[#C5A059]"></i> 10. App Offline
+ </button>
+ </div>
+ </nav>
+
+ <!-- MAIN CONTENT CONTAINER -->
+ <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+ <!-- ==================== TAB 1: RESUMEN & AUDITORÍA ==================== -->
+ <section id="view-resumen" class="tab-view space-y-6">
+
+ <!-- OPERATIONAL NOTES & AUDIT BANNER -->
+ <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-xl p-5 shadow-sm">
+ <div class="flex items-start gap-3">
+ <div class="p-2 bg-amber-100 text-amber-800 rounded-lg shrink-0 mt-0.5">
+ <i class="fa-solid fa-clipboard-check text-lg"></i>
+ </div>
+ <div class="flex-1">
+ <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+ <h2 class="text-base font-extrabold text-amber-950 uppercase tracking-wide">
+ Auditoría Operativa &amp; Avisos de Movilidad · Viajes Planea
+ </h2>
+ <button onclick="switchTab('importante')" class="text-xs font-bold text-[#C8102E] underline hover:text-red-800">
+ Ver Condiciones y Normativa Completa &rarr;
+ </button>
+ </div>
+ <p class="text-xs text-amber-900 mb-3">
+ Verificación cruzada de vuelos Iberia/Air Nostrum, bono hotelero Restel y tiempos de conexión en Madrid:
+ </p>
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+ <div class="bg-white/95 border border-amber-300 rounded-lg p-3">
+ <span class="font-bold text-amber-900 block mb-1"><i class="fa-solid fa-clock mr-1 text-amber-600"></i>AVISO LLEGADA TARDÍA HOTEL (&gt; 20:00 H)</span>
+ <p class="text-slate-700">
+ El vuelo <strong>IB2333</strong> aterriza en Madrid T4 a las <strong>21:00 h</strong> (llegada estimada al hotel sobre las 21:35 h). Al llegar después de las 20:00 h, es <strong>obligatorio avisar directamente al Hotel Érase un Hotel</strong> (<a href="tel:+34915712880" class="underline font-bold">915 712 880</a>) para mantener garantizada la habitación.
+ </p>
+ </div>
+ <div class="bg-white/95 border border-amber-300 rounded-lg p-3">
+ <span class="font-bold text-amber-800 block mb-1"><i class="fa-solid fa-taxi mr-1"></i>CONEXIONES LOCALES SIN CONTRATAR</span>
+ <p class="text-slate-700">
+ No hay transfer privado contratado en Madrid. Para enlazar Aeropuerto MAD T4 &harr; Hotel Érase un Hotel (Bravo Murillo, 304) y lugar de reunión, contratar Taxi o Metro (Línea 8 hasta Nuevos Ministerios + Línea 10 hasta Cuzco/Plaza de Castilla) y pasar el gasto a su empresa (Radio Taxi Madrid: <a href="tel:+34915478200" class="underline font-bold">915 47 82 00</a>).
+ </p>
+ </div>
+ <div class="bg-white/95 border border-emerald-200 rounded-lg p-3">
+ <span class="font-bold text-emerald-800 block mb-1"><i class="fa-solid fa-file-invoice mr-1 text-[#C5A059]"></i>BONO RESTEL &amp; EXPEDIENTES SEPARADOS</span>
+ <p class="text-slate-700">
+ <strong>&bull; Bono Hotel Restel:</strong> Loc. <code class="font-mono bg-slate-100 px-1">56986495 // 4497986</code> con 2 habitaciones DUI en Desayuno.<br/>
+ <strong>&bull; Vuelos en localizadores independientes:</strong> Pascual David (<code class="font-mono bg-slate-100 px-1">OBHYLY</code>) y Rubén (<code class="font-mono bg-slate-100 px-1">98DXO2</code>) viajan en los mismos vuelos pero con reservas separadas.
+ </p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- HOTEL CARD: HOTEL ERASEUNHOTEL -->
+ <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+ <div class="bg-[#0F172A] px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+ <div class="flex items-center gap-2.5 text-white">
+ <i class="fa-solid fa-hotel text-[#C5A059] text-lg"></i>
+ <div>
+ <h3 class="font-bold text-base leading-tight">Hotel Érase un Hotel (3&#9733;) · Madrid (Tetuán / Castellana Norte)</h3>
+ <p class="text-xs text-slate-300">Bono Restel Travel · Ref. Agencia: VITALY/ADEPLUS · 2 Habitaciones Doble Uso Individual (DUI) + Desayuno</p>
+ </div>
+ </div>
+ <div class="flex flex-wrap items-center gap-2">
+ <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+ <i class="fa-regular fa-calendar-check mr-1"></i>Entrada: 01/12/2026 · Salida: 02/12/2026
+ </span>
+ <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-200 border border-amber-400/40">
+ <i class="fa-solid fa-ticket mr-1"></i>Bono Restel: 56986495 // 4497986
+ </span>
+ </div>
+ </div>
+
+ <!-- PROMINENT CHECK-IN / CHECK-OUT DATES BAR -->
+ <div class="bg-slate-50 border-b border-slate-200 px-5 py-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+ <div class="bg-white p-2.5 rounded-lg border border-amber-300">
+ <span class="text-[11px] uppercase font-bold text-amber-700 block">Fecha de Entrada (Check-in)</span>
+ <span class="font-extrabold text-sm text-[#0F172A]">Martes, 01 Dic 2026</span>
+ <span class="block text-[11px] text-amber-800 font-semibold">Llegada ~21:35 h &rarr; Avisar al hotel (&gt;20:00 h)</span>
+ </div>
+ <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+ <span class="text-[11px] uppercase font-bold text-slate-400 block">Fecha de Salida (Check-out)</span>
+ <span class="font-extrabold text-sm text-[#0F172A]">Miércoles, 02 Dic 2026</span>
+ <span class="block text-[11px] text-slate-500">Antes de las 12:00 h (2 PAX)</span>
+ </div>
+ <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+ <span class="text-[11px] uppercase font-bold text-slate-400 block">Duración y Habitaciones</span>
+ <span class="font-extrabold text-sm text-[#0F172A]">1 Noche · 2 Hab. DUI</span>
+ <span class="block text-[11px] text-slate-500">Estándar Doble Uso Individual</span>
+ </div>
+ <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+ <span class="text-[11px] uppercase font-bold text-slate-400 block">Régimen Contratado</span>
+ <span class="font-extrabold text-sm text-emerald-700">Alojamiento y Desayuno (AD)</span>
+ <span class="block text-[11px] text-slate-500">Comidas/cenas a contratar y pasar dieta</span>
+ </div>
+ </div>
+
+ <div class="p-5 grid grid-cols-1 lg:grid-cols-3 gap-5">
+ <div class="space-y-2 text-sm">
+ <p class="text-xs font-bold uppercase text-slate-400">Ubicación y Contacto Verificado</p>
+ <p class="font-semibold text-slate-900"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1.5"></i>Calle Bravo Murillo, 304, 28020 Madrid</p>
+ <p class="text-slate-600"><i class="fa-solid fa-phone text-slate-400 mr-1.5"></i>+34 915 712 880 · Emergencias Restel 24h: +34 91 310 85 07</p>
+ <div class="bg-amber-50 border border-amber-200 rounded-lg p-2.5 text-xs text-amber-950">
+ <i class="fa-solid fa-bell-concierge text-amber-700 mr-1"></i><strong>Documentación y Llegada:</strong> Presentar el <strong>Bono Restel (Loc. 56986495 // 4497986)</strong> junto con el DNI en recepción. Confirmar previamente al hotel la llegada posterior a las 20:00 h.
+ </div>
+ <p class="text-xs text-slate-500 pt-0.5">
+ <i class="fa-solid fa-taxi mr-1 text-[#C5A059]"></i>Distancia Aeropuerto MAD T4 &harr; Hotel: ~14 km (~18–22 min en Taxi / ~30 min en Metro L8+L10).
+ </p>
+ </div>
+ <div class="lg:col-span-2 bg-slate-50 rounded-lg p-3.5 border border-slate-200/80 text-xs space-y-2">
+ <p class="font-bold text-slate-800 uppercase">Rooming List Detallado (Fechas de Entrada y Salida por Viajero)</p>
+ <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="hotel-rooming-list">
+ <!-- Rendered dynamically by JS -->
+ </div>
+ <p class="text-[11px] text-slate-500 pt-1">
+ <i class="fa-solid fa-circle-info mr-1"></i>Política del establecimiento: En caso de cancelación o no presentación, el hotel facturará el 100 % de la estancia.
+ </p>
+ </div>
+ </div>
+ </div>
+
+ <!-- CONVERGENCE MATRIX TABLE -->
+ <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+ <div class="px-5 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+ <div>
+ <h3 class="font-bold text-base text-[#0F172A]">
+ <i class="fa-solid fa-table-list text-[#C5A059] mr-2"></i>Matriz Ejecutiva de Llegadas, Estancia y Salidas
+ </h3>
+ <p class="text-xs text-slate-500">Consolidación nominal de vuelos Iberia / Air Nostrum, traslados urbanos y estancia en Madrid</p>
+ </div>
+ <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded">
+ Zona Horaria: CET (Madrid)
+ </span>
+ </div>
+ <div class="overflow-x-auto">
+ <table class="w-full text-left border-collapse text-xs sm:text-sm">
+ <thead>
+ <tr class="bg-slate-100 text-slate-700 uppercase text-xs border-b border-slate-200">
+ <th class="py-3 px-4 font-bold">Ejecutivo</th>
+ <th class="py-3 px-4 font-bold">Vuelo Ida (01 Dic)</th>
+ <th class="py-3 px-4 font-bold">Movilidad Urbana Madrid</th>
+ <th class="py-3 px-4 font-bold">Hotel Érase un Hotel (In / Out)</th>
+ <th class="py-3 px-4 font-bold">Vuelo Regreso (02 Dic)</th>
+ </tr>
+ </thead>
+ <tbody id="matrix-tbody" class="divide-y divide-slate-200">
+ <!-- Populated by JS -->
+ </tbody>
+ </table>
+ </div>
+ </div>
+
+ <!-- TRANSPORT CARDS -->
+ <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="transport-cards-grid">
+ <!-- Populated by JS -->
+ </div>
+
+ </section>
+
+ <!-- ==================== TAB 2: CRONOGRAMA DIARIO ==================== -->
+ <section id="view-itinerario" class="tab-view hidden space-y-5">
+ <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+ <div>
+ <h2 class="text-lg font-extrabold text-[#0F172A]">Cronograma Operativo Día a Día</h2>
+ <p class="text-xs text-slate-500">Todos los horarios en hora local peninsular (CET). Incluye avisos de embarque y conexión en Madrid T4.</p>
+ </div>
+ <div class="flex gap-2">
+ <button onclick="scrollToDay('day-1')" class="px-3 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-bold hover:bg-slate-800">D1 · 01 Dic</button>
+ <button onclick="scrollToDay('day-2')" class="px-3 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-bold hover:bg-slate-800">D2 · 02 Dic</button>
+ </div>
+ </div>
+ <div id="itinerary-container" class="space-y-5">
+ <!-- Populated by JS -->
+ </div>
+ </section>
+
+ <!-- ==================== TAB 3: MAPA OPERATIVO (ESRI ARCGIS VERIFICADO) ==================== -->
+ <section id="view-mapa" class="tab-view hidden space-y-4">
+ <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+ <div>
+ <h2 class="text-lg font-extrabold text-[#0F172A]">Mapa Logístico &amp; Puntos de Control en Madrid (Coordenadas Verificadas)</h2>
+ <p class="text-xs text-slate-500">Direcciones exactas contrastadas: Hotel Érase un Hotel (Bravo Murillo 304), Aeropuerto MAD T4, Estación Chamartín y Restauración.</p>
+ </div>
+ <div class="flex flex-wrap gap-2">
+ <button onclick="filterMapMarkers('ALL')" class="px-3 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-bold">Todos</button>
+ <button onclick="filterMapMarkers('HOTEL')" class="px-3 py-1.5 rounded-lg bg-amber-100 text-amber-900 text-xs font-bold">Hotel</button>
+ <button onclick="filterMapMarkers('TRANSPORTE')" class="px-3 py-1.5 rounded-lg bg-blue-100 text-blue-900 text-xs font-bold">Aeropuerto / Estación</button>
+ <button onclick="filterMapMarkers('DINING')" class="px-3 py-1.5 rounded-lg bg-rose-100 text-rose-900 text-xs font-bold">Sugerencias Gastronómicas</button>
+ </div>
+ </div>
+ <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+ <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+ <div id="corporate-map"></div>
+ </div>
+ <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm overflow-y-auto max-h-[480px] space-y-2.5" id="map-points-list">
+ <!-- Populated by JS -->
+ </div>
+ </div>
+ </section>
+
+ <!-- ==================== TAB 4: GUÍA EJECUTIVA MADRID ==================== -->
+ <section id="view-sede" class="tab-view hidden space-y-5">
+ <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+ <h2 class="text-lg font-extrabold text-[#0F172A] mb-1">Guía Ejecutiva de Madrid (Zona Tetuán / Plaza de Castilla) · Diciembre 2026</h2>
+ <p class="text-xs text-slate-500 mb-4">Información práctica para desplazamientos de negocios, climatología invernal y sugerencias gastronómicas verificadas cerca del hotel.</p>
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+ <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+ <p class="text-xs font-bold uppercase text-slate-400 mb-1"><i class="fa-solid fa-cloud-sun text-[#C5A059] mr-1"></i>Climatología Diciembre</p>
+ <p class="text-sm font-bold text-slate-900">Máx. 11 °C / Mín. 3 °C</p>
+ <p class="text-xs text-slate-600 mt-1">Ambiente frío seco característico de diciembre en Madrid, especialmente a primera hora de la mañana y a la llegada nocturna del vuelo (21:00 h).</p>
+ </div>
+ <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+ <p class="text-xs font-bold uppercase text-slate-400 mb-1"><i class="fa-solid fa-shirt text-[#C5A059] mr-1"></i>Vestimenta Recomendada</p>
+ <p class="text-sm font-bold text-slate-900">Casual / Informal · Libre Elección</p>
+ <p class="text-xs text-slate-600 mt-1">Sin etiqueta formal requerida: vestimenta cómoda o casual de libre elección, acompañada de abrigo de invierno para exteriores.</p>
+ </div>
+ <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+ <p class="text-xs font-bold uppercase text-slate-400 mb-1"><i class="fa-solid fa-taxi text-[#C5A059] mr-1"></i>Taxis &amp; Metro en Madrid</p>
+ <p class="text-sm font-bold text-slate-900">Radio Taxi Madrid: 915 47 82 00</p>
+ <p class="text-xs text-slate-600 mt-1">Metro junto al hotel: <strong>Tetuán (Línea 1)</strong> y <strong>Cuzco (Línea 10)</strong>. Conexión directa a Aeropuerto T4 mediante Línea 10 + Línea 8 (Nuevos Ministerios).</p>
+ </div>
+ </div>
+
+ <h3 class="text-sm font-extrabold uppercase tracking-wider text-[#0F172A] mb-1">
+ Sugerencias Gastronómicas en Madrid · Entorno Tetuán / Plaza de Castilla (2 opciones verificadas por día · Libre Elección)
+ </h3>
+ <p class="text-xs text-slate-500 mb-4">Selección orientativa con direcciones y teléfonos 100 % verificados a pocos minutos a pie del Hotel Érase un Hotel (sin reserva ni horario fijo):</p>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div class="border border-slate-200 rounded-xl p-4 hover:border-[#C5A059] transition">
+ <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-800">Día 1 · Opción 1</span>
+ <h4 class="font-bold text-slate-900 mt-2">Asador de Aranda · Plaza de Castilla</h4>
+ <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>Plaza de Castilla, 3, Tetuán, 28046 Madrid</p>
+ <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone mr-1"></i>917 33 87 02</p>
+ <p class="text-xs text-slate-700">Clásico asador castellano a 6 minutos a pie del hotel, especializado en horno de leña y cocina tradicional.</p>
+ </div>
+ <div class="border border-slate-200 rounded-xl p-4 hover:border-[#C5A059] transition">
+ <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-800">Día 1 · Opción 2</span>
+ <h4 class="font-bold text-slate-900 mt-2">Distrito 798 (Hotel Meliá Castilla)</h4>
+ <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>C. del Poeta Joan Maragall, 43, Tetuán, 28020 Madrid</p>
+ <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone mr-1"></i>912 90 87 07</p>
+ <p class="text-xs text-slate-700">Restaurante de cocina nikkei y japonesa contemporánea ideal para cenas ejecutivas en el entorno de Cuzco.</p>
+ </div>
+ <div class="border border-slate-200 rounded-xl p-4 hover:border-[#C5A059] transition">
+ <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-800">Día 2 · Opción 1</span>
+ <h4 class="font-bold text-slate-900 mt-2">Lima Nikkei Madrid</h4>
+ <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>C. de Rosario Pino, 8, Tetuán, 28020 Madrid</p>
+ <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone mr-1"></i>689 77 94 45</p>
+ <p class="text-xs text-slate-700">Propuesta gastronómica peruano-japonesa junto a Plaza de Castilla, perfecta para un almuerzo de negocios.</p>
+ </div>
+ <div class="border border-slate-200 rounded-xl p-4 hover:border-[#C5A059] transition">
+ <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-800">Día 2 · Opción 2</span>
+ <h4 class="font-bold text-slate-900 mt-2">Taberna El Bierzo · Sor Ángela de la Cruz</h4>
+ <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>C. de Sor Ángela de la Cruz, 22, Tetuán, 28020 Madrid</p>
+ <p class="text-xs text-slate-500 mb-2"><i class="fa-solid fa-phone mr-1"></i>915 72 33 19</p>
+ <p class="text-xs text-slate-700">Taberna tradicional de cocina española y producto de temporada junto al eje Cuzco-Castellana.</p>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==================== TAB 5: INFORMACIÓN IMPORTANTE (NORMATIVA VIAJES PLANEA) ==================== -->
+ <section id="view-importante" class="tab-view hidden space-y-5">
+
+ <!-- TOP HEADER BANNER -->
+ <div class="bg-[#0F172A] text-white rounded-xl p-5 border-l-4 border-[#C5A059] shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+ <div>
+ <span class="text-[11px] font-bold uppercase tracking-wider text-[#C5A059] block mb-1">Condiciones Generales y Operativas · Viajes Planea</span>
+ <h2 class="text-lg sm:text-xl font-extrabold">Información Importante a Tener en Cuenta en Todos los Servicios Contratados</h2>
+ <p class="text-xs text-slate-300 mt-1">
+ <strong>Nota de Validez:</strong> Si usted ya ha recibido la documentación correspondiente de estos servicios en un correo anterior, por favor <strong>tenga en cuenta solamente la documentación e información actualizada</strong> facilitada en este envío.
+ </p>
+ </div>
+ <a href="tel:+34924952613" class="px-4 py-2.5 rounded-lg bg-[#C8102E] hover:bg-red-700 text-white text-xs font-bold flex items-center gap-2 shrink-0 self-start md:self-center">
+ <i class="fa-solid fa-headset"></i> Soporte 24h: 924 952 613
+ </a>
+ </div>
+
+ <!-- 1. VUELOS Y TRENES -->
+ <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+ <div class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex items-center gap-2">
+ <i class="fa-solid fa-plane-departure text-[#0F172A]"></i>
+ <h3 class="font-extrabold text-sm uppercase tracking-wide text-[#0F172A]">1. Transportes: Vuelos y Trenes</h3>
+ </div>
+ <div class="p-5 space-y-4 text-xs text-slate-700 leading-relaxed">
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
+ <p class="font-bold text-slate-900"><i class="fa-solid fa-ticket text-[#C5A059] mr-1.5"></i>Tarjetas de Embarque y Antelación</p>
+ <ul class="list-disc pl-4 space-y-1.5">
+ <li><strong>Envío de tarjetas de embarque:</strong> Cuando sea necesaria documentación adicional como tarjetas de embarque, se las haremos llegar entre <strong>23 y 24 horas antes</strong> de la salida del vuelo a su correo electrónico o vía WhatsApp al teléfono facilitado. Si viaja en fin de semana, le rogamos esté pendiente de su correo o teléfono.</li>
+ <li><strong>Antelación en aeropuerto:</strong> Recuerde estar en el aeropuerto con tiempo suficiente para gestiones previas al embarque. Desde <strong>Viajes Planea</strong> recomendamos llegar al menos <strong>2 horas antes</strong> de la salida del vuelo.</li>
+ <li><strong>Pasajeros Residentes:</strong> En caso de ser residente en Ceuta, Melilla, Islas Baleares o Islas Canarias, es aconsejable llevar junto con su documentación el certificado de residente.</li>
+ <li><strong>Derechos de los pasajeros:</strong> Puede consultar la normativa europea sobre derechos de embarque en <a href="https://transport.ec.europa.eu/transport-themes/passenger-rights/air_es" target="_blank" rel="noopener" class="text-blue-700 underline font-semibold">Comisión Europea · Derechos de los Pasajeros Aéreos</a>.</li>
+ </ul>
+ </div>
+
+ <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
+ <p class="font-bold text-slate-900"><i class="fa-solid fa-suitcase-rolling text-[#C5A059] mr-1.5"></i>Dimensiones de Equipaje de Mano y Asientos</p>
+ <div class="grid grid-cols-2 gap-2 my-2">
+ <div class="bg-white p-2.5 rounded border border-slate-200">
+ <span class="font-bold text-[#0F172A] block"><i class="fa-solid fa-briefcase text-[#C5A059] mr-1"></i>Accesorio Personal</span>
+ <span class="text-[11px] text-slate-600 block">Bajo el asiento delantero</span>
+ <span class="font-mono font-bold text-[11px] text-slate-900">Máx. 40 x 30 x 15 cm</span>
+ </div>
+ <div class="bg-white p-2.5 rounded border border-slate-200">
+ <span class="font-bold text-[#0F172A] block"><i class="fa-solid fa-suitcase text-[#C5A059] mr-1"></i>Equipaje de Cabina</span>
+ <span class="text-[11px] text-slate-600 block">Compartimento superior</span>
+ <span class="font-mono font-bold text-[11px] text-slate-900">Máx. 55 x 40 x 20 cm (10 kg)</span>
+ </div>
+ </div>
+ <ul class="list-disc pl-4 space-y-1.5">
+ <li><strong>Trenes:</strong> Las características del equipaje permitido aparecen detalladas en cada billete adjunto.</li>
+ <li><strong>Asignación de asientos:</strong> Salvo indicación expresa, los transportes incluyen asiento aleatorio. La selección de asiento concreto queda sujeta a disponibilidad y suplemento de la compañía.</li>
+ </ul>
+ </div>
+ </div>
+
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div class="p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-950">
+ <p class="font-bold mb-1"><i class="fa-solid fa-mobile-screen mr-1"></i>Nota Importante Aerolínea Ryanair</p>
+ <p>Si tiene vuelo confirmado con Ryanair, le informamos que su política de tarjetas de embarque exige llevar las tarjetas en <strong>formato digital</strong> emitidas desde la aplicación de Ryanair. Para facilitarle la tarea, desde Viajes Planea le adjuntamos imagen de la misma con la que podrá viajar y almacenarla en su móvil.</p>
+ </div>
+ <div class="p-3 rounded-lg bg-slate-100 border border-slate-200 text-slate-800">
+ <p class="font-bold mb-1"><i class="fa-solid fa-people-arrows mr-1"></i>Coordinación y Conexiones Locales</p>
+ <p>Si necesitan coordinar su desplazamiento con algún compañero, rogamos contacten entre ustedes directamente o con el departamento de Personas de su empresa. En caso de necesitar taxi o transporte público adicional para conexionar estación/aeropuerto con su lugar de reunión, debe contratarlo usted mismo y pasar el gasto al departamento correspondiente (recomendamos transporte público para contribuir con el medio ambiente).</p>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- 2. COCHES DE ALQUILER -->
+ <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+ <div class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex items-center gap-2">
+ <i class="fa-solid fa-car text-[#0F172A]"></i>
+ <h3 class="font-extrabold text-sm uppercase tracking-wide text-[#0F172A]">2. Coches de Alquiler: Condiciones de Recogida y Devolución</h3>
+ </div>
+ <div class="p-5 space-y-3 text-xs text-slate-700 leading-relaxed">
+ <div class="p-3 rounded-lg bg-red-50 border border-red-200 text-red-950 font-medium">
+ <i class="fa-solid fa-triangle-exclamation text-[#C8102E] mr-1"></i>
+ <strong>Imprescindible en mostrador:</strong> Entregue el bono adjunto y <strong>NO contrate ningún servicio extra adicional</strong> que le puedan ofrecer en el mostrador de recogida sin previa autorización de Viajes Planea. Cualquier cargo no incluido contratado en destino <strong>no está autorizado</strong> y correrá a cargo del pasajero principal que firme el contrato.
+ </div>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <ul class="list-disc pl-4 space-y-1.5">
+ <li><strong>Documentación obligatoria:</strong> Documento de Identidad (DNI/Pasaporte) y Carné de conducir vigente con antigüedad mínima de 1 año. De no presentar esta documentación no podrá retirar el vehículo sin derecho a reembolso.</li>
+ <li><strong>Política de combustible (Lleno-Lleno):</strong> El coche se entrega con el depósito lleno y debe devolverse igualmente lleno. Recuerde guardar siempre el justificante del último repostaje.</li>
+ <li><strong>Edad mínima conductor:</strong> Sin cargo a partir de 25 años (entre 21 y 25 años puede aplicar suplemento; menores de 21 años no pueden retirar el vehículo).</li>
+ </ul>
+ <ul class="list-disc pl-4 space-y-1.5">
+ <li><strong>Horarios de oficina:</strong> Recoger o devolver el vehículo fuera de los horarios establecidos en el acuerdo o fuera del horario de apertura de la oficina puede suponer un cargo adicional no incluido.</li>
+ <li><strong>Paso de fronteras:</strong> Si tiene previsto cambiar de país con el vehículo, consulte previamente las condiciones generales de la compañía (algunas lo prohíben o aplican suplemento).</li>
+ <li><strong>Conexiones desde domicilio:</strong> Si necesita transporte adicional desde su domicilio a la estación/oficina, debe contratarlo usted mismo y pasar el gasto a su empresa.</li>
+ </ul>
+ </div>
+ </div>
+ </div>
+
+ <!-- 3. ALOJAMIENTOS, SEGUROS Y DOCUMENTACIÓN INTERNACIONAL -->
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+ <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+ <div class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex items-center gap-2">
+ <i class="fa-solid fa-hotel text-[#0F172A]"></i>
+ <h3 class="font-extrabold text-sm uppercase tracking-wide text-[#0F172A]">3. Alojamientos y Dietas</h3>
+ </div>
+ <div class="p-5 space-y-2 text-xs text-slate-700 leading-relaxed">
+ <ul class="list-disc pl-4 space-y-1.5">
+ <li><strong>Llegadas tardías (después de las 20:00 h):</strong> Si tiene previsto llegar al alojamiento después de las 20:00 h, es obligatorio contactar directamente con el establecimiento para informar de dicha circunstancia y mantener garantizada la habitación.</li>
+ <li><strong>Hora de salida (Check-out):</strong> La salida de todos los establecimientos es <strong>antes de las 12:00 h</strong> del día de finalización de estancia; de lo contrario, el hotel puede aplicar cargos adicionales.</li>
+ <li><strong>Comidas y cenas:</strong> En caso de necesitar servicio de comida o cena no incluido en el régimen contratado, debe contratarlo a la llegada en el establecimiento y pasar el gasto de dieta a su empresa.</li>
+ </ul>
+ </div>
+ </div>
+
+ <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+ <div class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex items-center gap-2">
+ <i class="fa-solid fa-shield-heart text-[#0F172A]"></i>
+ <h3 class="font-extrabold text-sm uppercase tracking-wide text-[#0F172A]">4. Seguros y Requisitos Sanitarios</h3>
+ </div>
+ <div class="p-5 space-y-2 text-xs text-slate-700 leading-relaxed">
+ <ul class="list-disc pl-4 space-y-1.5">
+ <li><strong>Seguros de viaje:</strong> Desde Viajes Planea siempre recomendamos y ofrecemos la contratación de seguro de viaje. Si aún no lo ha contratado, contacte con nosotros para gestionarlo.</li>
+ <li><strong>Información sanitaria y entrada a otros países:</strong> Es obligación del pasajero informarse de la documentación requerida por el país de destino antes del viaje. Puede consultar los requisitos oficiales actualizados en <a href="https://www.iatatravelcentre.com/" target="_blank" rel="noopener" class="text-blue-700 underline font-semibold">IATA Travel Centre</a>.</li>
+ <li><strong>Errores en documentación:</strong> Si detecta cualquier error en los servicios contratados, rogamos contacte urgentemente con nosotros para darle una pronta solución.</li>
+ </ul>
+ </div>
+ </div>
+ </div>
+
+ <!-- 4. PROTOCOLO INCIDENCIAS 24H Y ENCUESTA DE SATISFACCIÓN -->
+ <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm grid grid-cols-1 lg:grid-cols-3 gap-5 items-center">
+ <div class="lg:col-span-2 space-y-2 text-xs text-slate-700 leading-relaxed">
+ <h4 class="font-extrabold text-sm text-[#0F172A] uppercase">
+ <i class="fa-solid fa-phone-volume text-[#C8102E] mr-1.5"></i>Protocolo de Incidencias en Destino (Asistencia 24h)
+ </h4>
+ <p>
+ Ante cualquier incidencia o deficiencia en los servicios contratados, el cliente debe informar inmediatamente a la agencia. <strong>Viajes Planea</strong> dispone de un servicio de <strong>asistencia 24 horas (<a href="tel:+34924952613" class="font-bold text-[#C8102E] underline">924 952 613</a>)</strong> para dar soporte en destino. Se entenderá por incidencia todo aquello que no tenga lugar de conformidad con lo pactado. En caso de no notificar la incidencia acaecida en destino, Viajes Planea no asumirá responsabilidad alguna sobre la misma.
+ </p>
+ </div>
+ <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-center space-y-2">
+ <p class="font-bold text-xs text-[#0F172A]">Tu opinión nos ayuda a mejorar</p>
+ <p class="text-[11px] text-slate-600">Comparte tu experiencia con el servicio de Viajes Planea en menos de 2 minutos.</p>
+ <a href="mailto:planea@viajesplanea.com?subject=Valoracion%20Servicio%20Viajes%20Planea%20-%20Madrid%20VITALY%20ADEPLUS" class="inline-block px-4 py-2 rounded-lg bg-[#0F172A] hover:bg-slate-800 text-[#C5A059] text-xs font-extrabold uppercase tracking-wider transition">
+ Valorar Servicio <i class="fa-solid fa-star ml-1"></i>
+ </a>
+ </div>
+ </div>
+
+ </section>
+
+ <!-- ==================== TAB 6: ASISTENTE PLANIA ==================== -->
+ <section id="view-plania" class="tab-view hidden">
+ <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden max-w-4xl mx-auto">
+ <div class="bg-[#0F172A] text-white p-4 flex items-center justify-between">
+ <div class="flex items-center gap-3">
+ <div class="w-10 h-10 rounded-full bg-[#C5A059] text-[#0F172A] flex items-center justify-center font-extrabold text-lg">
+ <i class="fa-solid fa-robot"></i>
+ </div>
+ <div>
+ <h3 class="font-bold text-base">PlanIA · Concierge Corporativo Offline</h3>
+ <p class="text-xs text-slate-300">Consulta localizadores, horarios de vuelos, bono del hotel o normativa de viaje</p>
+ </div>
+ </div>
+ <button onclick="toggleTts()" id="tts-toggle-btn" class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-600 text-xs font-semibold hover:bg-slate-700">
+ <i class="fa-solid fa-volume-high text-[#C5A059] mr-1"></i> Voz: Activa
+ </button>
+ </div>
+
+ <div id="chat-messages" class="p-4 h-80 overflow-y-auto space-y-3 bg-slate-50 text-sm">
+ <div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm max-w-[85%]">
+ <p class="font-bold text-xs text-[#0F172A] mb-1">PlanIA · Viajes Planea</p>
+ <p class="text-slate-700 text-xs leading-relaxed">
+ Hola. Tengo cargados los vuelos Iberia/Air Nostrum Badajoz–Madrid (`IB2333` / `IB2332`), el bono de Restel para el <strong>Hotel Érase un Hotel</strong> (2 habitaciones DUI con desayuno del 01 al 02 de diciembre) y todas las normas operativas de Viajes Planea. ¿Qué necesitas consultar?
+ </p>
+ </div>
+ </div>
+
+ <div class="px-4 py-2 bg-slate-100 border-t border-slate-200 flex flex-wrap gap-1.5">
+ <button onclick="askPlanIA('Datos y localizador del hotel en Madrid')" class="text-xs bg-white border border-slate-300 px-2.5 py-1 rounded-full hover:bg-slate-200">Hotel &amp; Bono Restel</button>
+ <button onclick="askPlanIA('Horarios y localizadores de los vuelos de David y Ruben')" class="text-xs bg-white border border-slate-300 px-2.5 py-1 rounded-full hover:bg-slate-200">Vuelos IB2333 / IB2332</button>
+ <button onclick="askPlanIA('Como llegar del aeropuerto T4 al hotel')" class="text-xs bg-white border border-slate-300 px-2.5 py-1 rounded-full hover:bg-slate-200">Traslado T4 &rarr; Hotel</button>
+ <button onclick="askPlanIA('Política de equipaje y tarjetas de embarque')" class="text-xs bg-white border border-slate-300 px-2.5 py-1 rounded-full hover:bg-slate-200">Equipaje y Embarque</button>
+ </div>
+
+ <form onsubmit="handleChatSubmit(event)" class="p-3 bg-white border-t border-slate-200 flex gap-2">
+ <input type="text" id="chat-input" placeholder="Ej: ¿A qué hora sale el vuelo de vuelta o cuál es el localizador del hotel?" class="flex-1 text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#0F172A]" />
+ <button type="submit" class="px-4 py-2 rounded-lg bg-[#0F172A] text-white text-xs font-bold hover:bg-slate-800">
+ Consultar <i class="fa-solid fa-paper-plane ml-1"></i>
+ </button>
+ </form>
+ </div>
+ </section>
+
+ <!-- ==================== TAB 7: DIETAS & LOGÍSTICA ==================== -->
+ <section id="view-gastos" class="tab-view hidden space-y-5">
+ <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+ <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+ <h3 class="font-extrabold text-base text-[#0F172A]">
+ <i class="fa-solid fa-calculator text-[#C5A059] mr-2"></i>Calculadora Rápida de Dietas &amp; Gastos Directos
+ </h3>
+ <p class="text-xs text-slate-500">Control de gastos directos justificables con ticket o factura para liquidación corporativa (sin cálculo de kilometraje).</p>
+ <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+ <div>
+ <label class="font-bold text-slate-700 block mb-1">Manutención / Comidas (€)</label>
+ <input type="number" step="1" id="calc-meals" value="45" oninput="recalcExpenses()" class="w-full border border-slate-300 rounded-lg px-3 py-2 font-mono" />
+ <span class="text-[11px] text-slate-400">Cena día 01 + Comida día 02</span>
+ </div>
+ <div>
+ <label class="font-bold text-slate-700 block mb-1">Taxis / Metro (€)</label>
+ <input type="number" step="0.5" id="calc-taxis" value="66" oninput="recalcExpenses()" class="w-full border border-slate-300 rounded-lg px-3 py-2 font-mono" />
+ <span class="text-[11px] text-slate-400">Ref: Taxi T4 &harr; Hotel (~33 €/trayecto)</span>
+ </div>
+ <div>
+ <label class="font-bold text-slate-700 block mb-1">Parking / Otros (€)</label>
+ <input type="number" step="0.5" id="calc-other" value="0" oninput="recalcExpenses()" class="w-full border border-slate-300 rounded-lg px-3 py-2 font-mono" />
+ <span class="text-[11px] text-slate-400">Gastos varios justificados</span>
+ </div>
+ </div>
+ <div class="bg-slate-900 text-white rounded-xl p-4 flex items-center justify-between">
+ <div>
+ <p class="text-xs text-slate-400 uppercase font-bold">Total Gastos Directos Estimados</p>
+ <p class="text-[11px] text-slate-400">Manutención + Taxis/Transporte Público + Otros</p>
+ </div>
+ <p id="calc-total" class="text-2xl font-extrabold text-[#C5A059]">111,00 €</p>
+ </div>
+ </div>
+
+ <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between">
+ <div class="space-y-3">
+ <h3 class="font-extrabold text-base text-[#0F172A]">
+ <i class="fa-solid fa-file-invoice-dollar text-[#C5A059] mr-2"></i>Resumen de Servicios Contratados (PVP)
+ </h3>
+ <p class="text-xs text-slate-600 leading-relaxed">
+ Por política de confidencialidad comercial de <strong>Viajes Planea</strong>, los importes netos de proveedor no se muestran en este dossier. El desglose económico PVP se incorporará tras la validación del departamento de administración/facturación (Ref. Agencia: <code>VITALY/ADEPLUS</code>).
+ </p>
+ <div class="divide-y divide-slate-200 text-xs pt-1">
+ <div class="py-2 flex justify-between">
+ <span>Alojamiento Hotel Érase un Hotel 3&#9733; (2 Hab. DUI · AD · 01–02 Dic)</span>
+ <span class="font-semibold text-slate-500">Bono Restel · Según PVP</span>
+ </div>
+ <div class="py-2 flex justify-between">
+ <span>Vuelos Iberia/Air Nostrum BJZ &harr; MAD (Pascual David Peñarrocha · Loc. OBHYLY)</span>
+ <span class="font-semibold text-slate-500">Emitido · Según PVP</span>
+ </div>
+ <div class="py-2 flex justify-between">
+ <span>Vuelos Iberia/Air Nostrum BJZ &harr; MAD (Rubén Marcos Delgado · Loc. 98DXO2)</span>
+ <span class="font-semibold text-slate-500">Emitido · Según PVP</span>
+ </div>
+ </div>
+ </div>
+ <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-[11px] text-slate-600">
+ <i class="fa-solid fa-circle-info text-[#C5A059] mr-1"></i>Para solicitar factura desglosada o añadir importes PVP al dossier, contactar con <strong>planea@viajesplanea.com</strong>.
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==================== TAB 8: ASISTENCIA & COBERTURAS ==================== -->
+ <section id="view-seguro" class="tab-view hidden space-y-5">
+ <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl text-xs text-amber-900">
+ <strong><i class="fa-solid fa-circle-info mr-1"></i>Nota de Auditoría de Seguros:</strong> No se ha adjuntado póliza de asistencia en viaje independiente en este lote documental. Los desplazamientos aéreos cuentan con la cobertura legal del Convenio de Montreal y Reglamento (CE) 261/2004. Desde Viajes Planea recomendamos siempre la contratación de seguro de viaje.
+ </div>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+ <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2 text-xs">
+ <h3 class="font-bold text-sm text-[#0F172A]"><i class="fa-solid fa-hotel text-[#C5A059] mr-1.5"></i>Asistencia Hotelera Restel Travel (24 Horas)</h3>
+ <p><strong>Localizador Bono:</strong> <code class="bg-slate-100 px-1">56986495 // 4497986</code> · Ref: <code class="bg-slate-100 px-1">VITALY/ADEPLUS</code></p>
+ <ul class="list-disc pl-4 space-y-1 text-slate-700 pt-1">
+ <li><strong>Teléfono directo Hotel Érase un Hotel:</strong> <a href="tel:+34915712880" class="font-bold underline">+34 915 712 880</a> (Bravo Murillo, 304, Madrid).</li>
+ <li><strong>Teléfono de Emergencias 24h Restel:</strong> <a href="tel:+34913108507" class="font-bold text-[#C8102E] underline">(+34) 91 310 85 07</a>.</li>
+ <li><strong>Asistencia 24h Viajes Planea:</strong> <a href="tel:+34924952613" class="font-bold text-[#C8102E] underline">924 952 613</a>.</li>
+ </ul>
+ </div>
+ <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2 text-xs">
+ <h3 class="font-bold text-sm text-[#0F172A]"><i class="fa-solid fa-plane-circle-check text-[#C5A059] mr-1.5"></i>Documentación &amp; Reconfirmación Aérea</h3>
+ <p><strong>Aerolínea Operadora:</strong> Iberia / Air Nostrum (Terminal 4 Madrid-Barajas)</p>
+ <ul class="list-disc pl-4 space-y-1 text-slate-700 pt-1">
+ <li>Es imprescindible llevar <strong>DNI en vigor</strong> (el libro de familia no es válido).</li>
+ <li>Reconfirmar el horario y estado del vuelo 24 horas antes de la salida.</li>
+ <li>Antelación recomendada en aeropuerto: <strong>2 horas antes</strong> de la salida programada.</li>
+ </ul>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==================== TAB 9: TARIFAS & EQUIPAJE ==================== -->
+ <section id="view-condiciones" class="tab-view hidden space-y-4">
+ <div class="bg-slate-900 text-white p-4 rounded-xl flex items-center gap-3 text-xs">
+ <i class="fa-solid fa-suitcase-rolling text-[#C5A059] text-lg"></i>
+ <p><strong>Estándar Corporativo Viajes Planea:</strong> Ambos viajeros tienen confirmada <strong>1 pieza de equipaje de mano en cabina (máx. 55x40x20 cm y 10 kg) + 1 accesorio personal bajo asiento (máx. 40x30x15 cm)</strong> en ambos trayectos.</p>
+ </div>
+ <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+ <div class="px-5 py-4 border-b border-slate-200">
+ <h3 class="font-bold text-base text-[#0F172A]">Condiciones Tarifarias y Política de Equipaje por Billete</h3>
+ </div>
+ <div class="overflow-x-auto">
+ <table class="w-full text-left border-collapse text-xs">
+ <thead>
+ <tr class="bg-slate-100 text-slate-700 uppercase border-b border-slate-200">
+ <th class="py-3 px-4">Pasajero / Billete</th>
+ <th class="py-3 px-4">Localizadores</th>
+ <th class="py-3 px-4">Tarifa Contratada</th>
+ <th class="py-3 px-4">Equipaje Incluido</th>
+ </tr>
+ </thead>
+ <tbody class="divide-y divide-slate-200">
+ <tr>
+ <td class="py-3 px-4 font-bold">Pascual David Peñarrocha López<br><span class="font-mono font-normal text-slate-500">Billete: 075 9255199564</span></td>
+ <td class="py-3 px-4 font-mono">CDV: OBHYLY<br>Aerolínea: Z3OEZF</td>
+ <td class="py-3 px-4">Ida: Economy Optima (Q)<br>Vuelta: Economy Flexible (L)</td>
+ <td class="py-3 px-4"><strong>1 pieza incluida por trayecto</strong> + accesorio personal (40x30x15 cm).</td>
+ </tr>
+ <tr>
+ <td class="py-3 px-4 font-bold">Rubén Marcos Delgado<br><span class="font-mono font-normal text-slate-500">Billete: 075 5862838716</span></td>
+ <td class="py-3 px-4 font-mono">CDV: 98DXO2<br>Aerolínea: 98DXO2</td>
+ <td class="py-3 px-4">Ida: Economy Standard (Q)<br>Vuelta: Economy Standard (L)</td>
+ <td class="py-3 px-4"><strong>1 pieza incluida por trayecto</strong> + accesorio personal (40x30x15 cm).</td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==================== TAB 10: APP OFFLINE (PWA) ==================== -->
+ <section id="view-pwa" class="tab-view hidden">
+ <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm max-w-2xl mx-auto text-center space-y-4">
+ <div class="w-14 h-14 rounded-2xl bg-[#0F172A] text-[#C5A059] flex items-center justify-center text-2xl mx-auto shadow">
+ <i class="fa-solid fa-briefcase"></i>
+ </div>
+ <h3 class="text-xl font-extrabold text-[#0F172A]">Guardar Dossier en el Móvil (Modo Sin Conexión)</h3>
+ <p class="text-xs text-slate-600 leading-relaxed">
+ Este archivo HTML es autocontenido. Puedes guardarlo en la pantalla de inicio de tu teléfono para consultar localizadores, horarios y direcciones sin cobertura durante el vuelo.
+ </p>
+ <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left text-xs pt-2">
+ <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+ <p class="font-bold text-slate-900 mb-1.5"><i class="fa-brands fa-apple mr-1"></i> iPhone / iPad (Safari)</p>
+ <ol class="list-decimal pl-4 space-y-1 text-slate-600">
+ <li>Abre este archivo en <strong>Safari</strong>.</li>
+ <li>Pulsa el botón <strong>Compartir</strong> (cuadrado con flecha hacia arriba).</li>
+ <li>Selecciona <strong>"Añadir a pantalla de inicio"</strong>.</li>
+ </ol>
+ </div>
+ <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+ <p class="font-bold text-slate-900 mb-1.5"><i class="fa-brands fa-android mr-1 text-emerald-600"></i> Android (Chrome)</p>
+ <ol class="list-decimal pl-4 space-y-1 text-slate-600">
+ <li>Abre este archivo en <strong>Google Chrome</strong>.</li>
+ <li>Pulsa el menú de los <strong>tres puntos (&#8942;)</strong> arriba a la derecha.</li>
+ <li>Pulsa <strong>"Añadir a pantalla de inicio"</strong> o <strong>"Instalar aplicación"</strong>.</li>
+ </ol>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ </main>
+
+ <footer class="max-w-7xl mx-auto px-4 sm:px-6 py-6 text-center text-xs text-slate-400 border-t border-slate-200 mt-10">
+ Viajes Planea · Calle Héroes de Cascorro, 5 · 06004 Badajoz · Asistencia 24h: 924 952 613 · planea@viajesplanea.com
+ </footer>
+
+ <!-- PWA MODAL -->
+ <div id="pwa-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+ <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+ <div class="flex items-center justify-between">
+ <h3 class="font-extrabold text-base text-[#0F172A]">Acceso Rápido en Móvil</h3>
+ <button onclick="closePwaModal()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+ </div>
+ <p class="text-xs text-slate-600">En iOS Safari pulsa <strong>Compartir &rarr; Añadir a pantalla de inicio</strong>. En Android Chrome pulsa <strong>Menú (&#8942;) &rarr; Instalar aplicación</strong>.</p>
+ <button onclick="closePwaModal()" class="w-full py-2 rounded-lg bg-[#0F172A] text-white text-xs font-bold">Entendido</button>
+ </div>
+ </div>
+
+ <script>
+ // ==================== STRUCTURED CORPORATE DATA ====================
+ const TRAVELERS = [
+ {
+ id: 'DAVID',
+ name: 'Pascual David Peñarrocha López',
+ role: 'Ejecutivo · Ref. VITALY/ADEPLUS',
+ arrival: '01/12 · 19:45 BJZ -> 21:00 MAD T4 (Iberia/Air Nostrum IB2333 · Loc. OBHYLY / Z3OEZF · Billete 075 9255199564 · 1 pza)',
+ transfer: 'Sin transfer contratado: conexión MAD T4 <-> Hotel Érase un Hotel por cuenta del viajero (Taxi ~20 min o Metro L8+L10).',
+ hotelInOut: 'Entrada: 01/12/2026 · Salida: 02/12/2026 (1 noche · Hab. DUI + Desayuno · Bono Restel 56986495 // 4497986)',
+ departure: '02/12 · 17:55 MAD T4 -> 19:15 BJZ (Iberia/Air Nostrum IB2332 · Loc. OBHYLY / Z3OEZF · Economy Flexible L · 1 pza)'
+ },
+ {
+ id: 'RUBEN',
+ name: 'Rubén Marcos Delgado',
+ role: 'Ejecutivo · Ref. VITALY/ADEPLUS',
+ arrival: '01/12 · 19:45 BJZ -> 21:00 MAD T4 (Iberia/Air Nostrum IB2333 · Loc. 98DXO2 · Billete 075 5862838716 · 1 pza)',
+ transfer: 'Sin transfer contratado: conexión MAD T4 <-> Hotel Érase un Hotel por cuenta del viajero (Taxi ~20 min o Metro L8+L10).',
+ hotelInOut: 'Entrada: 01/12/2026 · Salida: 02/12/2026 (1 noche · Hab. DUI + Desayuno · Bono Restel 56986495 // 4497986)',
+ departure: '02/12 · 17:55 MAD T4 -> 19:15 BJZ (Iberia/Air Nostrum IB2332 · Loc. 98DXO2 · Economy Standard L · 1 pza)'
+ }
+ ];
+
+ const TRANSPORT_CARDS = [
+ {
+ paxIds: ['DAVID'],
+ type: 'VUELOS IDA Y VUELTA · IBERIA / AIR NOSTRUM',
+ badge: 'Badajoz (BJZ) <-> Madrid (MAD T4)',
+ title: 'Pascual David Peñarrocha López',
+ details: [
+ '<strong>Localizadores:</strong> CDV: <code>OBHYLY</code> · Aerolínea: <code>Z3OEZF</code> · Billete: <code>075 9255199564</code>.',
+ '<strong>Ida 01/12:</strong> Vuelo IB2333 · Salida BJZ <strong>19:45 h</strong> &rarr; Llegada MAD T4 <strong>21:00 h</strong> (1h 15m) · Tarifa Economy Optima (Q) · 1 pieza incluida.',
+ '<strong>Vuelta 02/12:</strong> Vuelo IB2332 · Salida MAD T4 <strong>17:55 h</strong> &rarr; Llegada BJZ <strong>19:15 h</strong> (1h 20m) · Tarifa Economy Flexible (L) · 1 pieza incluida.'
+ ]
+ },
+ {
+ paxIds: ['RUBEN'],
+ type: 'VUELOS IDA Y VUELTA · IBERIA / AIR NOSTRUM',
+ badge: 'Badajoz (BJZ) <-> Madrid (MAD T4)',
+ title: 'Rubén Marcos Delgado',
+ details: [
+ '<strong>Localizadores:</strong> CDV: <code>98DXO2</code> · Aerolínea: <code>98DXO2</code> · Billete: <code>075 5862838716</code>.',
+ '<strong>Ida 01/12:</strong> Vuelo IB2333 · Salida BJZ <strong>19:45 h</strong> &rarr; Llegada MAD T4 <strong>21:00 h</strong> (1h 15m) · Tarifa Economy Standard (Q) · 1 pieza incluida.',
+ '<strong>Vuelta 02/12:</strong> Vuelo IB2332 · Salida MAD T4 <strong>17:55 h</strong> &rarr; Llegada BJZ <strong>19:15 h</strong> (1h 20m) · Tarifa Economy Standard (L) · 1 pieza incluida.'
+ ]
+ }
+ ];
+
+ const ITINERARY_DAYS = [
+ {
+ id: 'day-1',
+ dayLabel: 'DÍA 1 · MARTES 01 DICIEMBRE 2026',
+ subtitle: 'Vuelo Badajoz -> Madrid T4 y Check-in en Hotel Érase un Hotel',
+ events: [
+ { time: '17:45 (Rec.)', pax: ['ALL'], badge: 'AEROPUERTO', title: 'Presentación en Aeropuerto de Badajoz (BJZ)', desc: 'Antelación recomendada de 2 horas antes del vuelo. Llevar DNI en vigor. Tarjetas de embarque enviadas 23–24h antes.' },
+ { time: '19:45 – 21:00', pax: ['DAVID', 'RUBEN'], badge: 'VUELO', title: 'Vuelo Directo Badajoz (BJZ) -> Madrid-Barajas (MAD T4) · IB2333', desc: 'Operado por Air Nostrum (1h 15m). Pascual David Peñarrocha (Loc. OBHYLY / Z3OEZF) y Rubén Marcos Delgado (Loc. 98DXO2).' },
+ { time: '21:15 (Rec.)', pax: ['ALL'], badge: 'TAXI RECOMENDADO', title: 'Traslado Aeropuerto MAD T4 -> Hotel Érase un Hotel (Bravo Murillo, 304)', desc: 'Sin servicio privado contratado: recomendamos tomar Taxi en parada oficial T4 (~20 min) o Metro (L8 hasta Nuevos Ministerios + L10 hasta Cuzco) y pasar el gasto a su empresa.' },
+ { time: '21:40 (Est.)', pax: ['ALL'], badge: 'HOTEL CHECK-IN', title: 'Entrada Hotel Érase un Hotel 3* · 2 Habitaciones DUI con Desayuno', desc: 'Calle Bravo Murillo, 304, 28020 Madrid (Tel. +34 915 712 880). Bono Restel: 56986495 // 4497986. IMPORTANTE: Al llegar después de las 20:00 h, es obligatorio avisar previamente al hotel.' }
+ ]
+ },
+ {
+ id: 'day-2',
+ dayLabel: 'DÍA 2 · MIÉRCOLES 02 DICIEMBRE 2026',
+ subtitle: 'Check-out Hotel, Jornada de Trabajo en Madrid y Vuelo de Regreso a Badajoz',
+ events: [
+ { time: '07:30 – 10:30', pax: ['ALL'], badge: 'HOTEL', title: 'Desayuno en Hotel Érase un Hotel', desc: 'Incluido en las 2 habitaciones DUI.' },
+ { time: 'Antes 12:00', pax: ['ALL'], badge: 'HOTEL CHECK-OUT', title: 'Salida (Check-out) Hotel Érase un Hotel', desc: 'Salida obligatoria de las habitaciones antes de las 12:00 h del 02/12/2026.' },
+ { time: '09:30 – 15:15', pax: ['ALL'], badge: 'AGENDA', title: 'Jornada Corporativa / Reuniones en Madrid', desc: 'Bloque reservado para gestiones profesionales en Madrid.' },
+ { time: '15:30 (Rec.)', pax: ['ALL'], badge: 'TAXI RECOMENDADO', title: 'Traslado Madrid Centro / Hotel -> Aeropuerto MAD T4', desc: 'Recomendamos salir con antelación suficiente para llegar al aeropuerto 2 horas antes de la salida del vuelo (17:55 h).' },
+ { time: '17:55 – 19:15', pax: ['DAVID', 'RUBEN'], badge: 'VUELO', title: 'Vuelo Directo Madrid-Barajas (MAD T4) -> Badajoz (BJZ) · IB2332', desc: 'Operado por Air Nostrum (1h 20m). Pascual David Peñarrocha (Loc. OBHYLY) y Rubén Marcos Delgado (Loc. 98DXO2).' }
+ ]
+ }
+ ];
+
+ // ==================== VERIFIED COORDINATES (MADRID) ====================
+ const MAP_POINTS = [
+ {
+ name: 'Hotel Érase un Hotel (Sede Alojamiento)',
+ cat: 'HOTEL',
+ lat: 40.46185,
+ lng: -3.69745,
+ address: 'Calle Bravo Murillo, 304, Tetuán, 28020 Madrid · Tel. 915 712 880',
+ desc: 'Entrada 01/12 · Salida 02/12 · 2 Hab. DUI AD · Bono Restel 56986495 // 4497986'
+ },
+ {
+ name: 'Aeropuerto Adolfo Suárez Madrid-Barajas (Terminal 4)',
+ cat: 'TRANSPORTE',
+ lat: 40.49180,
+ lng: -3.59320,
+ address: 'Av. de la Hispanidad, s/n, Terminal T4, 28042 Madrid · Tel. 913 21 10 00',
+ desc: 'Llegada IB2333 (01/12 21:00) y Salida IB2332 (02/12 17:55)'
+ },
+ {
+ name: 'Asador de Aranda · Plaza de Castilla (Recomendación)',
+ cat: 'DINING',
+ lat: 40.46605,
+ lng: -3.68975,
+ address: 'Plaza de Castilla, 3, Tetuán, 28046 Madrid · Tel. 917 33 87 02',
+ desc: 'Sugerencia gastronómica · Cocina tradicional castellana en horno de leña'
+ },
+ {
+ name: 'Distrito 798 · Hotel Meliá Castilla (Recomendación)',
+ cat: 'DINING',
+ lat: 40.46145,
+ lng: -3.69085,
+ address: 'C. del Poeta Joan Maragall, 43, Tetuán, 28020 Madrid · Tel. 912 90 87 07',
+ desc: 'Sugerencia gastronómica · Cocina japonesa y nikkei junto a Cuzco'
+ },
+ {
+ name: 'Lima Nikkei Madrid (Recomendación)',
+ cat: 'DINING',
+ lat: 40.46335,
+ lng: -3.69155,
+ address: 'C. de Rosario Pino, 8, Tetuán, 28020 Madrid · Tel. 689 77 94 45',
+ desc: 'Sugerencia gastronómica · Cocina nikkei junto a Plaza de Castilla'
+ },
+ {
+ name: 'Taberna El Bierzo · Sor Ángela de la Cruz (Recomendación)',
+ cat: 'DINING',
+ lat: 40.45965,
+ lng: -3.69340,
+ address: 'C. de Sor Ángela de la Cruz, 22, Tetuán, 28020 Madrid · Tel. 915 72 33 19',
+ desc: 'Sugerencia gastronómica · Taberna tradicional española en Cuzco'
+ }
+ ];
+
+ // ==================== STATE & FILTERING ====================
+ let currentPax = 'ALL';
+ let mapInstance = null;
+ let mapMarkers = [];
+ let mapRetryCount = 0;
+ let ttsEnabled = true;
+
+ function setPaxFilter(paxId) {
+ currentPax = paxId;
+ document.querySelectorAll('.pax-pill').forEach(btn => {
+ btn.classList.toggle('active', btn.dataset.pax === paxId);
+ });
+ renderAll();
+ }
+
+ function renderAll() {
+ const filteredTravelers = currentPax === 'ALL'
+ ? TRAVELERS
+ : TRAVELERS.filter(t => t.id === currentPax);
+
+ const roomingEl = document.getElementById('hotel-rooming-list');
+ roomingEl.innerHTML = filteredTravelers.map(t => `
+ <div class="bg-white p-2 rounded border border-slate-200 flex items-center justify-between gap-2">
+ <span><i class="fa-solid fa-bed text-[#C5A059] mr-1.5"></i><strong>${t.name}</strong></span>
+ <span class="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold shrink-0">In: 01/12 · Out: 02/12 · DUI AD</span>
+ </div>
+ `).join('');
+
+ const tbodyEl = document.getElementById('matrix-tbody');
+ tbodyEl.innerHTML = filteredTravelers.map(t => `
+ <tr class="hover:bg-slate-50 transition">
+ <td class="py-3 px-4 font-bold text-[#0F172A]">
+ ${t.name}
+ <span class="block text-[11px] font-normal text-slate-500">${t.role}</span>
+ </td>
+ <td class="py-3 px-4 text-xs text-slate-700">${t.arrival}</td>
+ <td class="py-3 px-4 text-xs text-slate-700">${t.transfer}</td>
+ <td class="py-3 px-4 text-xs font-semibold text-slate-800">${t.hotelInOut}</td>
+ <td class="py-3 px-4 text-xs text-slate-700">${t.departure}</td>
+ </tr>
+ `).join('');
+
+ const filteredCards = currentPax === 'ALL'
+ ? TRANSPORT_CARDS
+ : TRANSPORT_CARDS.filter(c => c.paxIds.includes(currentPax));
+
+ document.getElementById('transport-cards-grid').innerHTML = filteredCards.map(c => `
+ <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-2.5">
+ <div class="flex items-center justify-between gap-2">
+ <span class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#0F172A] text-[#C5A059]">${c.type}</span>
+ <span class="text-xs font-semibold text-slate-500">${c.badge}</span>
+ </div>
+ <h4 class="font-bold text-base text-slate-900">${c.title}</h4>
+ <ul class="space-y-1.5 text-xs text-slate-700 list-disc pl-4">
+ ${c.details.map(d => `<li>${d}</li>`).join('')}
+ </ul>
+ </div>
+ `).join('');
+
+ const itinEl = document.getElementById('itinerary-container');
+ itinEl.innerHTML = ITINERARY_DAYS.map(day => {
+ const visibleEvents = currentPax === 'ALL'
+ ? day.events
+ : day.events.filter(ev => ev.pax.includes('ALL') || ev.pax.includes(currentPax));
+
+ if (visibleEvents.length === 0) return '';
+
+ return `
+ <div id="${day.id}" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+ <div class="bg-[#0F172A] text-white px-5 py-3 flex flex-wrap items-center justify-between gap-2">
+ <h3 class="font-extrabold text-sm tracking-wide text-[#C5A059]">${day.dayLabel}</h3>
+ <span class="text-xs text-slate-300">${day.subtitle}</span>
+ </div>
+ <div class="divide-y divide-slate-100">
+ ${visibleEvents.map(ev => `
+ <div class="p-4 flex flex-col sm:flex-row sm:items-start gap-3 hover:bg-slate-50">
+ <div class="sm:w-32 shrink-0">
+ <span class="inline-block font-mono text-xs font-bold bg-slate-100 text-slate-900 px-2.5 py-1 rounded">${ev.time}</span>
+ </div>
+ <div class="flex-1">
+ <div class="flex flex-wrap items-center gap-2 mb-1">
+ <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-900">${ev.badge}</span>
+ <h4 class="font-bold text-sm text-slate-900">${ev.title}</h4>
+ </div>
+ <p class="text-xs text-slate-600 leading-relaxed">${ev.desc}</p>
+ </div>
+ </div>
+ `).join('')}
+ </div>
+ </div>
+ `;
+ }).join('');
+ }
+
+ // ==================== TABS & MAP (ESRI ARCGIS LOCAL-SAFE) ====================
+ function switchTab(tabName) {
+ document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+ document.querySelectorAll('.tab-btn').forEach(btn => {
+ btn.classList.remove('active', 'text-white');
+ if (btn.id === 'tab-importante') {
+ btn.classList.add('text-[#C8102E]');
+ } else {
+ btn.classList.add('text-slate-600');
+ }
+ });
+
+ document.getElementById('view-' + tabName).classList.remove('hidden');
+ const activeBtn = document.getElementById('tab-' + tabName);
+ activeBtn.classList.add('active');
+ activeBtn.classList.remove('text-slate-600', 'text-[#C8102E]');
+
+ if (tabName === 'mapa') {
+ setTimeout(() => initMap(), 150);
+ setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(true); }, 450);
+ }
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+ }
+
+ function scrollToDay(dayId) {
+ const el = document.getElementById(dayId);
+ if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+ }
+
+ function initMap() {
+ if (typeof L === 'undefined') {
+ if (mapRetryCount < 6) {
+ mapRetryCount++;
+ setTimeout(initMap, 200);
+ }
+ return;
+ }
+ if (!mapInstance) {
+ mapInstance = L.map('corporate-map').setView([40.4650, -3.6850], 13);
+ const street = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+ attribution: 'Tiles &copy; Esri',
+ maxZoom: 19
+ }).addTo(mapInstance);
+ const topo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+ attribution: 'Tiles &copy; Esri',
+ maxZoom: 19
+ });
+ const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+ attribution: 'Tiles &copy; Esri',
+ maxZoom: 19
+ });
+ L.control.layers({ 'Callejero Esri': street, 'Topográfico': topo, 'Satélite': sat }, null, { position: 'topright' }).addTo(mapInstance);
+ filterMapMarkers('ALL');
+ window.addEventListener('resize', () => {
+ if (mapInstance) mapInstance.invalidateSize(true);
+ });
+ }
+ setTimeout(() => mapInstance.invalidateSize(true), 150);
+ }
+
+ function filterMapMarkers(cat) {
+ if (!mapInstance) return;
+ mapMarkers.forEach(m => { if (m) mapInstance.removeLayer(m); });
+ mapMarkers = [];
+
+ const pts = cat === 'ALL' ? MAP_POINTS : MAP_POINTS.filter(p => p.cat === cat);
+ const listEl = document.getElementById('map-points-list');
+ listEl.innerHTML = '';
+ const boundsCoords = [];
+
+ pts.forEach((pt, idx) => {
+ const color = pt.cat === 'HOTEL' ? '#C5A059' : pt.cat === 'TRANSPORTE' ? '#1D4ED8' : '#C8102E';
+ const iconHtml = `<div style="background:${color};color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.35);font-size:12px;"><i class="fa-solid fa-location-dot"></i></div>`;
+ const marker = L.marker([pt.lat, pt.lng], {
+ icon: L.divIcon({ className: 'leaflet-div-icon', html: iconHtml, iconSize: [30, 30], iconAnchor: [15, 15] })
+ }).addTo(mapInstance).bindPopup(`<strong>${pt.name}</strong><br><span style="font-size:11px;color:#475569;">${pt.address}</span><br><span style="font-size:12px;">${pt.desc}</span>`);
+ mapMarkers.push(marker);
+ boundsCoords.push([pt.lat, pt.lng]);
+
+ const item = document.createElement('div');
+ item.className = 'p-3 rounded-lg border border-slate-200 hover:border-[#0F172A] cursor-pointer transition';
+ item.innerHTML = `<p class="font-bold text-xs text-[#0F172A]">${pt.name}</p><p class="text-[11px] font-semibold text-slate-600 mt-0.5"><i class="fa-solid fa-location-dot text-[#C8102E] mr-1"></i>${pt.address}</p><p class="text-[11px] text-slate-500 mt-0.5">${pt.desc}</p>`;
+ item.onclick = () => focusMapByIndex(idx);
+ listEl.appendChild(item);
+ });
+
+ if (boundsCoords.length > 1) {
+ mapInstance.fitBounds(L.latLngBounds(boundsCoords), { padding: [40, 40], maxZoom: 13 });
+ } else if (boundsCoords.length === 1) {
+ mapInstance.setView(boundsCoords[0], 15);
+ }
+ }
+
+ function focusMapByIndex(idx) {
+ const marker = mapMarkers[idx];
+ if (!marker || !mapInstance) return;
+ mapInstance.flyTo(marker.getLatLng(), 15, { animate: true, duration: 0.8 });
+ marker.openPopup();
+ }
+
+ // ==================== PLANIA ASSISTANT & TTS ====================
+ function toggleTts() {
+ ttsEnabled = !ttsEnabled;
+ document.getElementById('tts-toggle-btn').innerHTML = ttsEnabled
+ ? '<i class="fa-solid fa-volume-high text-[#C5A059] mr-1"></i> Voz: Activa'
+ : '<i class="fa-solid fa-volume-xmark text-slate-400 mr-1"></i> Voz: Silenciada';
+ }
+
+ function speakText(text) {
+ if (!ttsEnabled || !('speechSynthesis' in window)) return;
+ window.speechSynthesis.cancel();
+ const utter = new SpeechSynthesisUtterance(text);
+ utter.lang = 'es-ES';
+ const voices = window.speechSynthesis.getVoices();
+ const femaleEs = voices.find(v => v.lang.startsWith('es') && /helena|laura|monica|elvira|lucia|female/i.test(v.name))
+ || voices.find(v => v.lang.startsWith('es'));
+ if (femaleEs) utter.voice = femaleEs;
+ window.speechSynthesis.speak(utter);
+ }
+
+ function handleChatSubmit(e) {
+ e.preventDefault();
+ const input = document.getElementById('chat-input');
+ const q = input.value.trim();
+ if (!q) return;
+ input.value = '';
+ askPlanIA(q);
+ }
+
+ function askPlanIA(question) {
+ const box = document.getElementById('chat-messages');
+ box.innerHTML += `<div class="bg-[#0F172A] text-white rounded-xl p-3 max-w-[80%] ml-auto text-xs">${question}</div>`;
+
+ const q = question.toLowerCase();
+ let reply = 'El alojamiento para Pascual David Peñarrocha López y Rubén Marcos Delgado es en el Hotel Érase un Hotel (Calle Bravo Murillo, 304, Madrid) con entrada el 1 de diciembre y salida antes de las 12:00 del 2 de diciembre en 2 habitaciones DUI con desayuno (Bono Restel 56986495 // 4497986).';
+
+ if (q.includes('hotel') || q.includes('bono') || q.includes('restel') || q.includes('bravo')) {
+ reply = 'Hotel Érase un Hotel 3 estrellas (Calle Bravo Murillo, 304, 28020 Madrid, teléfono 915 712 880). Localizador Restel: 56986495 // 4497986 (Ref. VITALY/ADEPLUS). Incluye 2 habitaciones DUI con desayuno del 01/12 al 02/12/2026. Al llegar después de las 20:00 h por el horario del vuelo, es obligatorio avisar al hotel.';
+ } else if (q.includes('vuelo') || q.includes('ib2333') || q.includes('ib2332') || q.includes('horario') || q.includes('localizador')) {
+ reply = 'Vuelo de ida IB2333 el 01/12: Badajoz 19:45 a Madrid T4 21:00. Vuelo de vuelta IB2332 el 02/12: Madrid T4 17:55 a Badajoz 19:15. Localizadores: Pascual David Peñarrocha (OBHYLY / Z3OEZF) y Rubén Marcos Delgado (98DXO2).';
+ } else if (q.includes('t4') || q.includes('taxi') || q.includes('metro') || q.includes('traslado') || q.includes('llegar')) {
+ reply = 'No hay transfer privado contratado en Madrid. Desde la Terminal 4 puedes tomar un Taxi (~20 min, teléfono Radio Taxi 915 47 82 00) o el Metro (Línea 8 hasta Nuevos Ministerios y transbordo a Línea 10 hasta Cuzco, a unos metros de Bravo Murillo 304) y pasar el gasto a tu empresa.';
+ } else if (q.includes('equipaje') || q.includes('maleta') || q.includes('embarque')) {
+ reply = 'Ambos billetes incluyen 1 pieza por trayecto (maleta de cabina hasta 55x40x20 cm y 10 kg más accesorio personal bajo asiento de 40x30x15 cm). Las tarjetas de embarque se envían 23-24 horas antes y se recomienda estar en el aeropuerto 2 horas antes del vuelo.';
+ }
+
+ box.innerHTML += `<div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm max-w-[85%] text-xs text-slate-800"><strong class="text-[#0F172A] block mb-1">PlanIA</strong>${reply}</div>`;
+ box.scrollTop = box.scrollHeight;
+ speakText(reply);
+ }
+
+ // ==================== EXPENSE CALCULATOR (SIN KILOMETRAJE) ====================
+ function recalcExpenses() {
+ const meals = parseFloat(document.getElementById('calc-meals').value) || 0;
+ const taxis = parseFloat(document.getElementById('calc-taxis').value) || 0;
+ const other = parseFloat(document.getElementById('calc-other').value) || 0;
+ const total = meals + taxis + other;
+ document.getElementById('calc-total').textContent = total.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+ }
+
+ function openPwaModal() {
+ const m = document.getElementById('pwa-modal');
+ m.classList.remove('hidden');
+ m.classList.add('flex');
+ }
+ function closePwaModal() {
+ const m = document.getElementById('pwa-modal');
+ m.classList.add('hidden');
+ m.classList.remove('flex');
+ }
+
+ // Dynamic PWA Manifest
+ (function injectManifest() {
+ const manifest = {
+ name: 'Dossier Corporativo · Madrid 2026 | Viajes Planea',
+ short_name: 'Planea Madrid',
+ start_url: '.',
+ display: 'standalone',
+ background_color: '#0F172A',
+ theme_color: '#0F172A'
+ };
+ const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+ const link = document.createElement('link');
+ link.rel = 'manifest';
+ link.href = URL.createObjectURL(blob);
+ document.head.appendChild(link);
+ })();
+
+ // Initial render
+ renderAll();
+ </script>
+</body>
+</html>
