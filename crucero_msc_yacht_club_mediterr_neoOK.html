@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Crucero Exclusivo MSC Yacht Club | Familia López-Sojo 2026</title>
+
+    <!-- Configuración PWA App Web Instalable para iOS y Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Yacht Club 2026">
+    <meta name="theme-color" content="#0A192F">
+    
+    <!-- Iconos para la pantalla de inicio -->
+    <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1548574505-5e2386903d8f?auto=format&fit=crop&w=180&h=180&q=80">
+    <link rel="icon" type="image/png" href="https://images.unsplash.com/photo-1548574505-5e2386903d8f?auto=format&fit=crop&w=180&h=180&q=80">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Leaflet.js para el Mapa Interactivo -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navyYacht: '#0A192F',      // Azul Marino Imperial Yacht Club
+                        goldYacht: '#D4AF37',      // Dorado Imperial Yacht Club
+                        goldAccent: '#C5A059',     // Acento secundario oro
+                        creamCanvas: '#FAF8F5',    // Fondo de lienzo de lujo
+                        slateCharcoal: '#1E293B',  // Texto oscuro principal
+                        crimsonTag: '#A61C1C'      // Rojo elegante de acento
+                    },
+                    fontFamily: {
+                        playfair: ['Playfair Display', 'serif'],
+                        jakarta: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --navy-yacht: #0A192F;
+            --gold-yacht: #D4AF37;
+            --cream-canvas: #FAF8F5;
+            --slate-charcoal: #1E293B;
+            --crimson-tag: #A61C1C;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--cream-canvas);
+            color: var(--slate-charcoal);
+            scroll-behavior: smooth;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .header-title {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        button, input, select, textarea {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            font-family: inherit;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0A192F;
+        }
+
+        .tab-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .leaflet-container {
+            z-index: 1 !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+        .leaflet-pane {
+            z-index: 1 !important;
+        }
+        .leaflet-top, .leaflet-bottom {
+            z-index: 10 !important;
+        }
+        #avatar-guide-widget {
+            z-index: 9999 !important;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.block { display: block !important; }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; }
+        }
+    </style>
+</head>
+<body class="text-slateCharcoal antialiased">
+
+    <!-- BANNER PWA DE INSTALACIÓN -->
+    <div id="pwa-install-banner" class="bg-navyYacht text-white px-4 py-2.5 text-xs border-b border-goldYacht/30 flex items-center justify-between no-print shadow-md font-sans">
+        <div class="flex items-center gap-2.5">
+            <span class="text-goldYacht text-base"><i class="fa-solid fa-mobile-screen-button animate-bounce"></i></span>
+            <div>
+                <span class="font-bold text-goldYacht">¿Quieres llevar el cuaderno de a bordo como App?</span>
+                <span class="block text-[10px] text-gray-300">Instálalo en tu pantalla de inicio en un clic.</span>
+            </div>
+        </div>
+        <button onclick="showInstallInstructions()" class="bg-goldYacht text-navyYacht font-bold px-3 py-1 rounded-full text-[11px] shadow hover:bg-white transition">
+            Instalar App
+        </button>
+    </div>
+
+    <!-- MODAL DE INSTRUCCIONES DE INSTALACIÓN PWA -->
+    <div id="install-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-[99999] flex items-center justify-center p-4 font-sans">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-slate-800 space-y-4 shadow-2xl relative border-2 border-goldYacht">
+            <button onclick="hideInstallInstructions()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-800 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 bg-navyYacht text-goldYacht rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-md">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+                <h3 class="font-serif font-bold text-lg text-navyYacht">Instalar como App Nativa</h3>
+                <p class="text-xs text-slate-500">Sigue estos sencillos pasos en tu dispositivo:</p>
+            </div>
+            <div class="space-y-3 text-xs bg-creamCanvas p-4 rounded-xl border border-goldYacht/20">
+                <div class="flex items-start gap-3">
+                    <span class="bg-goldYacht text-navyYacht font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">1</span>
+                    <p>En **iPhone**, toca el botón **Compartir** <i class="fa-solid fa-arrow-up-from-bracket text-navyYacht font-bold"></i> en la barra de Safari.</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="bg-goldYacht text-navyYacht font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">2</span>
+                    <p>Desplázate hacia abajo y pulsa en **"Añadir a la pantalla de inicio"** <i class="fa-solid fa-square-plus text-navyYacht font-bold"></i>.</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="bg-goldYacht text-navyYacht font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0">3</span>
+                    <p>¡Listo! Tendrás el icono **Yacht Club 2026** disponible a pantalla completa.</p>
+                </div>
+            </div>
+            <button onclick="hideInstallInstructions()" class="w-full py-2.5 bg-navyYacht text-goldYacht font-bold rounded-xl text-xs uppercase shadow-md">
+                Entendido
+            </button>
+        </div>
+    </div>
+
+    <!-- HERO/HEADER EXCLUSIVO YACHT CLUB 2026 -->
+    <header class="relative bg-navyYacht text-white overflow-hidden py-14 md:py-22 shadow-2xl">
+        <div class="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay" style="background-image: url('https://images.unsplash.com/photo-1548574505-5e2386903d8f?auto=format&fit=crop&w=1600&q=80');"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 font-sans">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-goldYacht/30 pb-8 mb-8">
+                <div>
+                    <span class="inline-block bg-goldYacht text-navyYacht text-xs uppercase font-bold tracking-widest px-3.5 py-1 rounded-full mb-3 shadow-md">
+                        <i class="fa-solid fa-crown mr-1"></i> Experiencia MSC Yacht Club Confirmada
+                    </span>
+                    <h1 class="header-title text-4xl md:text-6xl font-bold tracking-tight mb-2">MSC DIVINA</h1>
+                    <p class="header-title text-xl md:text-2xl text-goldYacht italic font-serif">Islas Griegas, Éfeso, Riviera Turca &amp; Nápoles</p>
+                </div>
+                <div class="text-left md:text-right bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5 shadow-lg">
+                    <p class="text-xs text-goldYacht uppercase font-semibold tracking-wider">Diseñado a medida para</p>
+                    <p class="text-xl font-bold text-white">Familia López-Sojo <span class="text-sm font-normal text-gray-300">(4 Pax)</span></p>
+                    <p class="text-sm text-gray-300 mt-1"><i class="fa-solid fa-anchor text-goldYacht mr-1 animate-pulse"></i> 14 al 21 de Agosto de 2026 (8 Días / 7 Noches)</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center font-sans">
+                <div class="bg-navyYacht/60 border border-goldYacht/30 p-4 rounded-xl shadow-sm">
+                    <div class="text-goldYacht text-2xl mb-1"><i class="fa-solid fa-door-closed"></i></div>
+                    <span class="block text-xs uppercase text-gray-300">Camarotes Yacht Club</span>
+                    <span class="text-sm font-semibold">12002 &amp; 12004 (Deck 12)</span>
+                </div>
+                <div class="bg-navyYacht/60 border border-goldYacht/30 p-4 rounded-xl shadow-sm">
+                    <div class="text-goldYacht text-2xl mb-1"><i class="fa-solid fa-plane"></i></div>
+                    <span class="block text-xs uppercase text-gray-300">Vuelos Incluidos</span>
+                    <span class="text-sm font-semibold">Iberia Directos (MAD-FCO)</span>
+                </div>
+                <div class="bg-navyYacht/60 border border-goldYacht/30 p-4 rounded-xl shadow-sm">
+                    <div class="text-goldYacht text-2xl mb-1"><i class="fa-solid fa-wifi"></i></div>
+                    <span class="block text-xs uppercase text-gray-300">Wi-Fi &amp; Crédito</span>
+                    <span class="text-sm font-semibold">Browse &amp; Stream + 100€ Crédito</span>
+                </div>
+                <div class="bg-navyYacht/60 border border-goldYacht/30 p-4 rounded-xl shadow-sm">
+                    <div class="text-goldYacht text-2xl mb-1"><i class="fa-solid fa-person-walking-luggage"></i></div>
+                    <span class="block text-xs uppercase text-gray-300">Excursiones Incluidas</span>
+                    <span class="text-sm font-semibold">Explorer Package (3 Puertos)</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MENÚ DE NAVEGACIÓN INTERACTIVA -->
+    <nav class="sticky top-0 bg-white shadow-md z-40 no-print border-b border-gray-200 font-sans">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
+            <div class="flex overflow-x-auto lg:overflow-x-visible lg:flex-wrap lg:justify-center items-center gap-1.5 md:gap-2 py-3 no-scrollbar text-xs">
+                <button onclick="switchTab('resumen')" id="tab-resumen" class="tab-btn active shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-bold text-xs whitespace-nowrap tab-transition bg-navyYacht text-white shadow-sm hover:shadow-md">
+                    <i class="fa-solid fa-passport mr-1.5"></i>Resumen &amp; Camarote
+                </button>
+                <button onclick="switchTab('itinerario')" id="tab-itinerario" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-semibold text-xs whitespace-nowrap tab-transition bg-gray-100 text-slateCharcoal hover:bg-goldYacht/10">
+                    <i class="fa-solid fa-compass-drafting mr-1.5"></i>Itinerario Diario
+                </button>
+                <button onclick="switchTab('mapa')" id="tab-mapa" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-semibold text-xs whitespace-nowrap tab-transition bg-gray-100 text-slateCharcoal hover:bg-goldYacht/10">
+                    <i class="fa-solid fa-map-location-dot mr-1.5"></i>Mapa de Ruta
+                </button>
+                <button onclick="switchTab('enciclopedia')" id="tab-enciclopedia" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-bold text-xs whitespace-nowrap tab-transition bg-goldYacht/15 text-navyYacht border border-goldYacht/40 hover:bg-goldYacht/30 flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-bookmark text-goldYacht"></i>Enciclopedia del Destino
+                </button>
+                <button onclick="switchTab('asistente')" id="tab-asistente" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-bold text-xs whitespace-nowrap tab-transition bg-gray-100 border border-goldYacht/30 text-navyYacht hover:bg-goldYacht/10 flex items-center gap-1.5">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-goldYacht opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-goldYacht"></span>
+                    </span>
+                    <i class="fa-solid fa-robot text-goldYacht"></i>Asistente PlanIA
+                </button>
+                <button onclick="switchTab('practica')" id="tab-practica" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-semibold text-xs whitespace-nowrap tab-transition bg-gray-100 text-slateCharcoal hover:bg-goldYacht/10">
+                    <i class="fa-solid fa-clipboard-check mr-1.5"></i>Guía A Bordo
+                </button>
+                <button onclick="switchTab('condiciones')" id="tab-condiciones" class="tab-btn shrink-0 lg:shrink flex-1 max-w-fit px-3 py-2 rounded-lg font-semibold text-xs whitespace-nowrap tab-transition bg-gray-100 text-slateCharcoal hover:bg-goldYacht/10">
+                    <i class="fa-solid fa-file-contract mr-1.5"></i>Servicios Incluidos
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CUERPO DE CONTENIDOS -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- PESTAÑA 1: RESUMEN Y LOGÍSTICA DE CAMAROTES -->
+        <section id="content-resumen" class="tab-content block space-y-10">
+            
+            <!-- TARJETA VIP YACHT CLUB Y CAMAROTES -->
+            <div class="bg-gradient-to-r from-navyYacht to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-goldYacht font-sans">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-goldYacht/30 pb-6 mb-6">
+                    <div>
+                        <span class="bg-goldYacht text-navyYacht text-xs uppercase font-extrabold px-3 py-1 rounded-full">Experiencia VIP Exclusiva</span>
+                        <h2 class="header-title text-2xl md:text-3xl font-bold mt-2 text-white">MSC YACHT CLUB • MSC DIVINA</h2>
+                        <p class="text-xs text-goldYacht italic mt-1 font-serif">"Un yate dentro de un barco de crucero"</p>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-xl border border-white/10 text-xs space-y-1">
+                        <p><strong>Restaurante Privado:</strong> Turno libre "Cena a cualquier hora".</p>
+                        <p><strong>Servicio de Mayordomo:</strong> Asistencia privada las 24 horas.</p>
+                        <p><strong>Punto de Emergencia:</strong> Zona D (Deck 12).</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Camarote 1 -->
+                    <div class="bg-white/5 border border-goldYacht/30 p-5 rounded-xl space-y-3">
+                        <div class="flex justify-between items-center border-b border-goldYacht/20 pb-2">
+                            <span class="font-bold text-goldYacht text-sm uppercase">Camarote 12002 (Deck 12)</span>
+                            <span class="text-xs bg-goldYacht/20 text-goldYacht px-2.5 py-0.5 rounded-full font-bold">Reserva: 68252833</span>
+                        </div>
+                        <ul class="text-xs text-gray-200 space-y-1.5">
+                            <li><i class="fa-solid fa-user text-goldYacht mr-1.5"></i> <strong>Pasajero 1:</strong> Lucía López Sojo (08/10/2003)</li>
+                            <li><i class="fa-solid fa-user text-goldYacht mr-1.5"></i> <strong>Pasajero 2:</strong> Andrés López Sojo (29/09/2008)</li>
+                            <li><i class="fa-solid fa-wifi text-goldYacht mr-1.5"></i> <strong>Wi-Fi Incluido:</strong> Browse &amp; Stream (1 Dispositivo - `BS1N049`)</li>
+                            <li><i class="fa-solid fa-coins text-goldYacht mr-1.5"></i> <strong>Crédito a Bordo:</strong> 50 € de saldo (`SB050EUR`)</li>
+                            <li><i class="fa-solid fa-ticket text-goldYacht mr-1.5"></i> <strong>Docs Embarque:</strong> 174667922 / 174667923</li>
+                        </ul>
+                    </div>
+
+                    <!-- Camarote 2 -->
+                    <div class="bg-white/5 border border-goldYacht/30 p-5 rounded-xl space-y-3">
+                        <div class="flex justify-between items-center border-b border-goldYacht/20 pb-2">
+                            <span class="font-bold text-goldYacht text-sm uppercase">Camarote 12004 (Deck 12)</span>
+                            <span class="text-xs bg-goldYacht/20 text-goldYacht px-2.5 py-0.5 rounded-full font-bold">Reserva: 68252874</span>
+                        </div>
+                        <ul class="text-xs text-gray-200 space-y-1.5">
+                            <li><i class="fa-solid fa-user text-goldYacht mr-1.5"></i> <strong>Pasajero 1:</strong> Andrés López Sansinena (15/02/1971)</li>
+                            <li><i class="fa-solid fa-user text-goldYacht mr-1.5"></i> <strong>Pasajero 2:</strong> María Sojo Cebrián (17/08/1974)</li>
+                            <li><i class="fa-solid fa-wifi text-goldYacht mr-1.5"></i> <strong>Wi-Fi Incluido:</strong> Browse &amp; Stream (1 Dispositivo - `BS1N049`)</li>
+                            <li><i class="fa-solid fa-coins text-goldYacht mr-1.5"></i> <strong>Crédito a Bordo:</strong> 50 € de saldo (`SB050EUR`)</li>
+                            <li><i class="fa-solid fa-ticket text-goldYacht mr-1.5"></i> <strong>Docs Embarque:</strong> 174668021 / 174668023</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUADRO DE VUELOS Y TRASLADOS PRIVADOS -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 font-sans">
+                <!-- Vuelos Iberia -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="header-title text-xl font-bold text-navyYacht"><i class="fa-solid fa-plane-departure text-goldYacht mr-2"></i>Vuelos Iberia (PNR: JTGNN &amp; JTGNX)</h3>
+                            <span class="text-xs bg-navyYacht/10 text-navyYacht px-3 py-1 rounded-full font-bold">Emitidos</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead>
+                                    <tr class="bg-creamCanvas text-navyYacht">
+                                        <th class="p-2.5 rounded-l-lg font-sans">Vuelo</th>
+                                        <th class="p-2.5">Ruta</th>
+                                        <th class="p-2.5">Fecha</th>
+                                        <th class="p-2.5">Horario</th>
+                                        <th class="p-2.5 rounded-r-lg">Equipaje</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 text-xs">
+                                    <tr class="hover:bg-gray-50/50">
+                                        <td class="p-2.5 font-bold text-navyYacht">IB647</td>
+                                        <td class="p-2.5">Madrid (MAD) ➡️ Roma (FCO)</td>
+                                        <td class="p-2.5 whitespace-nowrap">Vie 14/08</td>
+                                        <td class="p-2.5 whitespace-nowrap font-bold text-crimsonTag">08:45 - 11:10 h</td>
+                                        <td class="p-2.5 text-gray-500 font-semibold">1 pza 23kg/pax</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50/50">
+                                        <td class="p-2.5 font-bold text-navyYacht">IB654</td>
+                                        <td class="p-2.5">Roma (FCO) ➡️ Madrid (MAD)</td>
+                                        <td class="p-2.5 whitespace-nowrap">Vie 21/08</td>
+                                        <td class="p-2.5 whitespace-nowrap font-bold text-crimsonTag">19:05 - 21:40 h</td>
+                                        <td class="p-2.5 text-gray-500 font-semibold">1 pza 23kg/pax</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="text-[11px] text-gray-600 mt-4 bg-creamCanvas p-3 rounded-lg border border-goldYacht/20 space-y-1">
+                        <p><i class="fa-solid fa-circle-info text-goldYacht mr-1"></i> <strong>Check-in vuelos:</strong> Presentarse mínimo 2 horas antes de la salida en el mostrador de facturación de Iberia en Madrid Barajas.</p>
+                    </div>
+                </div>
+
+                <!-- Traslados Privados -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 font-sans flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="header-title text-xl font-bold text-navyYacht"><i class="fa-solid fa-van-shuttle text-goldYacht mr-2"></i>Traslados Privados (International Shore Services)</h3>
+                            <span class="text-xs bg-goldYacht/20 text-navyYacht px-3 py-1 rounded-full font-bold">Confirmados</span>
+                        </div>
+                        <div class="space-y-3 text-xs text-gray-700">
+                            <div class="p-3 bg-creamCanvas rounded-xl border-l-4 border-goldYacht">
+                                <p class="font-bold text-navyYacht uppercase">Llegada (14/08/2026): Roma Fiumicino ➡️ Puerto Civitavecchia</p>
+                                <p class="mt-1"><strong>Punto de encuentro:</strong> Terminal 1 Planta de Llegadas (FCO Airport), frente a servicio NCC LIMO, junto a puertas de salida 2 &amp; 3.</p>
+                                <p class="text-[11px] text-gray-500 mt-0.5">El chófer os esperará tras recoger maletas para traslado directo a la terminal de embarque Yacht Club.</p>
+                            </div>
+                            <div class="p-3 bg-creamCanvas rounded-xl border-l-4 border-navyYacht">
+                                <p class="font-bold text-navyYacht uppercase">Retorno (21/08/2026): Puerto Civitavecchia ➡️ Roma Fiumicino</p>
+                                <p class="mt-1"><strong>Punto de encuentro:</strong> Muelle de desembarque del Puerto de Civitavecchia (salida del barco a partir de las 07:00 h).</p>
+                                <p class="text-[11px] text-gray-500 mt-0.5">Traslado cómodo directo al aeropuerto para el vuelo de regreso de Iberia (19:05 h).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-3 font-semibold"><i class="fa-solid fa-phone text-goldYacht mr-1"></i> Teléfono del proveedor de traslados: 0039 0287176066</p>
+                </div>
+            </div>
+
+            <!-- EXCURSIONES INCLUIDAS EN EL PAQUETE EXPLORER -->
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 font-sans">
+                <div class="flex items-center justify-between border-b pb-4 mb-6">
+                    <h3 class="header-title text-2xl font-bold text-navyYacht"><i class="fa-solid fa-map-location text-goldYacht mr-2"></i>Paquete de Excursiones Incluidas (Explorer Package)</h3>
+                    <span class="text-xs bg-navyYacht text-goldYacht font-bold px-3 py-1 rounded-full uppercase">Cód: DIEXPS26</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+                    <div class="p-4 bg-creamCanvas rounded-xl border border-goldYacht/20 space-y-2">
+                        <span class="bg-goldYacht text-navyYacht font-bold px-2 py-0.5 rounded uppercase">Mykonos (MYK05)</span>
+                        <h4 class="font-bold text-navyYacht text-sm">Panorámica &amp; Encanto de Mykonos</h4>
+                        <p class="text-gray-600">Recorrido por las estrechas callejuelas encaladas de Chora, los célebres molinos de viento y la "Pequeña Venecia" a orillas del Egeo.</p>
+                    </div>
+                    <div class="p-4 bg-creamCanvas rounded-xl border border-goldYacht/20 space-y-2">
+                        <span class="bg-goldYacht text-navyYacht font-bold px-2 py-0.5 rounded uppercase">Kusadasi (KUS01)</span>
+                        <h4 class="font-bold text-navyYacht text-sm">La Antigua Ciudad Imperial de Éfeso</h4>
+                        <p class="text-gray-600">Excursión guiada por la joya arqueológica de la antigüedad: Biblioteca de Celso, Gran Teatro y la mística Casa de la Virgen María.</p>
+                    </div>
+                    <div class="p-4 bg-creamCanvas rounded-xl border border-goldYacht/20 space-y-2">
+                        <span class="bg-goldYacht text-navyYacht font-bold px-2 py-0.5 rounded uppercase">Nápoles (NAP01)</span>
+                        <h4 class="font-bold text-navyYacht text-sm">Joyas Panorámicas de Nápoles &amp; Pompeya</h4>
+                        <p class="text-gray-600">Visita guiada a las célebres ruinas arqueológicas de la antigua Pompeya bajo el Vesubio y recorrido panorámico por el centro histórico napolitano.</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- PESTAÑA 2: ITINERARIO DIARIO POR PUERTOS -->
+        <section id="content-itinerario" class="tab-content hidden space-y-6">
+            <!-- NAVEGADOR DE DÍAS DIRECTO -->
+            <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex overflow-x-auto gap-2 no-print font-sans">
+                <span class="flex-shrink-0 flex items-center text-xs uppercase font-bold text-navyYacht px-3">Escala:</span>
+                <button onclick="scrollToDay(1)" class="px-3 py-1.5 bg-creamCanvas text-navyYacht rounded-lg text-xs font-bold hover:bg-goldYacht/20">D1: Civitavecchia</button>
+                <button onclick="scrollToDay(2)" class="px-3 py-1.5 bg-creamCanvas text-navyYacht rounded-lg text-xs font-bold hover:bg-goldYacht/20">D2: Navegación</button>
+                <button onclick="scrollToDay(3)" class="px-3 py-1.5 bg-creamCanvas text-navyYacht rounded-lg text-xs font-bold hover:bg-goldYacht/20">D3: Mykonos</button>
+                <button onclick="scrollToDay(4)" class="px-3 py-1.5 bg-creamCanvas text-navyYacht rounded-lg text-xs font-bold hover:bg-goldYacht/20">D4: Kusadasi</button>
+                <button onclick="scrollToDay(5)" class="px-3 py-1.5 bg-creamCanvas text-navyYacht rounded-lg text-xs font-bold hover:bg-goldYacht/20">D5: Marmaris</button>
+                <button onclick="scrollToDay(6)" class="px-3 py-1.5 bg-creamCanvas text-navyYacht rounded-lg text-xs font-bold hover:bg-goldYacht/20">D6: Navegación</button>
+                <button onclick="scrollToDay(7)" class="px-3 py-1.5 bg-creamCanvas text-navyYacht rounded-lg text-xs font-bold hover:bg-goldYacht/20">D7: Nápoles</button>
+                <button onclick="scrollToDay(8)" class="px-3 py-1.5 bg-creamCanvas text-navyYacht rounded-lg text-xs font-bold hover:bg-goldYacht/20">D8: Regreso</button>
+            </div>
+
+            <!-- TARJETAS CRONOLÓGICAS DEL CRUCERO -->
+            <div class="relative border-l-2 border-goldYacht/30 pl-4 md:pl-8 space-y-10 py-6 font-sans">
+
+                <!-- DÍA 1 -->
+                <div id="day-card-1" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+                    <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-goldYacht text-navyYacht w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow">01</div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <span class="text-xs uppercase text-goldYacht font-bold">Viernes 14 Agosto 2026</span>
+                            <h3 class="header-title text-2xl font-bold text-navyYacht">Vuelo a Roma &amp; Embarque VIP en Civitavecchia</h3>
+                        </div>
+                        <span class="bg-goldYacht/20 text-navyYacht text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-ship mr-1"></i>Salida Barco: 17:00 h</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4 text-sm text-gray-700">
+                        <div class="lg:col-span-2 space-y-3 leading-relaxed">
+                            <p>• <strong>08:45 h:</strong> Salida del vuelo Iberia IB647 desde Madrid Barajas T4. Llegada a Roma Fiumicino (FCO) a las 11:10 h.</p>
+                            <p>• <strong>Traslado Privado:</strong> Recepción por parte de <em>International Shore Services</em> en la Terminal 1 (Planta de Llegadas) frente al servicio NCC LIMO (puertas 2 y 3) para traslado privado en miniván de lujo hasta el Puerto de Civitavecchia (Varco Vespucci).</p>
+                            <p>• <strong>14:00 h • Embarque VIP Yacht Club:</strong> Acceso rápido prioritario por la terminal de embarque exclusivo Yacht Club con atención por parte de vuestro mayordomo dedicado. Acomodación en los camarotes <strong>12002</strong> y <strong>12004</strong> (Deck 12).</p>
+                            <p>• <strong>17:00 h:</strong> El MSC Divina zarpa rumbo a las aguas del Mediterráneo oriental. Cóctel de bienvenida en el Top Sail Lounge.</p>
+                        </div>
+                        <div>
+                            <img src="https://images.unsplash.com/photo-1548574505-5e2386903d8f?auto=format&fit=crop&w=800&q=80" alt="MSC Cruise Ship" class="w-full h-48 object-cover rounded-xl shadow-inner border border-gray-100" onerror="this.src='https://placehold.co/400x300/FAF8F5/0A192F?text=MSC+Divina'">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DÍA 2 -->
+                <div id="day-card-2" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+                    <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-goldYacht text-navyYacht w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow">02</div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <span class="text-xs uppercase text-goldYacht font-bold">Sábado 15 Agosto 2026</span>
+                            <h3 class="header-title text-2xl font-bold text-navyYacht">Día Entero de Navegación • Experiencia Yacht Club</h3>
+                        </div>
+                        <span class="bg-navyYacht text-goldYacht text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-water mr-1"></i>En Navegación</span>
+                    </div>
+                    <div class="text-sm text-gray-700 space-y-3 leading-relaxed">
+                        <p>Jornada completa para disfrutar de las instalaciones exclusivas de vuestro complejo privado <strong>MSC Yacht Club</strong>:</p>
+                        <p>• Relájate en el área de solárium y piscina privada <strong>One Pool Deck</strong> de la cubierta superior sin aglomeraciones.</p>
+                        <p>• Disfruta de aperitivos gourmet continuos y bebidas de cortesía en el panorámico <strong>Top Sail Lounge</strong>.</p>
+                        <p>• Almuerzo y cena en el restaurante privado Yacht Club con servicio de alta gastronomía a la carta y carta de vinos seleccionados.</p>
+                    </div>
+                </div>
+
+                <!-- DÍA 3 -->
+                <div id="day-card-3" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+                    <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-goldYacht text-navyYacht w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow">03</div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <span class="text-xs uppercase text-goldYacht font-bold">Domingo 16 Agosto 2026</span>
+                            <h3 class="header-title text-2xl font-bold text-navyYacht">Mykonos (Grecia): Encanto Egeo y Molinos</h3>
+                        </div>
+                        <span class="bg-goldYacht/20 text-navyYacht text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-clock mr-1"></i>14:00 h a 23:30 h</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4 text-sm text-gray-700">
+                        <div class="lg:col-span-2 space-y-3 leading-relaxed">
+                            <p>• <strong>14:00 h:</strong> Aterrizaje/Atraque del MSC Divina en la pintoresca isla de Mykonos.</p>
+                            <p>• <strong>Excursión Incluida (MYK05):</strong> Recorrido guiado para descubrir los icónicos molinos de viento blancos, el barrio flotante de la "Pequeña Venecia" y las encantadoras calles de Chora.</p>
+                            <p>• <strong>Tiempo Libre y Atardecer:</strong> Tiempo para disfrutar de un café o cóctel frente al Mar Egeo al atardecer antes de regresar a bordo.</p>
+                            <p>• <strong>23:30 h:</strong> Salida del barco con rumbo hacia la costa de Turquía.</p>
+                        </div>
+                        <div>
+                            <img src="https://images.unsplash.com/photo-1601581875309-fafbf2d3ed3a?auto=format&fit=crop&w=800&q=80" alt="Mykonos Greece" class="w-full h-48 object-cover rounded-xl shadow-inner border border-gray-100" onerror="this.src='https://placehold.co/400x300/FAF8F5/0A192F?text=Mykonos'">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DÍA 4 -->
+                <div id="day-card-4" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+                    <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-goldYacht text-navyYacht w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow">04</div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <span class="text-xs uppercase text-goldYacht font-bold">Lunes 17 Agosto 2026</span>
+                            <h3 class="header-title text-2xl font-bold text-navyYacht">Kusadasi (Turquía): La Antigua Éfeso</h3>
+                        </div>
+                        <span class="bg-goldYacht/20 text-navyYacht text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-clock mr-1"></i>09:00 h a 18:00 h</span>
+                    </div>
+                    <div class="text-sm text-gray-700 space-y-3 leading-relaxed">
+                        <p>• <strong>09:00 h:</strong> Llegada al puerto turco de Kusadasi.</p>
+                        <p>• <strong>Excursión Incluida (KUS01):</strong> Visita arqueológica en profundidad a las colosales ruinas de la antigua ciudad de <strong>Éfeso</strong>. Admiración de la Biblioteca de Celso, el Gran Teatro y la sagrada Casa de la Virgen María.</p>
+                        <p>• Tarde de paseo por el animado bazar costero de Kusadasi antes del embarque.</p>
+                        <p>• <strong>18:00 h:</strong> Zarpamos rumbo a Marmaris.</p>
+                    </div>
+                </div>
+
+                <!-- DÍA 5 -->
+                <div id="day-card-5" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+                    <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-goldYacht text-navyYacht w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow">05</div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <span class="text-xs uppercase text-goldYacht font-bold">Martes 18 Agosto 2026</span>
+                            <h3 class="header-title text-2xl font-bold text-navyYacht">Marmaris (Turquía): Costa Turquesa &amp; Gran Bazar</h3>
+                        </div>
+                        <span class="bg-goldYacht/20 text-navyYacht text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-clock mr-1"></i>07:00 h a 17:00 h</span>
+                    </div>
+                    <div class="text-sm text-gray-700 space-y-3 leading-relaxed">
+                        <p>• <strong>07:00 h:</strong> Llegada a Marmaris, una de las perlas más bonitas de la Riviera Turca rodeada de pinares y aguas cristalinas.</p>
+                        <p>• Día para explorar el castillo medieval de Suleimán el Magnífico, pasear por su animado puerto deportivo y disfrutar de compras de especias y artesanía en su pintoresco Gran Bazar.</p>
+                        <p>• <strong>17:00 h:</strong> El barco navega de regreso rumbo al oeste cruzando el Mediterráneo.</p>
+                    </div>
+                </div>
+
+                <!-- DÍA 6 -->
+                <div id="day-card-6" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+                    <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-goldYacht text-navyYacht w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow">06</div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <span class="text-xs uppercase text-goldYacht font-bold">Miércoles 19 Agosto 2026</span>
+                            <h3 class="header-title text-2xl font-bold text-navyYacht">Día de Navegación • Relax &amp; Noche de Gala Yacht Club</h3>
+                        </div>
+                        <span class="bg-navyYacht text-goldYacht text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-water mr-1"></i>En Navegación</span>
+                    </div>
+                    <div class="text-sm text-gray-700 space-y-3 leading-relaxed">
+                        <p>• Jornada para relajarse en las tumbonas de la cubierta privada Yacht Club o acudir al spa MSC Aurea Spa.</p>
+                        <p>• Por la noche, sugerimos vestirse de gala para la tradicional <strong>Noche de Gala</strong> a bordo y disfrutar de la cena de autor del chef en el restaurante exclusivo.</p>
+                    </div>
+                </div>
+
+                <!-- DÍA 7 -->
+                <div id="day-card-7" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+                    <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-goldYacht text-navyYacht w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow">07</div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <span class="text-xs uppercase text-goldYacht font-bold">Jueves 20 Agosto 2026</span>
+                            <h3 class="header-title text-2xl font-bold text-navyYacht">Nápoles (Italia): Pompeya &amp; Bahía Napolitana</h3>
+                        </div>
+                        <span class="bg-goldYacht/20 text-navyYacht text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-clock mr-1"></i>11:00 h a 20:00 h</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4 text-sm text-gray-700">
+                        <div class="lg:col-span-2 space-y-3 leading-relaxed">
+                            <p>• <strong>11:00 h:</strong> Atraque ante las vistas del Muro del puerto de Nápoles con el Vesubio de fondo.</p>
+                            <p>• <strong>Excursión Incluida (NAP01):</strong> Traslado en autobús privado a las sobrecogedoras ruinas de <strong>Pompeya</strong>, la próspera ciudad romana sepultada por la erupción del volcán en el año 79 d.C.</p>
+                            <p>• Breve recorrido panorámico por Nápoles antes de regresar al buque.</p>
+                            <p>• <strong>20:00 h:</strong> Salida final rumbo a Civitavecchia.</p>
+                        </div>
+                        <div>
+                            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80" alt="Naples Italy" class="w-full h-48 object-cover rounded-xl shadow-inner border border-gray-100" onerror="this.src='https://placehold.co/400x300/FAF8F5/0A192F?text=Napoles'">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DÍA 8 -->
+                <div id="day-card-8" class="relative bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 transition duration-300 hover:shadow-lg scroll-mt-24">
+                    <div class="absolute -left-[25px] md:-left-[41px] top-6 bg-goldYacht text-navyYacht w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow">08</div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <span class="text-xs uppercase text-goldYacht font-bold">Viernes 21 Agosto 2026</span>
+                            <h3 class="header-title text-2xl font-bold text-navyYacht">Desembarque en Civitavecchia ✈️ Vuelo de Retorno</h3>
+                        </div>
+                        <span class="bg-navyYacht text-goldYacht text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-plane-arrival mr-1"></i>Llegada Madrid 21:40 h</span>
+                    </div>
+                    <div class="text-sm text-gray-700 space-y-3 leading-relaxed">
+                        <p>• <strong>07:00 h:</strong> Aterrizaje/Llegada del MSC Divina al Puerto de Civitavecchia.</p>
+                        <p>• Desembarque prioritario de equipaje asistido por el servicio de mayordomía Yacht Club.</p>
+                        <p>• <strong>Traslado Privado de Retorno:</strong> Chófer privado de <em>International Shore Services</em> os recoge en el puerto para traslado cómodo al Aeropuerto de Roma Fiumicino (FCO).</p>
+                        <p>• <strong>19:05 h:</strong> Embarque en el vuelo Iberia IB654 con destino a Madrid Barajas (llegada 21:40 h). ¡Fin de un viaje familiar inolvidable!</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PESTAÑA 3: MAPA INTERACTIVO MARÍTIMO DE LA RUTA -->
+        <section id="content-mapa" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4 mb-6 font-sans">
+                    <div>
+                        <h2 class="header-title text-2xl md:text-3xl font-bold text-navyYacht"><i class="fa-solid fa-earth-mediterranean text-goldYacht mr-2"></i>Ruta Marítima por el Mediterráneo Oriental</h2>
+                        <p class="text-xs text-slate-500 mt-1 font-sans">Haz clic en las escalas laterales para centrar el mapa en cada puerto o haz zoom libremente:</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 font-sans">
+                    <!-- Listado lateral interactivo -->
+                    <div class="lg:col-span-1 max-h-[500px] overflow-y-auto pr-2 space-y-2 border-r border-gray-100 text-xs">
+                        <h4 class="font-bold text-navyYacht border-b pb-1 text-sm mb-2 font-serif">Escalas del Crucero</h4>
+                        
+                        <div onclick="focusMapOnPoint(42.0924, 11.7954, 'Puerto de Civitavecchia (Roma)')" class="p-2.5 bg-creamCanvas border-l-4 border-goldYacht rounded-lg cursor-pointer hover:bg-goldYacht/10 transition-colors">
+                            <span class="font-bold text-navyYacht">🚢 Civitavecchia (Roma)</span>
+                            <span class="block text-[10px] text-gray-500">Puerto de Embarque / Desembarque</span>
+                        </div>
+
+                        <div onclick="focusMapOnPoint(37.4467, 25.3289, 'Isla de Mykonos (Grecia)')" class="p-2.5 bg-blue-50/50 border-l-4 border-blue-500 rounded-lg cursor-pointer hover:bg-blue-100/50 transition-colors">
+                            <span class="font-bold text-blue-900">🏛️ Mykonos (Grecia)</span>
+                            <span class="block text-[10px] text-gray-500">D3: Excursión MYK05</span>
+                        </div>
+
+                        <div onclick="focusMapOnPoint(37.8579, 27.2610, 'Kusadasi / Éfeso (Turquía)')" class="p-2.5 bg-blue-50/50 border-l-4 border-blue-500 rounded-lg cursor-pointer hover:bg-blue-100/50 transition-colors">
+                            <span class="font-bold text-blue-900">🛕 Kusadasi - Éfeso (Turquía)</span>
+                            <span class="block text-[10px] text-gray-500">D4: Excursión KUS01</span>
+                        </div>
+
+                        <div onclick="focusMapOnPoint(36.8550, 28.2740, 'Marmaris (Riviera Turca)')" class="p-2.5 bg-blue-50/50 border-l-4 border-blue-500 rounded-lg cursor-pointer hover:bg-blue-100/50 transition-colors">
+                            <span class="font-bold text-blue-900">⛵ Marmaris (Turquía)</span>
+                            <span class="block text-[10px] text-gray-500">D5: Costa Turquesa &amp; Bazar</span>
+                        </div>
+
+                        <div onclick="focusMapOnPoint(40.8359, 14.2682, 'Puerto de Nápoles / Pompeya')" class="p-2.5 bg-blue-50/50 border-l-4 border-blue-500 rounded-lg cursor-pointer hover:bg-blue-100/50 transition-colors">
+                            <span class="font-bold text-blue-900">🏛️ Nápoles &amp; Pompeya (Italia)</span>
+                            <span class="block text-[10px] text-gray-500">D7: Excursión NAP01</span>
+                        </div>
+                    </div>
+
+                    <!-- Mapa Leaflet -->
+                    <div class="lg:col-span-3 h-[500px] rounded-2xl overflow-hidden relative shadow-inner border border-gray-100">
+                        <div id="map" class="w-full h-full"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 4: ENCICLOPEDIA VISUAL DEL DESTINO Y YACHT CLUB -->
+        <section id="content-enciclopedia" class="tab-content hidden space-y-8">
+            <div class="bg-gradient-to-r from-navyYacht to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-lg border border-goldYacht/30 font-sans">
+                <div class="flex items-center gap-4 mb-3">
+                    <span class="text-3xl text-goldYacht"><i class="fa-solid fa-book-bookmark"></i></span>
+                    <div>
+                        <h2 class="header-title text-2xl md:text-3xl font-bold">Enciclopedia del Destino &amp; Guía Yacht Club</h2>
+                        <p class="text-xs text-gray-300 mt-1">Base de conocimiento cultural, logística y de ocio cargada offline. El Asistente PlanIA consulta esta base de datos ampliada para sugerir visitas opcionales y rincones únicos en cada escala.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans">
+
+                <!-- MODULO 1: PRIVILEGIOS YACHT CLUB -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-4">
+                    <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+                        <span class="text-goldYacht text-2xl"><i class="fa-solid fa-crown"></i></span>
+                        <h4 class="font-bold text-navyYacht text-base">Privilegios MSC Yacht Club</h4>
+                    </div>
+                    <ul class="text-xs text-gray-700 space-y-2.5 leading-relaxed">
+                        <li class="bg-creamCanvas p-2.5 rounded-lg border-l-2 border-goldYacht">
+                            <strong>🛎️ Mayordomo 24 Horas:</strong> Asistencia en deshacer/hacer maletas, reservas exclusivas e itinerarios a bordo.
+                        </li>
+                        <li class="bg-creamCanvas p-2.5 rounded-lg border-l-2 border-goldYacht">
+                            <strong>🍹 Top Sail Lounge:</strong> Salón panorámico privado con bebidas ilimitadas, canapés y música en directo.
+                        </li>
+                        <li class="bg-creamCanvas p-2.5 rounded-lg border-l-2 border-goldYacht">
+                            <strong>🏊 One Pool Deck:</strong> Piscina, jacuzzis y solárium exclusivo en la cubierta superior sin aglomeraciones.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- MODULO 2: VISITAS OPCIONALES & RINCONES SECRETOS EN LAS ESCALAS -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-4 md:col-span-2">
+                    <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+                        <span class="text-goldYacht text-2xl"><i class="fa-solid fa-compass"></i></span>
+                        <h4 class="font-bold text-navyYacht text-base">Visitas Opcionales &amp; Rincones Secretos del Mediterráneo</h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-gray-700 leading-relaxed">
+                        <div class="bg-creamCanvas p-3 rounded-xl border-l-4 border-goldYacht space-y-1">
+                            <strong class="text-navyYacht block text-sm">🇬🇷 Mykonos (Tiempo Libre &amp; Alternativas):</strong>
+                            <p>• <strong>Puesta de Sol en Little Venice:</strong> Degustar un cóctel en las terrazas sobre el mar del *Caprice Bar* o *Kastro Bar* al atardecer.</p>
+                            <p>• <strong>Isla Sagrada de Delos:</strong> Excursión opcional en barco corto (30 min) a las ruinas arqueológicas de la isla natal de Apolo y Artemisa.</p>
+                            <p>• <strong>Playa de Psarou u Ornos:</strong> Calas de aguas cristalinas con clubes de playa sofisticados ideales para nadar.</p>
+                        </div>
+                        <div class="bg-creamCanvas p-3 rounded-xl border-l-4 border-goldYacht space-y-1">
+                            <strong class="text-navyYacht block text-sm">🇹🇷 Marmaris (Riviera Turca Exclusiva):</strong>
+                            <p>• <strong>Castillo de Suleimán el Magnífico:</strong> Fortaleza medieval con museo arqueológico y espectaculares panorámicas sobre el puerto deportivo.</p>
+                            <p>• <strong>Río Dalyan y Tumbas Licias:</strong> Travesía en barca por el río Dalyan admirando las tumbas reales esculpidas en el acantilado de roca y la playa de Iztuzu (reserva de tortugas *Caretta*).</p>
+                            <p>• <strong>Netsel Marina:</strong> Elegante puerto deportivo rodeado de cafés con encanto y boutiques libres de impuestos.</p>
+                        </div>
+                        <div class="bg-creamCanvas p-3 rounded-xl border-l-4 border-goldYacht space-y-1">
+                            <strong class="text-navyYacht block text-sm">🇹🇷 Kusadasi / Éfeso (Tradición Otomana):</strong>
+                            <p>• <strong>Pueblo de Şirince:</strong> Pintoresca aldea entre colinas a 20 min de Éfeso, célebre por sus casas de piedra otomanas, callejuelas floridas y cata de vinos artesanales de frutas.</p>
+                            <p>• <strong>Basílica de San Juan &amp; Selçuk:</strong> Las ruinas de la basílica bizantina donde reposan los restos del apóstol San Juan.</p>
+                        </div>
+                        <div class="bg-creamCanvas p-3 rounded-xl border-l-4 border-goldYacht space-y-1">
+                            <strong class="text-navyYacht block text-sm">🇮🇹 Nápoles, Herculano &amp; Capri (Italia):</strong>
+                            <p>• <strong>Herculano (Ercolano):</strong> Alternativa más íntima a Pompeya, con villas romanas y mosaicos extraordinariamente conservados bajo ceniza volcánica.</p>
+                            <p>• <strong>Isla de Capri / Sorrento:</strong> Travesía rápida en hidroala desde el puerto napolitano a la deslumbrante isla de Capri o la costa de Sorrento.</p>
+                            <p>• <strong>Cristo Velado (Capilla Sansevero):</strong> Obra maestra de la escultura barroca en pleno corazón de Spaccanapoli.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODULO NUEVO: FICHAS TÉCNICAS OFICIALES DE EXCURSIONES INCLUIDAS -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-goldYacht/30 space-y-4 md:col-span-3">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-goldYacht text-2xl"><i class="fa-solid fa-map-location-dot"></i></span>
+                            <div>
+                                <h4 class="font-bold text-navyYacht text-base">Fichas Técnicas Oficiales • Excursiones Incluidas (Explorer Package)</h4>
+                                <p class="text-[11px] text-slate-500">Detalles de itinerario, duración, terreno, recomendaciones de vestimenta y servicios incluidos.</p>
+                            </div>
+                        </div>
+                        <span class="bg-goldYacht text-navyYacht text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase">3 Tours Guiados</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-gray-700 leading-relaxed font-sans">
+                        <!-- MYK05 -->
+                        <div class="bg-creamCanvas p-4 rounded-xl border border-goldYacht/30 space-y-2 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center border-b border-goldYacht/20 pb-1.5">
+                                    <span class="font-bold text-navyYacht text-xs uppercase"><i class="fa-solid fa-bus text-goldYacht mr-1"></i> MYK05 • Mykonos</span>
+                                    <span class="bg-navyYacht/10 text-navyYacht px-2 py-0.5 rounded font-bold text-[10px]">Duración: 4 Horas</span>
+                                </div>
+                                <h5 class="font-bold text-navyYacht text-sm">Descubre la Isla en Autobús &amp; Monasterio Panagia Tourliani</h5>
+                                <p>• <strong>Itinerario:</strong> Trayecto de 30 min hasta Ano Mera (2º pueblo de la isla). 50 min de visita al patio y claustro del <em>Monasterio de Panagia Tourliani</em> (s. XVI). Traslado de 15 min a la famosa <em>Playa de Kalafati</em> (parada fotográfica de 20 min). Traslado de 35 min a Mykonos Chora para un tour a pie de 75 min.</p>
+                                <div class="bg-white/80 p-2.5 rounded-lg border border-gray-200 text-[11px] space-y-1">
+                                    <p class="font-semibold text-navyYacht"><i class="fa-solid fa-circle-info text-goldYacht mr-1"></i> Información Clave:</p>
+                                    <p>Exige vestimenta adecuada (hombros/rodillas cubiertas) para la visita al monasterio. Varias salidas a lo largo del día (horario asignado el día anterior).</p>
+                                </div>
+                            </div>
+                            <div class="pt-2 text-[10px] text-gray-500 border-t border-gray-200">
+                                <strong>Incluido en paquete Explorer Package</strong> (Valor ref: 52,70€/ad)
+                            </div>
+                        </div>
+
+                        <!-- KUS01 -->
+                        <div class="bg-creamCanvas p-4 rounded-xl border border-goldYacht/30 space-y-2 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center border-b border-goldYacht/20 pb-1.5">
+                                    <span class="font-bold text-navyYacht text-xs uppercase"><i class="fa-solid fa-landmark-dome text-goldYacht mr-1"></i> KUS01 • Kusadasi</span>
+                                    <span class="bg-navyYacht/10 text-navyYacht px-2 py-0.5 rounded font-bold text-[10px]">Duración: 4 Horas</span>
+                                </div>
+                                <h5 class="font-bold text-navyYacht text-sm">Descubra la Ciudad Clásica de Éfeso (UNESCO)</h5>
+                                <p>• <strong>Itinerario:</strong> Traslado de 30 min desde el puerto. Recorrido guiado de 2h 15m arrancando en la Puerta de Magnesia colina abajo: Gimnasio de Vedius, Teatro Odeón (s. II), Fuente de Trajano, Templo de Adriano, monumental <em>Biblioteca de Celso</em> y el Gran Anfiteatro (25.000 espectadores). 45 min de tiempo libre en bazares locales (alfombras, cuero, delicias turcas) y traslado de retorno.</p>
+                                <div class="bg-white/80 p-2.5 rounded-lg border border-gray-200 text-[11px] space-y-1">
+                                    <p class="font-semibold text-navyYacht"><i class="fa-solid fa-person-walking-with-cane text-goldYacht mr-1"></i> Terreno &amp; Equipo:</p>
+                                    <p>Terreno empinado y mármol resbaladizo. Obligatorio calzado plano muy cómodo (sin tacones). Sitio al aire libre: llevar sombrero, gafas y ropa ligera de algodón.</p>
+                                </div>
+                            </div>
+                            <div class="pt-2 text-[10px] text-gray-500 border-t border-gray-200">
+                                <strong>Incluye entrada de 40€ a Éfeso</strong> (Valor ref: 104,00€/ad)
+                            </div>
+                        </div>
+
+                        <!-- NAP01 -->
+                        <div class="bg-creamCanvas p-4 rounded-xl border border-goldYacht/30 space-y-2 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center border-b border-goldYacht/20 pb-1.5">
+                                    <span class="font-bold text-navyYacht text-xs uppercase"><i class="fa-solid fa-volcano text-goldYacht mr-1"></i> NAP01 • Nápoles</span>
+                                    <span class="bg-navyYacht/10 text-navyYacht px-2 py-0.5 rounded font-bold text-[10px]">Duración: 4 Horas</span>
+                                </div>
+                                <h5 class="font-bold text-navyYacht text-sm">Descubre las Ruinas de la Ciudad Romana de Pompeya</h5>
+                                <p>• <strong>Itinerario:</strong> Trayecto de 45 min por autopista desde el puerto de Nápoles. Visita guiada de 2 horas descubriendo la ciudad romana sepultada por la erupción del Vesubio en el 79 d.C.: frescos intactos, moldes de personas/animales y calles antiguas. 45 min de tiempo libre para explorar por su cuenta antes del trayecto de retorno al puerto.</p>
+                                <div class="bg-white/80 p-2.5 rounded-lg border border-gray-200 text-[11px] space-y-1">
+                                    <p class="font-semibold text-navyYacht"><i class="fa-solid fa-shoe-prints text-goldYacht mr-1"></i> Terreno &amp; Calzado:</p>
+                                    <p>Largos trayectos a pie sobre adoquines romanos irregulares (*basalto*). No apto para personas con movilidad reducida o sillas de ruedas.</p>
+                                </div>
+                            </div>
+                            <div class="pt-2 text-[10px] text-gray-500 border-t border-gray-200">
+                                <strong>Incluido en paquete Explorer Package</strong> (Valor ref: 111,00€/ad)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODULO 3: CÓDIGO DE VESTIMENTA EN EL BARCO -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-4">
+                    <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+                        <span class="text-goldYacht text-2xl"><i class="fa-solid fa-shirt"></i></span>
+                        <h4 class="font-bold text-navyYacht text-base">Código de Vestimenta A Bordo</h4>
+                    </div>
+                    <ul class="text-xs text-gray-700 space-y-2.5 leading-relaxed">
+                        <li class="bg-creamCanvas p-2.5 rounded-lg border-l-2 border-navyYacht">
+                            <strong>👔 Noche de Gala:</strong> Vestido elegante o de cóctel para mujeres, traje o chaqueta con corbata para hombres.
+                        </li>
+                        <li class="bg-creamCanvas p-2.5 rounded-lg border-l-2 border-navyYacht">
+                            <strong>🤍 Fiesta Blanca (White Party):</strong> Indumentaria o prendas de color blanco.
+                        </li>
+                        <li class="bg-creamCanvas p-2.5 rounded-lg border-l-2 border-navyYacht">
+                            <strong>🌴 Informal Diario:</strong> Ropa casual de verano para el restaurante y zonas comunes.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- MODULO 4: DICCIONARIO Y GASTRONOMÍA GRECO-TURCA -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-4">
+                    <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+                        <span class="text-goldYacht text-2xl"><i class="fa-solid fa-utensils"></i></span>
+                        <h4 class="font-bold text-navyYacht text-base">Sabores de las Escalas</h4>
+                    </div>
+                    <ul class="text-xs text-gray-700 space-y-2.5 leading-relaxed">
+                        <li class="bg-creamCanvas p-2.5 rounded-lg">
+                            <strong>🇬🇷 Mykonos:</strong> Probar la *Souvlaki*, ensalada griega con queso *Feta* fresco y tzatziki en Chora.
+                        </li>
+                        <li class="bg-creamCanvas p-2.5 rounded-lg">
+                            <strong>🇹🇷 Turquía:</strong> Degustar té de manzana en el bazar, *Baklava* artesano de pistacho y kebabs tradicionales.
+                        </li>
+                        <li class="bg-creamCanvas p-2.5 rounded-lg">
+                            <strong>🇮🇹 Nápoles:</strong> Probar la auténtica pizza napolitana Margherita en Spaccanapoli o un dulce *Sfogliatella*.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- MODULO 5: MONEDA Y PAGOS EN PUERTOS -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-4">
+                    <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+                        <span class="text-goldYacht text-2xl"><i class="fa-solid fa-credit-card"></i></span>
+                        <h4 class="font-bold text-navyYacht text-base">Monedas en las Escalas</h4>
+                    </div>
+                    <div class="text-xs text-gray-700 space-y-2 leading-relaxed">
+                        <p>• <strong>Italia y Grecia:</strong> Euro (€).</p>
+                        <p>• <strong>Turquía (Kusadasi y Marmaris):</strong> Lira Turca (TRY). No obstante, euros y tarjetas bancarias se aceptan ampliamente en tiendas y bazares turísticos.</p>
+                        <p>• <strong>A bordo del MSC Divina:</strong> Todos los pagos se realizan mediante la tarjeta de crucero vinculada a tarjeta bancaria.</p>
+                    </div>
+                </div>
+
+                <!-- MODULO 6: APLICACIÓN MSC FOR ME -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-4">
+                    <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+                        <span class="text-goldYacht text-2xl"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                        <h4 class="font-bold text-navyYacht text-base">App MSC for Me</h4>
+                    </div>
+                    <div class="text-xs text-gray-700 space-y-2 leading-relaxed">
+                        <p>• Descargar gratuitamente antes del viaje en App Store / Google Play.</p>
+                        <p>• Permite consultar el diario de a bordo, chatear gratis con la familia en el barco conectándose a la red Wi-Fi *MSC HOTSPOT* y revisar el saldo de la cuenta.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PESTAÑA 5: ASISTENTE PLANIA -->
+        <section id="content-asistente" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 font-sans">
+                <div class="flex items-center gap-3 border-b pb-4 mb-6">
+                    <div class="bg-navyYacht text-goldYacht p-3 rounded-xl text-xl">
+                        <i class="fa-solid fa-robot animate-pulse"></i>
+                    </div>
+                    <div>
+                        <h2 class="header-title text-2xl md:text-3xl font-bold text-navyYacht">Asistente PlanIA (MSC Yacht Club)</h2>
+                        <p class="text-xs text-slate-500 mt-1">Soporte en tiempo real especializado en el expediente de la **Familia López-Sojo (4 Pax)** y las escalas del MSC Divina.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <!-- Panel Izquierdo: Prompts rápidos -->
+                    <div class="lg:col-span-1 space-y-4">
+                        <div class="p-4 bg-creamCanvas rounded-xl border border-goldYacht/20">
+                            <h4 class="font-bold text-navyYacht text-xs uppercase tracking-wider mb-2 font-serif"><i class="fa-solid fa-crown text-goldYacht mr-1"></i> Ventajas Yacht Club</h4>
+                            <p class="text-[10px] text-slate-500 leading-relaxed mb-3">¿Queréis revisar las ventajas de vuestros camarotes 12002 y 12004?</p>
+                            <button onclick="sendPresetPrompt('Dime qué servicios exclusivos incluye nuestra experiencia MSC Yacht Club en el MSC Divina')" class="w-full py-2 bg-goldYacht text-navyYacht font-bold rounded-lg text-[10px] uppercase transition-all shadow-md">
+                                Ver Servicios VIP
+                            </button>
+                        </div>
+
+                        <div class="p-4 bg-creamCanvas rounded-xl border border-goldYacht/20">
+                            <h4 class="font-bold text-navyYacht text-xs uppercase tracking-wider mb-2 font-serif"><i class="fa-solid fa-plane text-navyYacht mr-1"></i> Vuelos e Iberia</h4>
+                            <p class="text-[10px] text-slate-500 leading-relaxed mb-3">¿Horarios de vuelos de ida/vuelta y traslados privados?</p>
+                            <button onclick="sendPresetPrompt('Dime los detalles de nuestros vuelos de Iberia y el traslado al puerto de Civitavecchia')" class="w-full py-2 bg-navyYacht text-goldYacht font-bold rounded-lg text-[10px] uppercase transition-all shadow-md">
+                                Ver Vuelos y Traslados
+                            </button>
+                        </div>
+
+                        <div class="p-4 bg-creamCanvas rounded-xl border border-goldYacht/20">
+                            <h4 class="font-bold text-navyYacht text-xs uppercase tracking-wider mb-2 font-serif"><i class="fa-solid fa-circle-question text-goldYacht mr-1"></i> Preguntas Frecuentes</h4>
+                            <div class="space-y-2 text-[10px] font-semibold text-navyYacht">
+                                <button onclick="sendPresetPrompt('¿Qué excursiones tenemos incluidas en el Explorer Package?')" class="w-full text-left p-2 hover:bg-goldYacht/10 rounded border border-goldYacht/20 transition-all">Excursiones Incluidas</button>
+                                <button onclick="sendPresetPrompt('¿Cuál es el límite de equipaje permitido en el barco e Iberia?')" class="w-full text-left p-2 hover:bg-goldYacht/10 rounded border border-goldYacht/20 transition-all">Equipaje y Maletas</button>
+                                <button onclick="sendPresetPrompt('¿Qué ropa debemos llevar para las noches temáticas a bordo?')" class="w-full text-left p-2 hover:bg-goldYacht/10 rounded border border-goldYacht/20 transition-all">Código de Vestimenta</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel Derecho: Interfaz del Chat -->
+                    <div class="lg:col-span-3 flex flex-col h-[520px] bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden relative">
+                        <div class="bg-navyYacht text-white px-4 py-3 flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></div>
+                                <span class="font-bold text-xs uppercase tracking-widest text-goldYacht">Asistente PlanIA (Oficial)</span>
+                            </div>
+                        </div>
+
+                        <!-- Área de mensajes -->
+                        <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
+                            <div class="flex gap-2.5 items-start max-w-[90%]">
+                                <div class="bg-goldYacht text-navyYacht w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 shadow-md"><i class="fa-solid fa-robot text-sm"></i></div>
+                                <div class="p-4 bg-white border-l-4 border-goldYacht rounded-2xl rounded-tl-none shadow-md text-slate-700 leading-relaxed font-sans space-y-2">
+                                    <p class="font-bold text-navyYacht text-sm"><i class="fa-solid fa-circle-info text-goldYacht mr-1"></i> Asistente Oficial de vuestro Crucero</p>
+                                    <p>¡Hola, **Familia López-Sojo**! Soy vuestro **Asistente PlanIA**.</p>
+                                    <div class="bg-creamCanvas p-3 rounded-lg text-[11px] text-slate-600 border border-goldYacht/15 space-y-1">
+                                        <p class="font-bold text-navyYacht"><i class="fa-solid fa-shield-halved text-goldYacht mr-1"></i> Alcance de mis Respuestas:</p>
+                                        <p>Estoy cargado offline con vuestro dossier de crucero completo: camarotes Yacht Club <strong>12002</strong> y <strong>12004</strong> en el MSC Divina, vuelos de Iberia (`IB647` / `IB654`), traslados privados de *International Shore Services*, paquete de 3 excursiones *Explorer Package* (Mykonos, Éfeso y Pompeya) y normas de vestimenta a bordo.</p>
+                                    </div>
+                                    <p>Podéis preguntarme sobre horarios de puerto, excursiones, propinas o servicios VIP Yacht Club.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loader -->
+                        <div id="ai-chat-loader" class="hidden absolute bottom-16 left-4 bg-white/95 backdrop-blur-sm border border-slate-200 px-4 py-2 rounded-xl flex items-center gap-2.5 shadow-md">
+                            <svg class="animate-spin h-4 w-4 text-navyYacht" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span class="text-[10px] uppercase font-bold text-navyYacht">Asistente PlanIA consultando expediente de crucero...</span>
+                        </div>
+
+                        <!-- Entrada de texto -->
+                        <div class="p-3 bg-white border-t border-slate-200 flex gap-2 no-print">
+                            <input type="text" id="ai-chat-input" onkeypress="handleChatKeyPress(event)" placeholder="Pregúntame algo sobre las escalas, camarotes, excursiones o barcos..." class="flex-1 border border-slate-200 rounded-xl px-4 py-2 text-xs focus:outline-none focus:border-goldYacht">
+                            <button onclick="sendChatMessage()" class="bg-navyYacht hover:bg-slate-900 text-goldYacht font-bold px-4 py-2 rounded-xl transition-all shadow-md text-xs">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 6: GUÍA PRÁCTICA & A BORDO -->
+        <section id="content-practica" class="tab-content hidden space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans">
+
+                <!-- Normas de Equipaje -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-4">
+                    <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+                        <span class="text-goldYacht text-2xl"><i class="fa-solid fa-suitcase"></i></span>
+                        <h4 class="font-bold text-navyYacht text-lg">Franquicia de Equipaje</h4>
+                    </div>
+                    <div class="text-xs text-gray-700 space-y-2 leading-relaxed">
+                        <p class="font-semibold text-navyYacht">A Bordo del Crucero:</p>
+                        <p>Hasta 2 maletas por persona (máx. 23 kg cada una) + 2 de mano. Máximo por camarote: 100 kg o 8 piezas en total.</p>
+                        <p class="font-semibold text-navyYacht mt-2">Vuelos Iberia:</p>
+                        <p>1 maleta facturada de 23 kg en bodega por persona + 1 equipaje de mano en cabina.</p>
+                    </div>
+                </div>
+
+                <!-- Pago a Bordo -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-4">
+                    <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+                        <span class="text-goldYacht text-2xl"><i class="fa-solid fa-credit-card"></i></span>
+                        <h4 class="font-bold text-navyYacht text-lg">Tarjeta de Crucero &amp; Pago</h4>
+                    </div>
+                    <div class="text-xs text-gray-700 space-y-2 leading-relaxed">
+                        <p>La tarjeta de crucero se encuentra en el camarote a la llegada. Se activa vinculando una tarjeta de crédito/débito en los tótems interactivos de a bordo durante las primeras 24 horas.</p>
+                    </div>
+                </div>
+
+                <!-- Propinas y Cuota de Servicio -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-gray-100 space-y-4">
+                    <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+                        <span class="text-goldYacht text-2xl"><i class="fa-solid fa-coins"></i></span>
+                        <h4 class="font-bold text-navyYacht text-lg">Cuota de Servicio de Hotel</h4>
+                    </div>
+                    <div class="text-xs text-gray-700 space-y-2 leading-relaxed bg-green-50 p-3 rounded-lg border-l-4 border-green-600 text-green-950 font-semibold">
+                        <p><i class="fa-solid fa-circle-check text-green-600 mr-1"></i> INCLUIDAS Y PREPAGADAS:</p>
+                        <p class="font-normal text-gray-700 mt-1">Las propinas automáticas de servicio de hotel Yacht Club (`SC2627MY`) ya están incluidas en la reserva para los 4 pasajeros.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PESTAÑA 7: SERVICIOS Y CONDICIONES INCLUIDAS -->
+        <section id="content-condiciones" class="tab-content hidden space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 font-sans">
+                <!-- INCLUIDO -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 space-y-6">
+                    <h3 class="header-title text-2xl font-bold text-navyYacht border-b border-gray-100 pb-4"><i class="fa-solid fa-square-check text-emerald-600 mr-2"></i>Servicios Incluidos</h3>
+                    <ul class="space-y-3.5 text-sm text-gray-700">
+                        <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span>Vuelos de ida y vuelta Iberia Madrid-Roma Fiumicino con maleta facturada de 23kg.</span></li>
+                        <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span>Traslados privados miniván Fiumicino ↔ Puerto Civitavecchia (International Shore Services).</span></li>
+                        <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span>7 noches de crucero en 2 camarotes <strong>MSC Yacht Club</strong> (12002 y 12004).</span></li>
+                        <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span>Servicio de mayordomo 24h, acceso a restaurante privado, Top Sail Lounge y solárium One Pool.</span></li>
+                        <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span>Paquete de bebidas Premium todo incluido en zonas Yacht Club y minibar del camarote.</span></li>
+                        <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span><strong>Paquete de Internet Wi-Fi Incluido:</strong> Paquete "Browse &amp; Stream" para 1 dispositivo por camarote (Código `BS1N049`).</span></li>
+                        <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span><strong>Crédito a Bordo Promocional:</strong> 50 € de saldo cargado por camarote (100 € en total para gastos a bordo - `SB050EUR`).</span></li>
+                        <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span>Paquete de 3 excursiones <strong>Explorer Package</strong> (Mykonos MYK05, Éfeso KUS01, Nápoles NAP01).</span></li>
+                        <li class="flex items-start gap-3"><span class="text-emerald-600 mt-1"><i class="fa-solid fa-check"></i></span><span>Cuotas de servicio de hotel (propinas) Yacht Club prepagadas (`SC2627MY`).</span></li>
+                    </ul>
+                </div>
+
+                <!-- EXCLUIDO -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100 space-y-6">
+                    <h3 class="header-title text-2xl font-bold text-navyYacht border-b border-gray-100 pb-4"><i class="fa-solid fa-square-xmark text-red-600 mr-2"></i>Servicios Excluidos</h3>
+                    <ul class="space-y-3.5 text-sm text-gray-700">
+                        <li class="flex items-start gap-3"><span class="text-red-600 mt-1"><i class="fa-solid fa-xmark"></i></span><span>Tratamientos de spa no especificados o compras en tiendas libres de impuestos.</span></li>
+                        <li class="flex items-start gap-3"><span class="text-red-600 mt-1"><i class="fa-solid fa-xmark"></i></span><span>Gastos personales o partidas en el casino de a bordo.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER DE MARCA VIAJES PLANEA BADAJOZ -->
+    <footer class="bg-navyYacht text-white border-t border-goldYacht/30 mt-16 py-12 no-print font-sans">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8 border-b border-white/10 pb-8 mb-8">
+                <div class="space-y-2 text-center md:text-left">
+                    <h2 class="header-title text-2xl font-bold tracking-widest text-goldYacht font-serif">VIAJES PLANEA</h2>
+                    <p class="text-xs text-gray-300">Asesoramiento Exclusivo y Gestión de Viajes de Alta Gama</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-xs text-gray-300 font-sans">
+                    <div class="flex items-start gap-2.5">
+                        <span class="text-goldYacht text-base"><i class="fa-solid fa-location-dot"></i></span>
+                        <div>
+                            <p class="font-bold text-white">Sede Central Badajoz</p>
+                            <p>Calle Héroes de Cascorro, 5 Bajo<br>06004 Badajoz (España)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <span class="text-goldYacht text-base"><i class="fa-solid fa-phone"></i></span>
+                        <div>
+                            <p class="font-bold text-white">Contacto Telefónico</p>
+                            <p>+34 924 95 26 13</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <span class="text-goldYacht text-base"><i class="fa-solid fa-envelope"></i></span>
+                        <div>
+                            <p class="font-bold text-white">Email Corporativo</p>
+                            <p>badajoz@viajesplanea.es</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400 text-center">
+                <p>&copy; 2026 Viajes Planea Badajoz. Todos los derechos reservados.</p>
+                <button onclick="window.print()" class="no-print bg-goldYacht text-navyYacht px-4 py-2 rounded-lg font-bold hover:bg-white transition duration-300">
+                    <i class="fa-solid fa-print mr-1.5"></i>Imprimir o Guardar PDF
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AVATAR GUÍA VIRTUAL "MARCO" -->
+    <div id="avatar-guide-widget" class="fixed bottom-5 right-5 z-[9999] no-print flex flex-col items-end gap-3 font-sans" style="z-index: 9999 !important;">
+        <div id="avatar-dialog-bubble" class="bg-white/95 backdrop-blur-md border-2 border-goldYacht p-4 rounded-2xl shadow-2xl max-w-xs sm:max-w-sm text-xs text-slateCharcoal relative animate-fade-in transition-all duration-300 transform scale-100">
+            <button onclick="closeAvatarBubble()" class="absolute -top-2 -right-2 bg-navyYacht text-goldYacht hover:bg-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-md">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center gap-2 border-b border-gray-100 pb-2 mb-2">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+                <span class="font-bold text-navyYacht uppercase tracking-wider text-[11px] font-serif">Marco • Mayordomo Virtual Yacht Club</span>
+                <button id="speech-toggle-btn" onclick="toggleVoiceSpeech()" class="ml-auto text-navyYacht hover:text-goldYacht text-sm p-1" title="Activar/Silenciar Voz">
+                    <i id="speech-icon" class="fa-solid fa-volume-high text-goldYacht"></i>
+                </button>
+            </div>
+            <p id="avatar-dialog-text" class="leading-relaxed">
+                ¡Bienvenidos a bordo, **Familia López-Sojo**! Soy **Marco**, vuestro mayordomo virtual a bordo del MSC Divina. ¡Pulsad sobre cualquier pestaña o consultadme cualquier duda sobre vuestra travesía!
+            </p>
+            <div class="mt-3 pt-2 border-t border-gray-100 flex gap-1 flex-wrap">
+                <button onclick="avatarQuickAction('resumen')" class="px-2 py-1 bg-creamCanvas text-navyYacht rounded-md text-[10px] font-bold hover:bg-goldYacht/20">📋 Resumen</button>
+                <button onclick="avatarQuickAction('itinerario')" class="px-2 py-1 bg-creamCanvas text-navyYacht rounded-md text-[10px] font-bold hover:bg-goldYacht/20">⚓ Itinerario</button>
+                <button onclick="avatarQuickAction('mapa')" class="px-2 py-1 bg-creamCanvas text-navyYacht rounded-md text-[10px] font-bold hover:bg-goldYacht/20">🗺️ Mapa</button>
+                <button onclick="avatarQuickAction('enciclopedia')" class="px-2 py-1 bg-goldYacht/20 text-navyYacht rounded-md text-[10px] font-bold hover:bg-goldYacht/30">📚 Enciclopedia</button>
+                <button onclick="avatarQuickAction('asistente')" class="px-2 py-1 bg-goldYacht text-navyYacht rounded-md text-[10px] font-bold hover:bg-navyYacht hover:text-white">🤖 Asistente</button>
+                <button onclick="avatarQuickAction('practica')" class="px-2 py-1 bg-creamCanvas text-navyYacht rounded-md text-[10px] font-bold hover:bg-goldYacht/20">💡 Guía A Bordo</button>
+                <button onclick="avatarQuickAction('condiciones')" class="px-2 py-1 bg-creamCanvas text-navyYacht rounded-md text-[10px] font-bold hover:bg-goldYacht/20">📄 Incluidos</button>
+            </div>
+        </div>
+
+        <!-- BOTÓN PRINCIPAL DEL AVATAR CON TARJETA DE RETRATO RECTANGULAR REDONDEADA VIP -->
+        <button onclick="toggleAvatarBubble()" class="group relative flex flex-col items-center justify-between w-20 h-24 rounded-2xl shadow-2xl border-2 border-goldYacht hover:scale-105 transition-all duration-300 focus:outline-none overflow-hidden bg-navyYacht">
+            <span class="absolute inset-0 rounded-2xl bg-goldYacht/20 animate-pulse opacity-70"></span>
+            
+            <!-- Fotografía de Mayordomo Humano con encuadre completo de retrato vertical -->
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=300&h=400&q=80" alt="Marco Mayordomo Yacht Club" class="w-full h-full object-cover object-top relative z-10 scale-105 group-hover:scale-110 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&h=400&q=80'">
+
+            <span class="absolute bottom-0 inset-x-0 bg-navyYacht/95 text-goldYacht text-[9px] font-extrabold py-1 text-center border-t border-goldYacht/60 z-20 font-serif tracking-wider shadow-md">MAYORDOMO</span>
+        </button>
+    </div>
+
+    <!-- SCRIPTS DE INTERACTIVIDAD & REGISTRO PWA -->
+    <script>
+        var map = null;
+        var markersGroup = [];
+        var isVoiceEnabled = true;
+
+        function showInstallInstructions() {
+            var modal = document.getElementById('install-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function hideInstallInstructions() {
+            var modal = document.getElementById('install-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function registerDynamicPWA() {
+            try {
+                var manifestData = {
+                    "name": "MSC Yacht Club Familia López-Sojo",
+                    "short_name": "Yacht Club 2026",
+                    "start_url": window.location.href,
+                    "display": "standalone",
+                    "background_color": "#0A192F",
+                    "theme_color": "#0A192F",
+                    "icons": [{
+                        "src": "https://images.unsplash.com/photo-1548574505-5e2386903d8f?auto=format&fit=crop&w=192&h=180&q=80",
+                        "sizes": "192x192",
+                        "type": "image/jpeg"
+                    }]
+                };
+                var stringManifest = JSON.stringify(manifestData);
+                var blob = new Blob([stringManifest], {type: 'application/json'});
+                var manifestURL = URL.createObjectURL(blob);
+                var linkEl = document.createElement('link');
+                linkEl.rel = 'manifest';
+                linkEl.href = manifestURL;
+                document.head.appendChild(linkEl);
+            } catch(e) {}
+        }
+
+        function closeAvatarBubble() {
+            var bubble = document.getElementById('avatar-dialog-bubble');
+            if (bubble) bubble.classList.add('hidden');
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        }
+
+        function toggleAvatarBubble() {
+            var bubble = document.getElementById('avatar-dialog-bubble');
+            if (!bubble) return;
+            if (bubble.classList.contains('hidden')) {
+                bubble.classList.remove('hidden');
+            } else {
+                bubble.classList.add('hidden');
+                if (window.speechSynthesis) window.speechSynthesis.cancel();
+            }
+        }
+
+        function toggleVoiceSpeech() {
+            isVoiceEnabled = !isVoiceEnabled;
+            var speechIcon = document.getElementById('speech-icon');
+            if (speechIcon) {
+                speechIcon.className = isVoiceEnabled ? "fa-solid fa-volume-high text-goldYacht" : "fa-solid fa-volume-xmark text-gray-400";
+            }
+            if (!isVoiceEnabled && window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        var bestSpanishVoice = null;
+
+        function loadSpanishVoices() {
+            if (!('speechSynthesis' in window)) return;
+            var voices = window.speechSynthesis.getVoices();
+            if (!voices || voices.length === 0) return;
+
+            bestSpanishVoice = voices.find(function(v) {
+                return (v.lang.indexOf('es') === 0) && (v.name.indexOf('Google') !== -1 || v.name.indexOf('Natural') !== -1 || v.name.indexOf('Neural') !== -1 || v.name.indexOf('Online') !== -1);
+            }) || voices.find(function(v) {
+                return (v.lang.indexOf('es') === 0) && (v.name.indexOf('Monica') !== -1 || v.name.indexOf('Jorge') !== -1 || v.name.indexOf('Paulina') !== -1 || v.name.indexOf('Helena') !== -1 || v.name.indexOf('Luciana') !== -1);
+            }) || voices.find(function(v) {
+                return v.lang.indexOf('es') === 0;
+            });
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = loadSpanishVoices;
+            loadSpanishVoices();
+        }
+
+        function cleanTextForSpeech(text) {
+            if (!text) return '';
+            var t = text.replace(/<[^>]*>?/gm, '');
+            t = t.replace(/[*_`#~]/g, '');
+            
+            t = t.replace(/[\u{1F300}-\u{1F9FF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, ' ');
+            t = t.replace(/•|➔|➡️|⬅️|✈️|🏨|🛕|🏖️|🚢|☕|🍲|🏛️|🚣|🗿|🌳|🎪|🥢|🍹|💬/g, '. ');
+
+            t = t.replace(/\bpax\b/gi, 'personas');
+            t = t.replace(/\bmin\b/gi, 'minutos');
+            t = t.replace(/\bi\/v\b|\bv\/i\b/gi, 'de ida y vuelta');
+            t = t.replace(/\bRef:\b/gi, 'con referencia');
+            t = t.replace(/\bPNR:\b/gi, 'con código de reserva');
+            t = t.replace(/\bFCO\b/g, 'aeropuerto Fiumicino de Roma');
+            t = t.replace(/\bMAD\b/g, 'aeropuerto de Madrid');
+
+            t = t.replace(/(\d{1,2})\/08\/2026/g, '$1 de agosto');
+            t = t.replace(/(\d{1,2})\/08/g, '$1 de agosto');
+
+            t = t.replace(/(\d{1,2}):(\d{2})\s*h?/gi, function(match, h, m) {
+                var hourNum = parseInt(h, 10);
+                var minNum = parseInt(m, 10);
+                if (minNum === 0) return hourNum + " en punto";
+                if (minNum === 30) return hourNum + " y media";
+                if (minNum === 15) return hourNum + " y cuarto";
+                if (minNum === 45) return (hourNum + 1) + " menos cuarto";
+                return hourNum + " y " + minNum;
+            });
+
+            return t.replace(/\s+/g, ' ').trim();
+        }
+
+        function speakAvatarText(textToSpeak) {
+            try {
+                if (!isVoiceEnabled || !('speechSynthesis' in window)) return;
+
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+                window.speechSynthesis.cancel();
+
+                var text = cleanTextForSpeech(textToSpeak);
+                if (!text) return;
+
+                var utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-ES';
+                utterance.rate = 0.95;
+                utterance.pitch = 1.0;
+
+                if (bestSpanishVoice) {
+                    utterance.voice = bestSpanishVoice;
+                }
+
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {}
+        }
+
+        function avatarQuickAction(action) {
+            switchTab(action);
+            var textEl = document.getElementById('avatar-dialog-text');
+
+            var msg = "";
+            switch (action) {
+                case 'resumen':
+                    msg = "Aquí podéis consultar vuestras reservas de camarotes Yacht Club 12002 y 12004, los vuelos directos de Iberia a Roma y el traslado privado al puerto.";
+                    break;
+                case 'itinerario':
+                    msg = "Esta es la ruta diaria de vuestro crucero por las Islas Griegas, Éfeso, Marmaris y Nápoles, detallando las horas de llegada y salida en cada puerto.";
+                    break;
+                case 'mapa':
+                    msg = "¡Aquí tenéis el mapa interactivo de la travesía por el Mediterráneo! Podéis centrar la vista en cada escala haciendo clic sobre los puertos.";
+                    break;
+                case 'enciclopedia':
+                    msg = "Nuestra Enciclopedia Yacht Club contiene todos vuestros privilegios de a bordo, las visitas opcionales en las islas y recomendaciones gastronómicas.";
+                    break;
+                case 'asistente':
+                    msg = "Podéis escribirme cualquier pregunta sobre vuestros camarotes, excursiones incluidas, vuelos de Iberia o servicios del barco aquí en el chat.";
+                    break;
+                case 'practica':
+                    msg = "Aquí tenéis información práctica sobre franquicia de equipajes, tarjetas de crucero para pago a bordo y cuotas de servicio.";
+                    break;
+                case 'condiciones':
+                    msg = "En esta pestaña podéis revisar todos los servicios incluidos en vuestra reserva de la Familia López-Sojo.";
+                    break;
+            }
+
+            if (textEl && msg) textEl.innerHTML = msg;
+            if (msg) speakAvatarText(msg);
+        }
+
+        // PUNTOS GEOGRÁFICOS DE LAS ESCALAS
+        var mapPoints = [
+            { lat: 42.0924, lng: 11.7954, title: "Puerto Civitavecchia (Roma)", category: "hotel", desc: "D1/D8: Embarque y Desembarque MSC Yacht Club" },
+            { lat: 37.4467, lng: 25.3289, title: "Mykonos (Grecia)", category: "visita", desc: "D3: Excursión MYK05 Molinos y Chora" },
+            { lat: 37.8579, lng: 27.2610, title: "Kusadasi / Éfeso (Turquía)", category: "visita", desc: "D4: Excursión KUS01 Ruinas de Éfeso" },
+            { lat: 36.8550, lng: 28.2740, title: "Marmaris (Turquía)", category: "visita", desc: "D5: Costa Turquesa y Gran Bazar" },
+            { lat: 40.8359, lng: 14.2682, title: "Nápoles / Pompeya (Italia)", category: "visita", desc: "D7: Excursión NAP01 Ruinas de Pompeya" }
+        ];
+
+        function initMap() {
+            var mapEl = document.getElementById('map');
+            if (!mapEl) return;
+
+            if (map) {
+                map.invalidateSize();
+                return;
+            }
+
+            map = L.map('map', {
+                center: [38.5, 20.0],
+                zoom: 5,
+                scrollWheelZoom: true
+            });
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(map);
+
+            mapPoints.forEach(function(point) {
+                var colorIcon = 'blue';
+                if (point.category === 'hotel') colorIcon = 'orange';
+
+                var customIcon = L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-' + colorIcon + '.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                var marker = L.marker([point.lat, point.lng], { icon: customIcon })
+                    .bindPopup('<strong class="text-navyYacht">' + point.title + '</strong><br><span class="text-xs text-gray-600 font-sans">' + point.desc + '</span>')
+                    .addTo(map);
+
+                marker.categoryType = point.category;
+                markersGroup.push(marker);
+            });
+        }
+
+        function focusMapOnPoint(lat, lng, popupText) {
+            if (!map) return;
+            map.setView([lat, lng], 11, { animate: true, duration: 1 });
+            
+            markersGroup.forEach(function(marker) {
+                if (marker.getLatLng().lat === lat && marker.getLatLng().lng === lng) {
+                    marker.openPopup();
+                }
+            });
+        }
+
+        function switchTab(tabName) {
+            var contents = document.querySelectorAll('.tab-content');
+            contents.forEach(function(content) {
+                content.classList.add('hidden');
+                content.classList.remove('block');
+            });
+
+            var activeContent = document.getElementById('content-' + tabName);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+                activeContent.classList.add('block');
+            }
+
+            var buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(function(btn) {
+                btn.classList.remove('bg-navyYacht', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-slateCharcoal');
+            });
+
+            var activeBtn = document.getElementById('tab-' + tabName);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-gray-100', 'text-slateCharcoal');
+                activeBtn.classList.add('bg-navyYacht', 'text-white');
+            }
+
+            if (tabName === 'mapa') {
+                setTimeout(function() {
+                    initMap();
+                    if (map) map.invalidateSize();
+                }, 150);
+            }
+        }
+
+        function scrollToDay(dayNumber) {
+            var dayCard = document.getElementById('day-card-' + dayNumber);
+            if (dayCard) {
+                dayCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                dayCard.classList.add('ring-4', 'ring-goldYacht/30', 'scale-[1.01]');
+                setTimeout(function() {
+                    dayCard.classList.remove('ring-4', 'ring-goldYacht/30', 'scale-[1.01]');
+                }, 2000);
+            }
+        }
+
+        // MOTOR DE NLP OFFLINE PLANIA PARA EL CRUCERO YACHT CLUB
+        function getSmartButlerResponse(prompt) {
+            var q = prompt.toLowerCase().trim();
+
+            if (q.indexOf('yacht club') !== -1 || q.indexOf('mayordomo') !== -1 || q.indexOf('vip') !== -1 || q.indexOf('camarote') !== -1 || q.indexOf('12002') !== -1 || q.indexOf('12004') !== -1 || q.indexOf('wifi') !== -1 || q.indexOf('internet') !== -1) {
+                return `Vuestra experiencia **MSC Yacht Club** en el MSC Divina incluye los camarotes **12002** y **12004** en Deck 12:<br><br>• **Paquete de Internet Wi-Fi:** Paquete *Browse & Stream* (1 dispositivo activo por camarote - <code>BS1N049</code>) incluido.<br>• **Crédito a Bordo:** 50 € de saldo promocional por camarote (100 € en total - <code>SB050EUR</code>).<br>• **Mayordomo 24 Horas:** Servicio personalizado para equipajes, reservas e itinerarios.<br>• **Restaurante Privado:** Sin turnos fijos ("Cena a cualquier hora") con alta gastronomía a la carta.<br>• **Top Sail Lounge & One Pool:** Salón panorámico privado y solárium con bebidas Premium ilimitadas.`;
+            }
+
+            if (q.indexOf('mykonos') !== -1 || q.indexOf('mikonos') !== -1 || q.indexOf('myk05') !== -1) {
+                return `Excursión Incluida **MYK05: Descubre la isla en autobús (4 Horas)**:<br><br>• **Itinerario:** Traslado en autobús a Ano Mera (50 min en el *Monasterio Panagia Tourliani* del s. XVI), parada fotográfica de 20 min en la *Playa de Kalafati* y tour a pie de 75 min por las callejuelas encaladas de *Mykonos Chora*.<br>• **Recomendación:** Llevar vestimenta adecuada (hombros/rodillas cubiertos) para entrar al monasterio.<br>• **Opciones en Tiempo Libre:** Disfrutar de la puesta de sol con un cóctel en Little Venice (Caprice o Kastro Bar) o tomar un barco corto a la isla de Delos.`;
+            }
+
+            if (q.indexOf('kusadasi') !== -1 || q.indexOf('efeso') !== -1 || q.indexOf('éfeso') !== -1 || q.indexOf('kus01') !== -1) {
+                return `Excursión Incluida **KUS01: Descubra la Ciudad Clásica de Éfeso (4 Horas - UNESCO)**:<br><br>• **Itinerario:** Traslado de 30 min a Éfeso. Tour guiado de 2h 15m descendiendo desde la Puerta de Magnesia: Gimnasio de Vedius, Teatro Odeón, Fuente de Trajano, Templo de Adriano, la monumental *Biblioteca de Celso* y el *Gran Anfiteatro* (25.000 espectadores). 45 min libres en tiendas de artesanía y cuero antes del retorno.<br>• **Entrada Incluida:** Ticket de 40€/pax incluido.<br>• **Calzado & Ropa:** Mármol resbaladizo y terreno irregular; imprescindible calzado plano/cómodo (sin tacones), sombrero y protección solar.<br>• **Extra Enciclopedia:** Visitar la aldea otomana de Şirince o la Basílica de San Juan.`;
+            }
+
+            if (q.indexOf('napoles') !== -1 || q.indexOf('nápoles') !== -1 || q.indexOf('pompeya') !== -1 || q.indexOf('nap01') !== -1) {
+                return `Excursión Incluida **NAP01: Ruinas Romanas de Pompeya (4 Horas)**:<br><br>• **Itinerario:** Trayecto de 45 min por autopista desde Nápoles a las ruinas de Pompeya. Visita guiada de 2 horas recorriendo la antigua ciudad sepultada por el Vesubio en el 79 d.C. (frescos, moldes humanos, calles romanas). 45 min de tiempo libre para explorar antes de regresar en autocar al barco.<br>• **Calzado Importante:** Se camina sobre adoquines romanos de basalto irregulares; no apto para personas con problemas de movilidad reducida.<br>• **Alternativas Opcionales:** Visitar Herculano, tomar el hidroala a Capri o degustar pizza Margherita en Spaccanapoli.`;
+            }
+
+            if (q.indexOf('marmaris') !== -1 || q.indexOf('dalyan') !== -1) {
+                return `Sugerencias para la escala en **Marmaris, Turquía (Martes 18/08 - 07:00h a 17:00h)**:<br><br>• **Castillo de Suleimán el Magnífico:** Fortaleza medieval con museo arqueológico y vistas sobre el puerto deportivo.<br>• **Excursión al Río Dalyan (Opcional):** Travesía fluvial en barca contemplando las espectaculares **Tumbas Reales Licias** esculpidas en los acantilados de roca y la playa de Iztuzu (reserva de tortugas *Caretta*).<br>• **Netsel Marina & Gran Bazar:** Compras de especias, té de manzana y artesanía local en el bazar.`;
+            }
+
+            if (q.indexOf('civitavecchia') !== -1 || q.indexOf('roma') !== -1 || q.indexOf('fiumicino') !== -1 || q.indexOf('embarque') !== -1 || q.indexOf('desembarque') !== -1) {
+                return `Logística de **Civitavecchia y Roma (Día 1 - 14/08 y Día 8 - 21/08)**:<br><br>• **Llegada (14/08):** Vuelo Iberia IB647 Madrid (08:45h) ➔ Roma FCO (11:10h). Traslado privado en miniván de *International Shore Services* (T1 junto a puertas 2-3) al puerto de Civitavecchia.<br>• **Embarque Yacht Club:** Check-in prioritario VIP a partir de las 14:00h con asistencia de mayordomo.<br>• **Retorno (21/08):** Desembarque a las 07:00h, traslado privado a Fiumicino y vuelo Iberia IB654 Roma (19:05h) ➔ Madrid (21:40h).`;
+            }
+
+            if (q.indexOf('vuelo') !== -1 || q.indexOf('iberia') !== -1 || q.indexOf('traslado') !== -1) {
+                return `Detalles de vuestra logística de vuelos e Iberia (PNR: <code>JTGNN</code> y <code>JTGNX</code>):<br><br>• **Ida (14/08):** Vuelo Iberia IB647 Madrid (08:45 h) ➔ Roma Fiumicino (11:10 h). Traslado privado en miniván de *International Shore Services* hacia Civitavecchia.<br>• **Vuelta (21/08):** Traslado privado desde el barco hacia Fiumicino. Vuelo Iberia IB654 Roma (19:05 h) ➔ Madrid (21:40 h).`;
+            }
+
+            if (q.indexOf('excursion') !== -1 || q.indexOf('explorer') !== -1 || q.indexOf('paquete') !== -1) {
+                return `Tenéis contratado el paquete **Explorer Package (DIEXPS26)** que incluye 3 excursiones guiadas principales:<br><br>1. **Mykonos (MYK05 - 4h):** Autobús a Ano Mera (Monasterio Panagia Tourliani), Playa de Kalafati y tour a pie por Chora.<br>2. **Kusadasi / Éfeso (KUS01 - 4h):** Tour guiado por Éfeso (Biblioteca de Celso, Gran Teatro) con entrada de 40€ incluida y tiempo en bazares.<br>3. **Nápoles / Pompeya (NAP01 - 4h):** Recorrido guiado de 2 horas por las ruinas romanas de Pompeya.`;
+            }
+
+            if (q.indexOf('ropa') !== -1 || q.indexOf('vestimenta') !== -1 || q.indexOf('gala') !== -1) {
+                return `Sugerencias de vestimenta a bordo del MSC Divina:<br><br>• **Noche de Gala:** Traje o chaqueta elegante con corbata para hombres, y vestido formal para mujeres.<br>• **Fiesta Blanca (White Party):** Prendas de color blanco.<br>• **Excursiones:** Calzado plano/cómodo obligatoria para adoquines y mármol en Pompeya y Éfeso, sombrero y ropa de algodón. Ropa recatada para templos y monasterios.`;
+            }
+
+            var fallbacks = [
+                `Estimada familia López-Sojo, como vuestro **Asistente PlanIA**, consulto directamente vuestro dossier y la **Enciclopedia del Destino**.<br><br>Podéis preguntarme concretamente sobre:<br>• **Excursiones Incluidas:** "Detalles de la excursión a Éfeso (KUS01)", "Excursión a Pompeya (NAP01)" o "Mykonos (MYK05)".<br>• **Mykonos:** "¿Qué ver en Mykonos?"<br>• **Pompeya y Nápoles:** "¿Qué hacer en Pompeya o Capri?"<br>• **Marmaris:** "Excursiones opcionales en Marmaris"<br>• **Servicios VIP Yacht Club:** Camarotes 12002/12004, Mayordomo 24h y paquete Wi-Fi.`,
+                `¡A vuestra entera disposición! Decidme sobre qué escala o excursión queréis información (Mykonos MYK05, Éfeso KUS01, Pompeya NAP01, Marmaris o Roma) y os indicaré el programa oficial detallado.`
+            ];
+
+            return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+        }
+
+        function sendChatMessage() {
+            var inputEl = document.getElementById('ai-chat-input');
+
+            if (!inputEl || !inputEl.value.trim()) return;
+
+            var userText = inputEl.value.trim();
+            inputEl.value = '';
+
+            appendMessageToUI("user", userText);
+
+            var response = getSmartButlerResponse(userText);
+            appendMessageToUI("butler", response);
+            speakAvatarText(response);
+        }
+
+        function sendPresetPrompt(promptText) {
+            switchTab('asistente');
+            
+            appendMessageToUI("user", promptText);
+
+            var response = getSmartButlerResponse(promptText);
+            appendMessageToUI("butler", response);
+            speakAvatarText(response);
+        }
+
+        function appendMessageToUI(sender, text) {
+            var chatMessagesContainer = document.getElementById('ai-chat-messages');
+            if (!chatMessagesContainer) return;
+
+            var messageDiv = document.createElement('div');
+            messageDiv.className = sender === 'user' ? 'flex gap-2.5 items-start justify-end max-w-[85%] ml-auto' : 'flex gap-2.5 items-start max-w-[85%]';
+
+            var formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+
+            var avatarHTML = sender === 'user' 
+                ? `<div class="p-3 bg-navyYacht text-goldYacht rounded-2xl rounded-tr-none shadow-sm font-sans leading-relaxed text-slate-100">${formattedText}</div>
+                   <div class="bg-navyYacht text-goldYacht w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 shadow-sm"><i class="fa-solid fa-user"></i></div>`
+                : `<div class="bg-goldYacht text-navyYacht w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 shadow-sm"><i class="fa-solid fa-robot"></i></div>
+                   <div class="p-3 bg-white border border-slate-100 rounded-2xl rounded-tl-none shadow-sm text-slate-700 leading-relaxed font-sans">${formattedText}</div>`;
+
+            messageDiv.innerHTML = avatarHTML;
+            chatMessagesContainer.appendChild(messageDiv);
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') sendChatMessage();
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            registerDynamicPWA();
+        });
+    </script>
+</body>
+</html>
